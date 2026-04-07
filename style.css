@@ -1,0 +1,312 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --taskbar-height: clamp(32px, 4vh, 45px);
+}
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: #000;
+  overflow: hidden;
+}
+
+
+
+/* Desktop Apps */
+.desktop-apps {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: calc(100vh - var(--taskbar-height));
+  width: clamp(80px, 10vw, 120px);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: clamp(8px, 1.5vw, 15px);
+  padding: clamp(10px, 2vw, 20px) clamp(5px, 1vw, 10px);
+  background: rgba(0,0,0,0.9);
+  z-index: 20;
+}
+
+
+
+
+
+
+
+
+.app {
+  width: clamp(50px, 7vw, 80px);
+  height: clamp(50px, 7vw, 80px);
+  aspect-ratio: 1 / 1;
+  background: rgba(0,0,0,0.5);
+  border: 2px solid transparent;
+  border-radius: clamp(8px, 1.2vw, 12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  font-family: 'Courier New', monospace;
+  font-size: clamp(12px, 1.8vw, 16px);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  position: relative;
+}
+
+.app::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(0) invert(1);
+  z-index: 1;
+}
+
+.app span {
+  position: relative;
+  z-index: 2;
+}
+
+.app:hover {
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+  border-color: rgba(255,255,255,0.6);
+}
+
+/* Taskbar - Transparent Bottom Bar like Windows */
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: var(--taskbar-height);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 0 0;
+}
+
+
+.home-button {
+  background: transparent;
+  border: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  flex: 0 0 auto;
+  width: calc(var(--taskbar-height) + 5px);
+  height: var(--taskbar-height);
+  aspect-ratio: auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::before {
+    content: '';
+    width: 60%;
+    height: 60%; 
+    background-image: url('Sources/DesktopIcons/Home.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: brightness(0) invert(1);
+  }
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+
+
+
+
+
+
+.home-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.home-button:hover {
+  filter: brightness(0) invert(1) brightness(1.2);
+}
+
+/* Taskbar right icons */
+.taskbar-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.taskbar-icon {
+  background: transparent;
+  border: none;
+  border-left: transparent;
+  border-radius: 0;
+  flex: 0 0 auto;
+  padding: 0;
+  height: var(--taskbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: clamp(11px, 1.5vw, 13px);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: var(--taskbar-height);
+  height: var(--taskbar-height);
+  aspect-ratio: 1 / 1;
+  position: relative;
+}
+
+.taskbar-icon.arrow, .taskbar-icon.sound, .taskbar-icon.wifi {
+  margin-right: 0;
+}
+
+.taskbar-icon.clock {
+  padding: 0 8px;
+}
+
+.taskbar-icon:not(.clock)::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(0) invert(1);
+}
+
+.app.app-thispc::before {
+  background-image: url('Applications/ThisPC/ThisPC.png');
+}
+
+.app.app-browser::before {
+  background-image: url('Applications/Browser/Browser.png');
+}
+
+.app.app-discord::before {
+  background-image: url('Applications/Discord/Discord.png');
+}
+
+.app.app-folder::before {
+  background-image: url('Applications/Folder/Folder.png');
+}
+
+.app.app-gallary::before {
+  background-image: url('Applications/Gallary/Gallary.png');
+}
+
+.app.app-notepad::before {
+  background-image: url('Applications/Notepad/Notepad.png');
+}
+
+.app.app-pdf::before {
+  background-image: url('Applications/PDF/PDF.png');
+}
+
+.app.app-terminal::before {
+  background-image: url('Applications/Terminal/Terminal.png');
+}
+
+.taskbar-icon.arrow::before {
+  background-image: url('Sources/DesktopIcons/Arrow.png');
+}
+
+.taskbar-icon.sound::before {
+  background-image: url('Sources/DesktopIcons/Sound.png');
+}
+
+.taskbar-icon.wifi::before {
+  background-image: url('Sources/DesktopIcons/Signal.png');
+}
+
+.taskbar-icon.nymos::before {
+  background-image: url('Sources/DesktopIcons/Nymos.png');
+}
+
+.taskbar-icon.clock {
+  width: clamp(100px, 12vw, 140px);
+  font-size: clamp(14px, 2vw, 18px);
+  font-family: 'Courier New', 'SF Pro Display', -apple-system, monospace;
+  letter-spacing: 1px;
+}
+
+.taskbar-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.taskbar-icon:hover {
+  filter: brightness(0) invert(1) brightness(1.2);
+}
+
+.clock { font-family: 'Courier New', monospace; }
+.clock { font-family: 'Courier New', monospace; }
+
+
+
+
+
+/* Ensure full screen on PC and big devices */
+@media (min-width: 1024px) {
+  body {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #000;
+    overflow: hidden;
+  }
+}
+
+#bg-image {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Adjust these values manually for size */
+  width: 400px; 
+  height: 300px;
+  background-image: url('Sources/DesktopIcons/HomeBackground.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 1;
+  filter: invert(1);
+  pointer-events: none;
+}
+
+body {
+  background: transparent;
+}
+
+#app-container {
+  position: relative;
+  z-index: 100;
+  height: 100vh;
+}
