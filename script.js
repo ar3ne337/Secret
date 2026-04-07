@@ -5,6 +5,7 @@
 // Global state (accessible to functions)
 let musicTab = null;
 let notepadTab = null;
+let pdfTab = null;
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0;
 let tabStartX = 0, tabStartY = 0;
@@ -60,6 +61,23 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         notepadTab = createNotepadTab(tabContainer);
         positionNotepadTab();
+      }
+    });
+  }
+
+  // === PDF CLICK HANDLER ===
+  const pdfIcon = document.getElementById('app7');
+  if (pdfIcon) {
+    pdfIcon.style.cursor = 'pointer';
+    pdfIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      if (pdfTab && pdfTab.parentNode) {
+        pdfTab.remove();
+        pdfTab = null;
+      } else {
+        pdfTab = createPdfTab(tabContainer);
+        positionPdfTab();
       }
     });
   }
@@ -255,7 +273,7 @@ function startDrag(e) {
   if (e.target.classList.contains('tab-btn')) return;  // Don't drag on buttons
   
   // console.log('Drag started');
-  const currentTab = musicTab || notepadTab;
+  const currentTab = musicTab || notepadTab || pdfTab;
   if (!currentTab) return;
   
   isDragging = true;
@@ -273,7 +291,7 @@ function drag(e) {
   if (!isDragging) return;
   const dx = e.clientX - dragStartX;
   const dy = e.clientY - dragStartY;
-  const currentTab = musicTab || notepadTab;
+  const currentTab = musicTab || notepadTab || pdfTab;
   currentTab.style.left = (tabStartX + dx) + 'px';
   currentTab.style.top = (tabStartY + dy) + 'px';
   currentTab.style.transform = 'none';
@@ -289,17 +307,18 @@ function stopDrag() {
 // === MINIMIZE / CLOSE ===
 function toggleMinimize() {
   // console.log('Minimize toggled');
-  const currentTab = musicTab || notepadTab;
+  const currentTab = musicTab || notepadTab || pdfTab;
   if (currentTab) currentTab.classList.toggle('minimized');
 }
 
 function closeTab() {
   // console.log('Tab closed');
-  const currentTab = musicTab || notepadTab;
+  const currentTab = musicTab || notepadTab || pdfTab;
   if (currentTab) {
     currentTab.remove();
     if (currentTab === musicTab) musicTab = null;
-    else notepadTab = null;
+    else if (currentTab === notepadTab) notepadTab = null;
+    else pdfTab = null;
   }
 }
 
