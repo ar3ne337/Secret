@@ -293,6 +293,97 @@ html, body {
   }
 }
 
+/* Tab styles */
+.tab {
+  position: absolute;
+  background: rgba(32, 32, 32, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', -apple-system, sans-serif;
+  overflow: hidden;
+  min-width: 300px;
+  min-height: 200px;
+  resize: both;
+  cursor: default;
+}
+
+.tab-header {
+  height: 32px;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  user-select: none;
+  cursor: grab;
+}
+
+.tab-header:active {
+  cursor: grabbing;
+}
+
+.tab-title {
+  flex: 1;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.tab-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.tab-btn {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.minimize:hover {
+  color: #ffaa00;
+}
+
+.close:hover {
+  background: #e81123;
+  color: #fff;
+}
+
+.tab-content {
+  flex: 1;
+  padding: 16px;
+  color: #fff;
+  background: rgba(32, 32, 32, 0.95);
+  overflow: auto;
+  height: calc(100% - 32px);
+}
+
+.tab.minimized .tab-content {
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.tab.minimized {
+  height: 32px !important;
+}
+
+
 #bg-image {
   position: fixed;
   top: 50%;
