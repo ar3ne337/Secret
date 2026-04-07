@@ -312,7 +312,7 @@ html, body {
 
 .tab-header {
   height: 32px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgb(19, 19, 19, 0.1);
   box-shadow: 0 2px 8px rgba(0,0,0,0.6) inset;
   display: flex;
   align-items: center;
@@ -371,7 +371,7 @@ html, body {
   flex: 1;
   padding: 16px;
   color: #fff;
-  background: rgba(32, 32, 32, 0.95);
+  background: rgb(19, 19, 19, 0.1);
   overflow: auto;
   height: calc(100% - 32px);
 }
