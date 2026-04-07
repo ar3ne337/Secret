@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music Player</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .cover {
+      width: 300px;
+      height: 300px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+      margin-bottom: 40px;
+      filter: grayscale(0.3) brightness(0.8) contrast(1.1);
+    }
+
+    .track-info {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .track-name {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .artist {
+      font-size: 16px;
+      opacity: 0.8;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+    }
+
+    .control-btn {
+      width: 60px;
+      height: 60px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      background: rgba(0,0,0,0.6);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+
+
+
+    .control-btn:hover {
+      border-color: rgba(255,255,255,0.8);
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+    }
+
+    .control-btn img {
+      width: 28px;
+      height: 28px;
+      filter: brightness(0) invert(1);
+    }
+
+    .play-pause {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+    }
+
+    .progress {
+      width: 400px;
+      height: 6px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+      margin-top: 30px;
+      cursor: pointer;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ffff, #ff00ff);
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s ease;
+    }
+
+    .time {
+      display: flex;
+      justify-content: space-between;
+      width: 400px;
+      margin-top: 10px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="cover" id="cover"></div>
+  
+  <div class="track-info">
+    <div class="track-name" id="trackName">--</div>
+    <div class="artist" id="artist">--</div>
+  </div>
+
+  <div class="controls main-controls">
+    <div class="control-btn" id="prev">
+      <img src="Controls/Back.png" alt="Previous">
+    </div>
+    <div class="control-btn play-pause" id="playPause">
+      <img src="Controls/Play.png" alt="Play" id="playIcon">
+    </div>
+    <div class="control-btn" id="next">
+      <img src="Controls/Next.png" alt="Next">
+    </div>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress" id="progress">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="time">
+      <span id="currentTime">0:00</span>
+      <span id="duration">0:00</span>
+    </div>
+  </div>
+
+  <audio id="audio" preload="metadata"></audio>
+
+  <script>
+    const audio = document.getElementById('audio');
+    const playPauseBtn = document.getElementById('playPause');
+    const playIcon = document.getElementById('playIcon');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+
+    const progress = document.getElementById('progress');
+    const progressFill = document.getElementById('progressFill');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+    const trackNameEl = document.getElementById('trackName');
+    const artistEl = document.getElementById('artist');
+    const coverEl = document.getElementById('cover');
+
+    const songs = [
+      { name: 'Bad Girl', artist: 'Daya', path: 'Songs/BadGirl - Daya.mp3', cover: 'Covers/BadGirl.jpg' },
+      { name: 'Constellation', artist: 'Far Out', path: 'Songs/Constellation - Far Out.mp3', cover: 'Covers/Constellation.jpg' },
+      { name: 'DARKSIDE', artist: 'Neoni', path: 'Songs/DARKSIDE - Neoni.mp3', cover: 'Covers/DARKSIDE.jpg' },
+      { name: 'Die For You', artist: 'VALORANT', path: 'Songs/DieForYou - VALORANT.mp3', cover: 'Covers/DieForYou.jpg' },
+      { name: 'Getaway', artist: 'Syn Cole', path: 'Songs/Getaway - Syn Cole.mp3', cover: 'Covers/Getaway.jpg' },
+      { name: 'Heading Home', artist: 'Alan Walker', path: 'Songs/HeadingHome - Alan Walker.mp3', cover: 'Covers/HeadingHome.jpg' },
+      { name: 'Hope', artist: 'The Chainsmokers', path: 'Songs/Hope - The Chainsmokers.mp3', cover: 'Covers/Hope.jpg' }
+    ];
+
+    let currentSongIndex = 0;
+    let isPlaying = false;
+
+
+    function loadSong(index) {
+      const song = songs[index];
+      audio.src = song.path;
+      trackNameEl.textContent = song.name;
+      artistEl.textContent = song.artist;
+      coverEl.style.backgroundImage = `url(${song.cover})`;
+      audio.load();
+    }
+
+    function playPause() {
+      if (isPlaying) {
+        audio.pause();
+        playIcon.src = 'Controls/Play.png';
+        isPlaying = false;
+      } else {
+        audio.play();
+        playIcon.src = 'Controls/Pause.png';
+        isPlaying = true;
+      }
+    }
+
+    function previous() {
+      currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+      loadSong(currentSongIndex);
+      if (isPlaying) audio.play();
+    }
+
+    function next() {
+      currentSongIndex = (currentSongIndex + 1) % songs.length;
+      loadSong(currentSongIndex);
+      if (isPlaying) audio.play();
+    }
+
+
+
+    function updateProgress() {
+      if (audio.duration) {
+        const progressPercent = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = progressPercent + '%';
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+        durationEl.textContent = formatTime(audio.duration);
+      }
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function setProgress(e) {
+      const rect = progress.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      audio.currentTime = pos * audio.duration;
+    }
+
+    // Event listeners
+    playPauseBtn.addEventListener('click', playPause);
+    prevBtn.addEventListener('click', previous);
+    nextBtn.addEventListener('click', next);
+
+    progress.addEventListener('click', setProgress);
+
+    audio.addEventListener('ended', next);
+
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', () => {
+      durationEl.textContent = formatTime(audio.duration);
+    });
+
+    // Load first song
+    loadSong(currentSongIndex);
+  </script>
+</body>
+</html>
