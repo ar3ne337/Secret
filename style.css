@@ -313,12 +313,15 @@ html, body {
 .tab-header {
   height: 32px;
   background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6) inset;
   display: flex;
   align-items: center;
   padding: 0 8px;
   user-select: none;
   cursor: grab;
 }
+
+
 
 .tab-header:active {
   cursor: grabbing;
@@ -382,6 +385,16 @@ html, body {
 .tab.minimized {
   height: 32px !important;
 }
+
+.tab {
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6) inset;
+  min-height: 550px; /* Optimized for music player */
+  min-width: 420px;
+}
+
+
+
 
 
 #bg-image {

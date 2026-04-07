@@ -84,14 +84,25 @@ function createMusicTab(container) {
   header.appendChild(title);
   header.appendChild(controls);
 
-  // Content (empty as requested)
+  // Load Music player via iframe (isolated, correct relative paths)
   const content = document.createElement('div');
   content.className = 'tab-content';
-  // Empty - no text
+  content.style.padding = '0';
+  
+  const iframe = document.createElement('iframe');
+  iframe.src = 'Applications/Music/Music.html';
+  iframe.style.width = '100%';
+  iframe.style.height = 'calc(100% - 32px)';
+  iframe.style.border = 'none';
+  iframe.style.background = 'transparent';
+  iframe.allow = 'autoplay';
+  
+  content.appendChild(iframe);
 
   tab.appendChild(header);
   tab.appendChild(content);
   container.appendChild(tab);
+
 
   // === DRAG LOGIC ===
   header.addEventListener('mousedown', startDrag);
@@ -124,10 +135,11 @@ function createMusicTab(container) {
 function positionTab() {
   musicTab.style.left = '50%';
   musicTab.style.top = '20vh';
-  musicTab.style.width = '400px';
-  musicTab.style.height = '300px';
+  musicTab.style.width = '450px';
+  musicTab.style.height = '550px';
   musicTab.style.transform = 'translateX(-50%)';
 }
+
 
 // === DRAG FUNCTIONS ===
 function startDrag(e) {
