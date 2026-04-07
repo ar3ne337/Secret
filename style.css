@@ -211,6 +211,7 @@ html, body {
 
 .app.app-discord::before {
   background-image: url('Applications/Discord/Discord.png');
+  filter: brightness(0) invert(1) contrast(1.2);
 }
 
 .app.app-folder::before {
@@ -231,6 +232,14 @@ html, body {
 
 .app.app-terminal::before {
   background-image: url('Applications/Terminal/Terminal.png');
+}
+
+.app.app-instagram::before {
+  background-image: url('Applications/Instagram/Instagram.png');
+}
+
+.app.app-music::before {
+  background-image: url('Applications/Music/Music.png');
 }
 
 .taskbar-icon.arrow::before {
