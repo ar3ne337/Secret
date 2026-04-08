@@ -250,6 +250,87 @@ function createNotepadTab(container) {
   return tab;
 }
 
+function createPdfTab(container) {
+  const tab = document.createElement('div');
+  tab.id = 'pdf-tab';
+  tab.className = 'tab';
+  tab.style.zIndex = zIndexCounter++;
+
+  // Header (draggable area)
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = 'PDF';
+
+  // Controls
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  // Minimize button
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize (click to toggle)';
+
+  // Close button
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Load PDF via iframe
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '0';
+  
+  const iframe = document.createElement('iframe');
+  iframe.src = 'Applications/PDF/PDF.html';
+  iframe.style.width = '100%';
+  iframe.style.height = 'calc(100% - 32px)';
+  iframe.style.border = 'none';
+  iframe.style.background = 'transparent';
+
+  
+  content.appendChild(iframe);
+
+  tab.appendChild(header);
+  tab.appendChild(content);
+  container.appendChild(tab);
+
+  // === DRAG LOGIC ===
+  header.addEventListener('mousedown', startDrag);
+
+  // === EVENT LISTENERS ===
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize();
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTab();
+  });
+
+  // Bring to front on mousedown
+  tab.addEventListener('mousedown', function() {
+    tab.style.zIndex = zIndexCounter++;
+  });
+
+  // Prevent text selection during drag
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+
+  return tab;
+}
+
 // === UTILITY FUNCTIONS ===
 function positionTab() {
   musicTab.style.left = '50%';
@@ -265,6 +346,14 @@ function positionNotepadTab() {
   notepadTab.style.width = '600px';
   notepadTab.style.height = '500px';
   notepadTab.style.transform = 'translateX(-50%)';
+}
+
+function positionPdfTab() {
+  pdfTab.style.left = '50%';
+  pdfTab.style.top = '20vh';
+  pdfTab.style.width = '700px';
+  pdfTab.style.height = '600px';
+  pdfTab.style.transform = 'translateX(-50%)';
 }
 
 
