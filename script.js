@@ -415,3 +415,23 @@ function closeTab() {
 // END MUSIC TAB SYSTEM
 // =====================================================
 
+// =====================================================
+// CLOCK SYSTEM - Live device time in taskbar
+// =====================================================
+
+function updateClock() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const clockEl = document.getElementById('clock');
+  if (clockEl) {
+    clockEl.textContent = `${hours}:${minutes}`;
+  }
+}
+
+// Clock initialization (runs on DOM load)
+document.addEventListener('DOMContentLoaded', function() {
+  updateClock();  // Initial update
+  setInterval(updateClock, 1000);  // Update every second
+});
+
