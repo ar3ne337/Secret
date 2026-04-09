@@ -438,7 +438,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px 12px 12px 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-z-index: 1000;
+  z-index: 1000;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
   overflow: hidden;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -476,7 +476,7 @@ z-index: 1000;
   border-radius: 50%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: 2px solid rgba(255, 255, 255, 0.2);
-  background-image: url('Sources/DesktopIcons/Home.png');
+  background-image: url('Sources/DesktopIcons/UserAvatar.png');
   background-size: 60%;
   background-position: center;
   background-repeat: no-repeat;
@@ -696,9 +696,331 @@ z-index: 1000;
 }
 
 .settings-icon {
-  background-image: url('Sources/DesktopIcons/Sound.png');
+  background-image: url('Sources/DesktopIcons/Settings.png');
 }
 
 .power-icon {
-  background-image: url('Sources/DesktopIcons/Arrow.png');
+  background-image: url('Sources/DesktopIcons/Power.png');
+}
+
+/* File Explorer Styles */
+.file-explorer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.explorer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 8px 12px;
+  background: #2d2d2d;
+  border-bottom: 1px solid #3d3d3d;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #4d4d4d;
+  border-radius: 4px;
+  color: #ccc;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: #4d4d4d;
+  color: #fff;
+}
+
+.address-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #1a1a1a;
+  border: 1px solid #4d4d4d;
+  border-radius: 4px;
+}
+
+.address-icon {
+  width: 16px;
+  height: 16px;
+  background-image: url('Applications/Folder/Folder.png');
+  background-size: contain;
+  filter: brightness(0) invert(1);
+}
+
+.address-text {
+  color: #ccc;
+  font-size: 13px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #1a1a1a;
+  border: 1px solid #4d4d4d;
+  border-radius: 4px;
+  min-width: 200px;
+}
+
+.search-icon {
+  width: 16px;
+  height: 16px;
+  background-image: url('Sources/DesktopIcons/Search.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+}
+
+.search-icon::before {
+  content: none;
+}
+
+.search-box input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  width: 100%;
+}
+
+.search-box input::placeholder {
+  color: #888;
+}
+
+.explorer-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.explorer-sidebar {
+  width: 200px;
+  background: #222;
+  border-right: 1px solid #3d3d3d;
+  padding: 12px 0;
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  margin-bottom: 20px;
+}
+
+.sidebar-header {
+  padding: 8px 12px;
+  color: #999;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 8px 24px;
+  color: #ccc;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-item:hover {
+  background: #3d3d3d;
+  color: #fff;
+}
+
+.sidebar-item.active {
+  background: #0066cc;
+  color: #fff;
+}
+
+.sidebar-icon {
+  width: 18px;
+  height: 18px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(0) invert(1);
+}
+
+.sidebar-icon.pc {
+  background-image: url('Applications/ThisPC/ThisPC.png');
+}
+
+.sidebar-icon.folder {
+  background-image: url('Applications/Folder/Folder.png');
+}
+
+.sidebar-icon.downloads {
+  background-image: url('Sources/DesktopIcons/Downloads.png');
+}
+
+.sidebar-icon.documents {
+  background-image: url('Sources/DesktopIcons/Documents.png');
+}
+
+.sidebar-icon.pictures {
+  background-image: url('Applications/Gallary/Gallary.png');
+}
+
+.sidebar-icon.music {
+  background-image: url('Applications/Music/Music.png');
+}
+
+.sidebar-icon.videos {
+  background-image: url('Sources/DesktopIcons/Videos.png');
+}
+
+.explorer-content {
+  flex: 1;
+  background: #1a1a1a;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.content-header {
+  display: grid;
+  grid-template-columns: 40px 1fr 120px 140px;
+  padding: 8px 0;
+  border-bottom: 1px solid #3d3d3d;
+  color: #999;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.folder-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.folder-item {
+  display: grid;
+  grid-template-columns: 40px 1fr 120px 140px;
+  padding: 10px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.folder-item:hover {
+  background: #2d2d2d;
+  border-color: #4d4d4d;
+}
+
+.folder-icon {
+  width: 20px;
+  height: 20px;
+  background-image: url('Applications/Folder/Folder.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(0) invert(1);
+  margin: 0 auto;
+}
+
+.folder-name {
+  color: #fff;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.folder-date {
+  color: #999;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.folder-type {
+  color: #999;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+/* Special styling for restricted folder */
+.folder-item.restricted .folder-icon {
+  filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(0deg);
+  opacity: 0.8;
+}
+
+.folder-item.restricted .folder-name {
+  color: #ff6b6b;
+}
+
+/* Status Bar */
+.explorer-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 12px;
+  background: #2d2d2d;
+  border-top: 1px solid #3d3d3d;
+  color: #ccc;
+  font-size: 12px;
+}
+
+.status-left {
+  display: flex;
+  gap: 16px;
+}
+
+.status-right {
+  display: flex;
+  gap: 16px;
+}
+
+.view-options {
+  display: flex;
+  gap: 4px;
+}
+
+.view-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #ccc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-btn:hover {
+  background: #4d4d4d;
+}
+
+.view-btn.active {
+  background: #0066cc;
+  color: #fff;
 }

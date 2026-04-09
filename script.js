@@ -6,10 +6,12 @@
 let musicTab = null;
 let notepadTab = null;
 let pdfTab = null;
+let fileExplorerTab = null;
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0;
 let tabStartX = 0, tabStartY = 0;
 let zIndexCounter = 1000;
+let currentDragTab = null;
 
 // Wait for DOM load
 document.addEventListener('DOMContentLoaded', function() {
@@ -81,6 +83,40 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // === FILE EXPLORER CLICK HANDLER ===
+  const thisPCIcon = document.getElementById('app1');
+  if (thisPCIcon) {
+    thisPCIcon.style.cursor = 'pointer';
+    thisPCIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      if (fileExplorerTab && fileExplorerTab.parentNode) {
+        fileExplorerTab.remove();
+        fileExplorerTab = null;
+      } else {
+        fileExplorerTab = createFileExplorerTab(tabContainer);
+        positionFileExplorerTab();
+      }
+    });
+  }
+
+  // Also handle folder icon (app4) to open file explorer
+  const folderIcon = document.getElementById('app4');
+  if (folderIcon) {
+    folderIcon.style.cursor = 'pointer';
+    folderIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      if (fileExplorerTab && fileExplorerTab.parentNode) {
+        fileExplorerTab.remove();
+        fileExplorerTab = null;
+      } else {
+        fileExplorerTab = createFileExplorerTab(tabContainer);
+        positionFileExplorerTab();
+      }
+    });
+  }
 });
 
 // === TAB CREATOR FUNCTION ===
@@ -142,17 +178,19 @@ function createMusicTab(container) {
 
 
   // === DRAG LOGIC ===
-  header.addEventListener('mousedown', startDrag);
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
 
   // === EVENT LISTENERS ===
   minBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    toggleMinimize();
+    toggleMinimize(tab);
   });
 
   closeBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    closeTab();
+    closeTab(tab);
   });
 
   // Bring to front on mousedown
@@ -224,17 +262,19 @@ function createNotepadTab(container) {
   container.appendChild(tab);
 
   // === DRAG LOGIC ===
-  header.addEventListener('mousedown', startDrag);
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
 
   // === EVENT LISTENERS ===
   minBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    toggleMinimize();
+    toggleMinimize(tab);
   });
 
   closeBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    closeTab();
+    closeTab(tab);
   });
 
   // Bring to front on mousedown
@@ -305,17 +345,230 @@ function createPdfTab(container) {
   container.appendChild(tab);
 
   // === DRAG LOGIC ===
-  header.addEventListener('mousedown', startDrag);
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
 
   // === EVENT LISTENERS ===
   minBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    toggleMinimize();
+    toggleMinimize(tab);
   });
 
   closeBtn.addEventListener('click', function(e) {
     e.stopPropagation();
-    closeTab();
+    closeTab(tab);
+  });
+
+  // Bring to front on mousedown
+  tab.addEventListener('mousedown', function() {
+    tab.style.zIndex = zIndexCounter++;
+  });
+
+  // Prevent text selection during drag
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+
+  return tab;
+}
+
+function createFileExplorerTab(container) {
+  const tab = document.createElement('div');
+  tab.id = 'file-explorer-tab';
+  tab.className = 'tab';
+  tab.style.zIndex = zIndexCounter++;
+
+  // Header (draggable area)
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = 'File Explorer';
+
+  // Controls
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  // Minimize button
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize (click to toggle)';
+
+  // Close button
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Create File Explorer content
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '0';
+  
+  // Create File Explorer UI
+  const explorer = document.createElement('div');
+  explorer.className = 'file-explorer';
+  
+  // Toolbar
+  const toolbar = document.createElement('div');
+  toolbar.className = 'explorer-toolbar';
+  toolbar.innerHTML = `
+    <div class="nav-buttons">
+      <button class="nav-btn" title="Back">←</button>
+      <button class="nav-btn" title="Forward">→</button>
+      <button class="nav-btn" title="Up">↑</button>
+    </div>
+    <div class="address-bar">
+      <div class="address-icon"></div>
+      <span class="address-text">This PC > Documents</span>
+    </div>
+    <div class="search-box">
+      <span class="search-icon"></span>
+      <input type="text" placeholder="Search Documents">
+    </div>
+  `;
+  
+  // Main area with sidebar and content
+  const main = document.createElement('div');
+  main.className = 'explorer-main';
+  
+  // Sidebar
+  const sidebar = document.createElement('div');
+  sidebar.className = 'explorer-sidebar';
+  sidebar.innerHTML = `
+    <div class="sidebar-section">
+      <div class="sidebar-header">Quick access</div>
+      <div class="sidebar-item active">
+        <div class="sidebar-icon pc"></div>
+        <span>This PC</span>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-icon folder"></div>
+        <span>Documents</span>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-icon downloads"></div>
+        <span>Downloads</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-header">This PC</div>
+      <div class="sidebar-item">
+        <div class="sidebar-icon folder"></div>
+        <span>Desktop</span>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-icon documents"></div>
+        <span>Documents</span>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-icon pictures"></div>
+        <span>Pictures</span>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-icon music"></div>
+        <span>Music</span>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-icon videos"></div>
+        <span>Videos</span>
+      </div>
+    </div>
+  `;
+  
+  // Content area
+  const contentArea = document.createElement('div');
+  contentArea.className = 'explorer-content';
+  
+  // Header
+  const contentHeader = document.createElement('div');
+  contentHeader.className = 'content-header';
+  contentHeader.innerHTML = `
+    <div></div>
+    <div>Name</div>
+    <div>Date modified</div>
+    <div>Type</div>
+  `;
+  
+  // Folder grid
+  const folderGrid = document.createElement('div');
+  folderGrid.className = 'folder-grid';
+  
+  // Add the 5 folders
+  const folders = [
+    { name: 'Restricted', date: '2024-01-15 14:30', type: 'File folder', restricted: true },
+    { name: 'Images', date: '2024-03-20 09:15', type: 'File folder', restricted: false },
+    { name: 'Ar3ne', date: '2024-02-10 16:45', type: 'File folder', restricted: false },
+    { name: 'Assignments', date: '2024-04-05 11:20', type: 'File folder', restricted: false },
+    { name: 'Art', date: '2024-03-28 13:10', type: 'File folder', restricted: false }
+  ];
+  
+  folders.forEach(folder => {
+    const folderItem = document.createElement('div');
+    folderItem.className = 'folder-item' + (folder.restricted ? ' restricted' : '');
+    folderItem.innerHTML = `
+      <div class="folder-icon"></div>
+      <div class="folder-name">${folder.name}</div>
+      <div class="folder-date">${folder.date}</div>
+      <div class="folder-type">${folder.type}</div>
+    `;
+    folderGrid.appendChild(folderItem);
+  });
+  
+  contentArea.appendChild(contentHeader);
+  contentArea.appendChild(folderGrid);
+  
+  main.appendChild(sidebar);
+  main.appendChild(contentArea);
+  
+  // Status bar
+  const statusbar = document.createElement('div');
+  statusbar.className = 'explorer-statusbar';
+  statusbar.innerHTML = `
+    <div class="status-left">
+      <span>5 items</span>
+      <span>5 folders selected</span>
+    </div>
+    <div class="status-right">
+      <div class="view-options">
+        <button class="view-btn active" title="Details">☰</button>
+        <button class="view-btn" title="Icons">⊞</button>
+        <button class="view-btn" title="List">≡</button>
+      </div>
+    </div>
+  `;
+  
+  explorer.appendChild(toolbar);
+  explorer.appendChild(main);
+  explorer.appendChild(statusbar);
+  
+  content.appendChild(explorer);
+  tab.appendChild(header);
+  tab.appendChild(content);
+  container.appendChild(tab);
+
+  // === DRAG LOGIC ===
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
+
+  // === EVENT LISTENERS ===
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize(tab);
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTab(tab);
   });
 
   // Bring to front on mousedown
@@ -356,19 +609,24 @@ function positionPdfTab() {
   pdfTab.style.transform = 'translateX(-50%)';
 }
 
+function positionFileExplorerTab() {
+  fileExplorerTab.style.left = '50%';
+  fileExplorerTab.style.top = '15vh';
+  fileExplorerTab.style.width = '800px';
+  fileExplorerTab.style.height = '600px';
+  fileExplorerTab.style.transform = 'translateX(-50%)';
+}
+
 
 // === DRAG FUNCTIONS ===
-function startDrag(e) {
+function startDrag(e, tab) {
   if (e.target.classList.contains('tab-btn')) return;  // Don't drag on buttons
   
-  // console.log('Drag started');
-  const currentTab = musicTab || notepadTab || pdfTab;
-  if (!currentTab) return;
-  
+  currentDragTab = tab;
   isDragging = true;
   dragStartX = e.clientX;
   dragStartY = e.clientY;
-  const rect = currentTab.getBoundingClientRect();
+  const rect = currentDragTab.getBoundingClientRect();
   tabStartX = rect.left;
   tabStartY = rect.top;
   
@@ -377,37 +635,33 @@ function startDrag(e) {
 }
 
 function drag(e) {
-  if (!isDragging) return;
+  if (!isDragging || !currentDragTab) return;
   const dx = e.clientX - dragStartX;
   const dy = e.clientY - dragStartY;
-  const currentTab = musicTab || notepadTab || pdfTab;
-  currentTab.style.left = (tabStartX + dx) + 'px';
-  currentTab.style.top = (tabStartY + dy) + 'px';
-  currentTab.style.transform = 'none';
+  currentDragTab.style.left = (tabStartX + dx) + 'px';
+  currentDragTab.style.top = (tabStartY + dy) + 'px';
+  currentDragTab.style.transform = 'none';
 }
 
 function stopDrag() {
-  // console.log('Drag stopped');
   isDragging = false;
+  currentDragTab = null;
   document.removeEventListener('mousemove', drag);
   document.removeEventListener('mouseup', stopDrag);
 }
 
 // === MINIMIZE / CLOSE ===
-function toggleMinimize() {
-  // console.log('Minimize toggled');
-  const currentTab = musicTab || notepadTab || pdfTab;
-  if (currentTab) currentTab.classList.toggle('minimized');
+function toggleMinimize(tab) {
+  if (tab) tab.classList.toggle('minimized');
 }
 
-function closeTab() {
-  // console.log('Tab closed');
-  const currentTab = musicTab || notepadTab || pdfTab;
-  if (currentTab) {
-    currentTab.remove();
-    if (currentTab === musicTab) musicTab = null;
-    else if (currentTab === notepadTab) notepadTab = null;
-    else pdfTab = null;
+function closeTab(tab) {
+  if (tab) {
+    tab.remove();
+    if (tab === musicTab) musicTab = null;
+    else if (tab === notepadTab) notepadTab = null;
+    else if (tab === pdfTab) pdfTab = null;
+    else if (tab === fileExplorerTab) fileExplorerTab = null;
   }
 }
 
