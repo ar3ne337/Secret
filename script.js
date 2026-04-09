@@ -539,9 +539,9 @@ function createFileExplorerTab(container) {
     </div>
     <div class="status-right">
       <div class="view-options">
-        <button class="view-btn active" title="Details">☰</button>
-        <button class="view-btn" title="Icons">⊞</button>
-        <button class="view-btn" title="List">≡</button>
+        <button class="view-btn" title="Details"><img src="Sources/DesktopIcons/View.png" alt="Details" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
+        <button class="view-btn" title="Icons"><img src="Sources/DesktopIcons/Icons.png" alt="Icons" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
+        <button class="view-btn" title="List"><img src="Sources/DesktopIcons/List.png" alt="List" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
       </div>
     </div>
   `;
