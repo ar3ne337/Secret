@@ -423,3 +423,282 @@ body {
   z-index: 100;
   height: 100vh;
 }
+
+/* Start Menu Styles */
+.start-menu {
+  position: fixed;
+  bottom: var(--taskbar-height);
+  left: 0;
+  width: 400px;
+  max-width: 90vw;
+  height: 600px;
+  max-height: 70vh;
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px 12px 12px 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+z-index: 1000;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.start-menu.hidden {
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.start-menu-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: #fff;
+  font-family: 'Segoe UI', -apple-system, sans-serif;
+}
+
+/* User Section */
+.start-user-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background-image: url('Sources/DesktopIcons/Home.png');
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0) invert(1);
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.user-email {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Search Bar */
+.start-search {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Sections */
+.start-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+
+/* App Grid */
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.start-app-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.start-app-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.start-app-icon {
+  width: 32px;
+  height: 32px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0) invert(1);
+}
+
+.start-app-item span {
+  font-size: 12px;
+  text-align: center;
+}
+
+/* App List */
+.app-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.app-list-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.app-list-icon {
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0) invert(1);
+}
+
+.app-list-item span {
+  font-size: 13px;
+}
+
+/* Bottom Actions */
+.start-bottom {
+  margin-top: auto;
+  display: flex;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.start-bottom-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.start-bottom-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.bottom-icon {
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0) invert(1);
+}
+
+.start-bottom-item span {
+  font-size: 13px;
+}
+
+/* App Icons */
+.thispc-icon {
+  background-image: url('Applications/ThisPC/ThisPC.png');
+}
+
+.browser-icon {
+  background-image: url('Applications/Browser/Browser.png');
+}
+
+.discord-icon {
+  background-image: url('Applications/Discord/Discord.png');
+}
+
+.folder-icon {
+  background-image: url('Applications/Folder/Folder.png');
+}
+
+.gallary-icon {
+  background-image: url('Applications/Gallary/Gallary.png');
+}
+
+.notepad-icon {
+  background-image: url('Applications/Notepad/Notepad.png');
+}
+
+.pdf-icon {
+  background-image: url('Applications/PDF/PDF.png');
+}
+
+.terminal-icon {
+  background-image: url('Applications/Terminal/Terminal.png');
+}
+
+.instagram-icon {
+  background-image: url('Applications/Instagram/Instagram.png');
+}
+
+.music-icon {
+  background-image: url('Applications/Music/Music.png');
+}
+
+.settings-icon {
+  background-image: url('Sources/DesktopIcons/Sound.png');
+}
+
+.power-icon {
+  background-image: url('Sources/DesktopIcons/Arrow.png');
+}

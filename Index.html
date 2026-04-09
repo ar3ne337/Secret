@@ -56,10 +56,95 @@
   </div><!-- app-container end -->
   </div>
 
+  <!-- Start Menu Overlay -->
+  <div id="start-menu" class="start-menu hidden">
+    <div class="start-menu-container">
+      <!-- User Profile Section -->
+      <div class="start-user-section">
+        <div class="user-avatar"></div>
+        <div class="user-info">
+          <div class="user-name">User</div>
+          <div class="user-email">user@nymos.local</div>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="start-search">
+        <input type="text" placeholder="Type here to search" class="search-input">
+      </div>
+
+      <!-- Pinned Apps Section -->
+      <div class="start-section">
+        <div class="section-title">Pinned</div>
+        <div class="app-grid">
+          <div class="start-app-item" data-app="thispc">
+            <div class="start-app-icon thispc-icon"></div>
+            <span>This PC</span>
+          </div>
+          <div class="start-app-item" data-app="browser">
+            <div class="start-app-icon browser-icon"></div>
+            <span>Browser</span>
+          </div>
+          <div class="start-app-item" data-app="discord">
+            <div class="start-app-icon discord-icon"></div>
+            <span>Discord</span>
+          </div>
+          <div class="start-app-item" data-app="folder">
+            <div class="start-app-icon folder-icon"></div>
+            <span>Folder</span>
+          </div>
+          <div class="start-app-item" data-app="gallary">
+            <div class="start-app-icon gallary-icon"></div>
+            <span>Gallery</span>
+          </div>
+          <div class="start-app-item" data-app="notepad">
+            <div class="start-app-icon notepad-icon"></div>
+            <span>Notepad</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Apps Section -->
+      <div class="start-section">
+        <div class="section-title">All Apps</div>
+        <div class="app-list">
+          <div class="app-list-item" data-app="pdf">
+            <div class="app-list-icon pdf-icon"></div>
+            <span>PDF Reader</span>
+          </div>
+          <div class="app-list-item" data-app="terminal">
+            <div class="app-list-icon terminal-icon"></div>
+            <span>Terminal</span>
+          </div>
+          <div class="app-list-item" data-app="instagram">
+            <div class="app-list-icon instagram-icon"></div>
+            <span>Instagram</span>
+          </div>
+          <div class="app-list-item" data-app="music">
+            <div class="app-list-icon music-icon"></div>
+            <span>Music Player</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="start-bottom">
+        <div class="start-bottom-item">
+          <div class="bottom-icon settings-icon"></div>
+          <span>Settings</span>
+        </div>
+        <div class="start-bottom-item">
+          <div class="bottom-icon power-icon"></div>
+          <span>Power</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Taskbar - Bottom Bar like Windows -->
   <div class="taskbar">
     <!-- Home Button -->
-    <div class="home-button"></div>
+    <div class="home-button" id="home-button"></div>
     
     <!-- Right side icons with images -->
     <div class="taskbar-right">
@@ -67,7 +152,7 @@
       <div class="taskbar-icon sound"></div>
       <div class="taskbar-icon wifi"></div>
       <div class="taskbar-icon nymos"></div>
-<div id="clock" class="taskbar-icon clock">12:00</div>
+      <div id="clock" class="taskbar-icon clock">12:00</div>
     </div>
   </div>
 

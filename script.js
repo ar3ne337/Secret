@@ -435,3 +435,74 @@ document.addEventListener('DOMContentLoaded', function() {
   setInterval(updateClock, 1000);  // Update every second
 });
 
+// =====================================================
+// START MENU SYSTEM
+// =====================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+  const homeButton = document.getElementById('home-button');
+  const startMenu = document.getElementById('start-menu');
+  
+  // Toggle start menu on home button click
+  if (homeButton && startMenu) {
+    homeButton.addEventListener('click', function(e) {
+      e.stopPropagation();
+      startMenu.classList.toggle('hidden');
+    });
+    
+    // Close start menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!startMenu.contains(e.target) && !homeButton.contains(e.target)) {
+        startMenu.classList.add('hidden');
+      }
+    });
+    
+    // Prevent start menu from closing when clicking inside it
+    startMenu.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+  }
+  
+  // Handle start menu app clicks
+  const startAppItems = document.querySelectorAll('[data-app]');
+  startAppItems.forEach(item => {
+    item.addEventListener('click', function() {
+      const app = this.getAttribute('data-app');
+      startMenu.classList.add('hidden');
+      
+      // Trigger corresponding app
+      switch(app) {
+        case 'thispc':
+          document.getElementById('app1')?.click();
+          break;
+        case 'browser':
+          document.getElementById('app2')?.click();
+          break;
+        case 'discord':
+          document.getElementById('app3')?.click();
+          break;
+        case 'folder':
+          document.getElementById('app4')?.click();
+          break;
+        case 'gallary':
+          document.getElementById('app5')?.click();
+          break;
+        case 'notepad':
+          document.getElementById('app6')?.click();
+          break;
+        case 'pdf':
+          document.getElementById('app7')?.click();
+          break;
+        case 'terminal':
+          document.getElementById('app8')?.click();
+          break;
+        case 'instagram':
+          document.getElementById('app9')?.click();
+          break;
+        case 'music':
+          document.getElementById('app10')?.click();
+          break;
+      }
+    });
+  });
+});
