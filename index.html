@@ -316,9 +316,18 @@
         }, bootDuration);
       }
 
-      function handleLogin() {
+function handleLogin() {
         if (isBooting) return;
-        startBoot();
+        
+        // Your Journey begins here lost soul
+        const enteredPassword = passwordInput.value;
+        if (enteredPassword === 'Nymos337') {
+          startBoot();
+        } else {
+          messageEl.textContent = 'Incorrect password';
+          passwordInput.value = '';
+          passwordInput.focus();
+        }
       }
 
       loginBtn.addEventListener('click', handleLogin);
