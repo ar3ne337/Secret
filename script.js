@@ -1372,7 +1372,7 @@ document.addEventListener('DOMContentLoaded', function() {
         case 'folder':
           document.getElementById('app4')?.click();
           break;
-        case 'gallary':
+        case 'gallery':
           document.getElementById('app5')?.click();
           break;
         case 'notepad':

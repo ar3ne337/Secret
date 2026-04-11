@@ -224,7 +224,7 @@ html, body {
   background-image: url('Applications/Folder/Folder.png');
 }
 
-.app.app-gallary::before {
+.app.app-gallery::before {
   background-image: url('Applications/Gallary/Gallary.png');
 }
 
@@ -677,7 +677,7 @@ body {
   background-image: url('Applications/Folder/Folder.png');
 }
 
-.gallary-icon {
+.gallery-icon {
   background-image: url('Applications/Gallary/Gallary.png');
 }
 
