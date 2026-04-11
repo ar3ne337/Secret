@@ -422,13 +422,13 @@ function createFileExplorerTab(container) {
   toolbar.className = 'explorer-toolbar';
   toolbar.innerHTML = `
     <div class="nav-buttons">
-      <button class="nav-btn" title="Back">←</button>
+      <button class="nav-btn" title="Back" id="back-btn">←</button>
       <button class="nav-btn" title="Forward">→</button>
-      <button class="nav-btn" title="Up">↑</button>
+      <button class="nav-btn" title="Up" id="up-btn">↑</button>
     </div>
     <div class="address-bar">
       <div class="address-icon"></div>
-      <span class="address-text">This PC > Documents</span>
+      <span class="address-text" id="address-text">This PC > Documents</span>
     </div>
     <div class="search-box">
       <span class="search-icon"></span>
@@ -446,38 +446,38 @@ function createFileExplorerTab(container) {
   sidebar.innerHTML = `
     <div class="sidebar-section">
       <div class="sidebar-header">Quick access</div>
-      <div class="sidebar-item active">
+      <div class="sidebar-item active" data-nav="thispc">
         <div class="sidebar-icon pc"></div>
         <span>This PC</span>
       </div>
-      <div class="sidebar-item">
+      <div class="sidebar-item" data-nav="documents">
         <div class="sidebar-icon folder"></div>
         <span>Documents</span>
       </div>
-      <div class="sidebar-item">
+      <div class="sidebar-item" data-nav="downloads">
         <div class="sidebar-icon downloads"></div>
         <span>Downloads</span>
       </div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-header">This PC</div>
-      <div class="sidebar-item">
+      <div class="sidebar-item" data-nav="desktop">
         <div class="sidebar-icon folder"></div>
         <span>Desktop</span>
       </div>
-      <div class="sidebar-item">
+      <div class="sidebar-item" data-nav="documents">
         <div class="sidebar-icon documents"></div>
         <span>Documents</span>
       </div>
-      <div class="sidebar-item">
+      <div class="sidebar-item" data-nav="pictures">
         <div class="sidebar-icon pictures"></div>
         <span>Pictures</span>
       </div>
-      <div class="sidebar-item">
+      <div class="sidebar-item" data-nav="music">
         <div class="sidebar-icon music"></div>
         <span>Music</span>
       </div>
-      <div class="sidebar-item">
+      <div class="sidebar-item" data-nav="videos">
         <div class="sidebar-icon videos"></div>
         <span>Videos</span>
       </div>
@@ -487,6 +487,7 @@ function createFileExplorerTab(container) {
   // Content area
   const contentArea = document.createElement('div');
   contentArea.className = 'explorer-content';
+  contentArea.id = 'explorer-content-area';
   
   // Header
   const contentHeader = document.createElement('div');
@@ -501,27 +502,75 @@ function createFileExplorerTab(container) {
   // Folder grid
   const folderGrid = document.createElement('div');
   folderGrid.className = 'folder-grid';
+  folderGrid.id = 'folder-grid';
   
-  // Add the 5 folders
-  const folders = [
-    { name: 'Restricted', date: '2024-01-15 14:30', type: 'File folder', restricted: true },
-    { name: 'Images', date: '2024-03-20 09:15', type: 'File folder', restricted: false },
-    { name: 'Ar3ne', date: '2024-02-10 16:45', type: 'File folder', restricted: false },
-    { name: 'Assignments', date: '2024-04-05 11:20', type: 'File folder', restricted: false },
-    { name: 'Art', date: '2024-03-28 13:10', type: 'File folder', restricted: false }
-  ];
+  // Add the 5 folders (initial view)
+  function renderRootFolders() {
+    folderGrid.innerHTML = '';
+    const folders = [
+      { name: 'Restricted', date: '2024-01-15 14:30', type: 'File folder', restricted: true, id: 'restricted' },
+      { name: 'Images', date: '2024-03-20 09:15', type: 'File folder', restricted: false, id: 'images' },
+      { name: 'Ar3ne', date: '2024-02-10 16:45', type: 'File folder', restricted: false, id: 'ar3ne' },
+      { name: 'Assignments', date: '2024-04-05 11:20', type: 'File folder', restricted: false, id: 'assignments' },
+      { name: 'Art', date: '2024-03-28 13:10', type: 'File folder', restricted: false, id: 'art' }
+    ];
+    
+    folders.forEach(folder => {
+      const folderItem = document.createElement('div');
+      folderItem.className = 'folder-item' + (folder.restricted ? ' restricted' : '');
+      folderItem.setAttribute('data-folder-id', folder.id);
+      folderItem.innerHTML = `
+        <div class="folder-icon"></div>
+        <div class="folder-name">${folder.name}</div>
+        <div class="folder-date">${folder.date}</div>
+        <div class="folder-type">${folder.type}</div>
+      `;
+      
+      // Add click handler for Ar3ne folder
+      if (folder.id === 'ar3ne') {
+        folderItem.addEventListener('dblclick', function(e) {
+          e.stopPropagation();
+          renderAr3neFiles();
+          document.getElementById('address-text').textContent = 'This PC > Documents > Ar3ne';
+        });
+      }
+      
+      folderGrid.appendChild(folderItem);
+    });
+  }
   
-  folders.forEach(folder => {
-    const folderItem = document.createElement('div');
-    folderItem.className = 'folder-item' + (folder.restricted ? ' restricted' : '');
-    folderItem.innerHTML = `
-      <div class="folder-icon"></div>
-      <div class="folder-name">${folder.name}</div>
-      <div class="folder-date">${folder.date}</div>
-      <div class="folder-type">${folder.type}</div>
-    `;
-    folderGrid.appendChild(folderItem);
-  });
+  // Function to render Ar3ne files
+  function renderAr3neFiles() {
+    folderGrid.innerHTML = '';
+    
+    const files = [
+      { name: 'ConquestMother.txt', date: '2024-05-10 08:30', type: 'Text Document', icon: 'Applications/Ar3ne/Document.png', id: 'doc1' },
+      { name: 'Aqulia.jpg', date: '2024-05-12 14:22', type: 'JPEG Image', icon: 'Applications/Ar3ne/Picture.png', id: 'img1' },
+      { name: 'Scream.wav', date: '2024-05-08 19:45', type: 'Wave Sound', icon: 'Applications/Ar3ne/Audio.png', id: 'aud1' },
+      { name: 'Eye.mp3', date: '2024-05-15 23:11', type: 'MP3 Audio', icon: 'Applications/Ar3ne/Video.png', id: 'vid1' }
+    ];
+    
+    files.forEach(file => {
+      const fileItem = document.createElement('div');
+      fileItem.className = 'file-item';
+      fileItem.setAttribute('data-file-id', file.id);
+      fileItem.innerHTML = `
+        <div class="file-icon" style="background-image: url('${file.icon}')"></div>
+        <div class="file-name">${file.name}</div>
+        <div class="file-date">${file.date}</div>
+        <div class="file-type">${file.type}</div>
+      `;
+      folderGrid.appendChild(fileItem);
+    });
+    
+    // Update status bar item count
+    const statusLeft = document.querySelector('.status-left');
+    if (statusLeft) {
+      statusLeft.innerHTML = `<span>4 items</span><span>4 files</span>`;
+    }
+  }
+  
+  renderRootFolders();
   
   contentArea.appendChild(contentHeader);
   contentArea.appendChild(folderGrid);
@@ -535,7 +584,7 @@ function createFileExplorerTab(container) {
   statusbar.innerHTML = `
     <div class="status-left">
       <span>5 items</span>
-      <span>5 folders selected</span>
+      <span>5 folders</span>
     </div>
     <div class="status-right">
       <div class="view-options">
@@ -554,6 +603,32 @@ function createFileExplorerTab(container) {
   tab.appendChild(header);
   tab.appendChild(content);
   container.appendChild(tab);
+  
+  // Add back button functionality
+  const backBtn = toolbar.querySelector('#back-btn');
+  if (backBtn) {
+    backBtn.addEventListener('click', function() {
+      renderRootFolders();
+      document.getElementById('address-text').textContent = 'This PC > Documents';
+      const statusLeft = document.querySelector('.status-left');
+      if (statusLeft) {
+        statusLeft.innerHTML = `<span>5 items</span><span>5 folders</span>`;
+      }
+    });
+  }
+  
+  // Add up button functionality
+  const upBtn = toolbar.querySelector('#up-btn');
+  if (upBtn) {
+    upBtn.addEventListener('click', function() {
+      renderRootFolders();
+      document.getElementById('address-text').textContent = 'This PC > Documents';
+      const statusLeft = document.querySelector('.status-left');
+      if (statusLeft) {
+        statusLeft.innerHTML = `<span>5 items</span><span>5 folders</span>`;
+      }
+    });
+  }
 
   // === DRAG LOGIC ===
   header.addEventListener('mousedown', function(e) {

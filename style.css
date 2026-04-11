@@ -918,7 +918,7 @@ body {
   gap: 2px;
 }
 
-.folder-item {
+.folder-item, .file-item {
   display: grid;
   grid-template-columns: 40px 1fr 120px 140px;
   padding: 10px 0;
@@ -928,15 +928,14 @@ body {
   border: 1px solid transparent;
 }
 
-.folder-item:hover {
+.folder-item:hover, .file-item:hover {
   background: #2d2d2d;
   border-color: #4d4d4d;
 }
 
-.folder-icon {
+.folder-icon, .file-icon {
   width: 20px;
   height: 20px;
-  background-image: url('Applications/Folder/Folder.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -944,21 +943,21 @@ body {
   margin: 0 auto;
 }
 
-.folder-name {
+.folder-name, .file-name {
   color: #fff;
   font-size: 13px;
   display: flex;
   align-items: center;
 }
 
-.folder-date {
+.folder-date, .file-date {
   color: #999;
   font-size: 12px;
   display: flex;
   align-items: center;
 }
 
-.folder-type {
+.folder-type, .file-type {
   color: #999;
   font-size: 12px;
   display: flex;
