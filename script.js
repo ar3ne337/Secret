@@ -18,38 +18,29 @@ let currentDragTab = null;
 
 // Wait for DOM load
 document.addEventListener('DOMContentLoaded', function() {
-  // console.log('=== Music Tab Script Loaded ===');
   
   // Select elements
   const musicIcon = document.getElementById('app10');  // Music app icon
   const tabContainer = document.getElementById('app-container');  // Parent for tabs
-  
-  // console.log('Music icon found:', musicIcon);
-  // console.log('Tab container found:', tabContainer);
 
   // === CLICK HANDLER: Toggle Music Tab ===
   if (musicIcon) {
     musicIcon.style.cursor = 'pointer';  // Ensure clickable
     musicIcon.addEventListener('click', function(e) {
-      // console.log('MUSIC ICON CLICKED');
       e.stopPropagation();  // Prevent bubble
       
       if (musicTab && musicTab.parentNode) {
         // Close tab if open
-        // console.log('Closing tab');
         musicTab.remove();
         musicTab = null;
       } else {
         // === CREATE TAB ===
-        // console.log('Creating Music tab');
         musicTab = createMusicTab(tabContainer);
         
         // Initial position (centered horizontally)
         positionTab();
       }
     });
-  } else {
-    // console.error('ERROR: Music icon (#app10) not found!');
   }
 
   // === NOTEPAD CLICK HANDLER ===
@@ -57,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (notepadIcon) {
     notepadIcon.style.cursor = 'pointer';
     notepadIcon.addEventListener('click', function(e) {
-      // console.log('NOTEPAD ICON CLICKED');
       e.stopPropagation();
       
       if (notepadTab && notepadTab.parentNode) {
@@ -146,8 +136,6 @@ function createMusicTab(container) {
   tab.className = 'tab';
   tab.style.zIndex = zIndexCounter++;
 
-  // console.log('Tab zIndex set to:', tab.style.zIndex);
-
   // Header (draggable area)
   const header = document.createElement('div');
   header.className = 'tab-header';
@@ -231,8 +219,6 @@ function createNotepadTab(container) {
   tab.id = 'notepad-tab';
   tab.className = 'tab';
   tab.style.zIndex = zIndexCounter++;
-
-  // console.log('Notepad Tab zIndex set to:', tab.style.zIndex);
 
   // Header (draggable area)
   const header = document.createElement('div');
@@ -830,9 +816,9 @@ function createDiskExplorerTab(container) {
     </div>
     <div class="status-right">
       <div class="view-options">
-        <button class="view-btn" title="Details"><img src="Sources/DesktopIcons/View.png" alt="Details" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
-        <button class="view-btn" title="Icons"><img src="Sources/DesktopIcons/Icons.png" alt="Icons" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
-        <button class="view-btn" title="List"><img src="Sources/DesktopIcons/List.png" alt="List" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
+        <button class="view-btn" title="Details"><img src="https://a3.pages.dev/Sources/DesktopIcons/View.png" alt="Details" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
+        <button class="view-btn" title="Icons"><img src="https://a3.pages.dev/Sources/DesktopIcons/Icons.png" alt="Icons" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
+        <button class="view-btn" title="List"><img src="https://a3.pages.dev/Sources/DesktopIcons/List.png" alt="List" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
       </div>
     </div>
   `;
@@ -1059,48 +1045,65 @@ function createFolderExplorerTab(container) {
     }
   }
   
-  // Function to render Ar3ne files
-  function renderAr3neFiles() {
-    folderGrid.innerHTML = '';
+// Function to render Ar3ne files
+function renderAr3neFiles() {
+  folderGrid.innerHTML = '';
+  
+  const files = [
+    { name: 'Report.txt', date: '2024-05-10 08:30', type: 'Text Document', icon: 'txt' },
+    { name: 'Aqulia.jpg', date: '2024-05-12 14:22', type: 'JPEG Image', icon: 'img' },
+    { name: 'Scream.wav', date: '2024-05-08 19:45', type: 'Wave Sound', icon: 'audio' },
+    { name: 'Eye.mp4', date: '2024-05-15 23:11', type: 'MP4 Video', icon: 'video' }
+  ];
+  
+  files.forEach(file => {
+    const fileItem = document.createElement('div');
+    fileItem.className = 'file-item';
+    fileItem.setAttribute('data-file-id', file.name);
     
-    const files = [
-      { name: 'Report.txt', date: '2024-05-10 08:30', type: 'Text Document', icon: 'txt' },
-      { name: 'Aqulia.jpg', date: '2024-05-12 14:22', type: 'JPEG Image', icon: 'img' },
-      { name: 'Scream.wav', date: '2024-05-08 19:45', type: 'Wave Sound', icon: 'audio' },
-      { name: 'Eye.mp4', date: '2024-05-15 23:11', type: 'MP4 Video', icon: 'video' }
-    ];
+    // Create the file icon div
+    const fileIcon = document.createElement('div');
+    fileIcon.className = 'file-icon';
     
-    files.forEach(file => {
-      const fileItem = document.createElement('div');
-      fileItem.className = 'file-item';
-      fileItem.setAttribute('data-file-id', file.name);
-      
-      let iconStyle = '';
-      if (file.icon === 'txt') {
-        iconStyle = 'background-image: url("Applications/Notepad/Notepad.png");';
-      } else if (file.icon === 'img') {
-        iconStyle = 'background-image: url("Applications/Gallary/Gallary.png");';
-      } else if (file.icon === 'audio') {
-        iconStyle = 'background-image: url("Applications/Music/Music.png");';
-      } else if (file.icon === 'video') {
-        iconStyle = 'background-image: url("Sources/DesktopIcons/Videos.png");';
-      }
-      
-      fileItem.innerHTML = `
-        <div class="file-icon" style="${iconStyle}"></div>
-        <div class="file-name">${file.name}</div>
-        <div class="file-date">${file.date}</div>
-        <div class="file-type">${file.type}</div>
-      `;
-      folderGrid.appendChild(fileItem);
-    });
-    
-    // Update status bar
-    const statusLeft = document.querySelector('#folder-explorer-tab .status-left');
-    if (statusLeft) {
-      statusLeft.innerHTML = `<span>4 items</span><span>4 files</span>`;
+    // Set the background image using JavaScript style property (more reliable than string template)
+    if (file.icon === 'txt') {
+      fileIcon.style.backgroundImage = 'url("Applications/Notepad/Notepad.png")';
+    } else if (file.icon === 'img') {
+      fileIcon.style.backgroundImage = 'url("Applications/Gallary/Gallary.png")';
+    } else if (file.icon === 'audio') {
+      fileIcon.style.backgroundImage = 'url("Applications/Music/Music.png")';
+    } else if (file.icon === 'video') {
+      fileIcon.style.backgroundImage = 'url("Sources/DesktopIcons/Videos.png")';
     }
+    
+    // Create other elements
+    const fileName = document.createElement('div');
+    fileName.className = 'file-name';
+    fileName.textContent = file.name;
+    
+    const fileDate = document.createElement('div');
+    fileDate.className = 'file-date';
+    fileDate.textContent = file.date;
+    
+    const fileType = document.createElement('div');
+    fileType.className = 'file-type';
+    fileType.textContent = file.type;
+    
+    // Append all elements to fileItem
+    fileItem.appendChild(fileIcon);
+    fileItem.appendChild(fileName);
+    fileItem.appendChild(fileDate);
+    fileItem.appendChild(fileType);
+    
+    folderGrid.appendChild(fileItem);
+  });
+  
+  // Update status bar
+  const statusLeft = document.querySelector('#folder-explorer-tab .status-left');
+  if (statusLeft) {
+    statusLeft.innerHTML = `<span>4 items</span><span>4 files</span>`;
   }
+}
   
   renderRootFolders();
   

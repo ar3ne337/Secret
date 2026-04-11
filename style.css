@@ -129,19 +129,19 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-
-  &::before {
-    content: '';
-    width: 60%;
-    height: 60%; 
-    background-image: url('Sources/DesktopIcons/Home.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    filter: brightness(0) invert(1);
-  }
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.home-button::before {
+  content: '';
+  width: 60%;
+  height: 60%; 
+  background-image: url('Sources/DesktopIcons/Home.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(0) invert(1);
 }
 
 
@@ -155,7 +155,7 @@ html, body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.home-button:hover {
+.home-button:hover::before {
   filter: brightness(0) invert(1) brightness(1.2);
 }
 
@@ -275,11 +275,10 @@ html, body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.taskbar-icon:hover {
+.taskbar-icon:hover::before {
   filter: brightness(0) invert(1) brightness(1.2);
 }
 
-.clock { font-family: 'Courier New', monospace; }
 .clock { font-family: 'Courier New', monospace; }
 
 
@@ -314,6 +313,10 @@ html, body {
   min-height: 200px;
   resize: both;
   cursor: default;
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6) inset;
+  min-height: 550px;
+  min-width: 420px;
 }
 
 .tab-header {
@@ -392,13 +395,6 @@ html, body {
   height: 32px !important;
 }
 
-.tab {
-  background: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.6) inset;
-  min-height: 550px; /* Optimized for music player */
-  min-width: 420px;
-}
-
 
 
 
@@ -408,7 +404,6 @@ html, body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* Adjust these values manually for size */
   width: 400px; 
   height: 300px;
   background-image: url('Sources/DesktopIcons/HomeBackground.png');
@@ -966,10 +961,13 @@ body {
 }
 
 .file-icon {
+  width: 20px;
+  height: 20px;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   filter: brightness(0) invert(1);
+  margin: 0 auto;
 }
 
 .disk-icon {
