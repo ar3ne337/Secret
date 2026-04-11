@@ -3,172 +3,438 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MISSING PERSON REPORT</title>
+  <title>CLASSIFIED // INTERPOL RED NOTICE // MISSING PERSON</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-      background: #000; 
-      color: #0f0; 
-      font-family: 'Courier New', monospace; 
-      height: 100vh; 
-      overflow: hidden; 
-      padding: 20px;
-    }
-    .file-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: rgba(0,20,0,0.95);
-      border: 2px solid #0f0;
-      box-shadow: 0 0 30px rgba(0,255,0,0.3);
-      height: 120vh;
-      overflow-y: scroll;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .file-container::-webkit-scrollbar {
-      display: none;
-    }
-    .header {
-      background: rgba(0,50,0,1);
-      padding: 15px 20px;
-      border-bottom: 2px solid #0f0;
-      text-align: center;
-    }
-    .header h1 {
-      font-size: 18px;
-      margin-bottom: 5px;
-    }
-    .header .stamp {
-      font-size: 12px;
-      color: #f80;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .content {
-      padding: 25px;
-      line-height: 1.6;
-      font-size: 13px;
-    }
-    .section {
-      margin-bottom: 25px;
-      border-bottom: 1px solid rgba(0,255,0,0.3);
-      padding-bottom: 15px;
-    }
-    .section h2 {
-      color: #0f0;
-      font-size: 14px;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .photo-placeholder {
-      width: 150px;
-      height: 200px;
-      background: rgba(0,0,0,0.8);
-      border: 2px solid #f00;
-      margin: 10px 0 15px 0;
-      position: relative;
+
+    body {
+      background: #0b0c0e;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #f00;
-      font-size: 12px;
+      padding: 30px 20px;
+      font-family: 'Courier New', 'Lucida Sans Typewriter', monospace;
     }
-    .photo-placeholder::before {
-      content: '[PHOTO REDACTED]';
+
+    /* Classified document container — cyberpunk red/blue interpol theme */
+    .classified-doc {
+      max-width: 780px;
+      width: 100%;
+      background: #0e0f11;
+      box-shadow: 0 0 40px rgba(0, 180, 255, 0.18), 0 8px 24px rgba(0,0,0,0.9);
+      border: 1px solid #1e3a5f;
+      position: relative;
+    }
+
+    /* Classification banner — interpol blue/cyan */
+    .class-banner {
+      background: #0a1a2b;
+      color: #3cc6ff;
+      padding: 8px 0;
       text-align: center;
-      font-weight: bold;
+      font-weight: 900;
+      font-size: 18px;
+      letter-spacing: 6px;
+      border-bottom: 1px solid #00a6ff;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px #00b4ff;
     }
-    .field {
+
+    .class-banner.bottom {
+      border-top: 1px solid #00a6ff;
+      border-bottom: none;
+      font-size: 14px;
+      letter-spacing: 4px;
+    }
+
+    /* INTERPOL Header — cyberpunk style */
+    .interpol-header {
+      padding: 24px 30px 12px;
+      border-bottom: 1px solid #1e4f7a;
       display: flex;
-      margin: 12px 0;
-      min-height: 20px;
+      justify-content: space-between;
+      align-items: flex-end;
     }
-    .field label {
-      width: 140px;
-      font-weight: bold;
-      color: #888;
-      padding-right: 10px;
+
+    .interpol-seal {
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: 2px;
+      color: #2ab3ff;
+      text-shadow: 0 0 8px #0099ff;
     }
-    .field span {
-      color: #0f0;
-      flex: 1;
-      word-break: break-word;
-    }
-    .case-notes {
-      background: rgba(0,0,0,0.5);
-      padding: 15px;
-      border-left: 4px solid #f00;
-      margin-top: 15px;
-      font-style: italic;
-    }
-    .footer {
-      text-align: center;
-      padding: 20px;
-      border-top: 2px solid #0f0;
-      background: rgba(0,50,0,1);
+
+    .interpol-seal span {
       font-size: 12px;
-      color: #666;
+      display: block;
+      color: #3d7eb3;
+      font-weight: normal;
+      letter-spacing: 1.5px;
+      text-shadow: none;
     }
-    .scan-line {
+
+    .case-number {
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .case-number .label {
+      font-size: 11px;
+      color: #3d7eb3;
+      text-transform: uppercase;
+    }
+
+    .case-number .number {
+      font-size: 24px;
+      font-family: monospace;
+      border-bottom: 2px solid #00a6ff;
+      padding-bottom: 4px;
+      color: #5cc8ff;
+      text-shadow: 0 0 8px #00b4ff;
+    }
+
+    /* Document title */
+    .doc-title {
+      padding: 20px 30px 8px;
+      font-size: 26px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 6px;
+      color: #2ab3ff;
+      text-align: center;
+      text-shadow: 0 0 14px #00aaff;
+    }
+
+    /* Priority stamp — interpol red alert */
+    .priority-stamp {
+      text-align: center;
+      margin: 0 30px 20px;
+    }
+
+    .priority-stamp .stamp {
+      display: inline-block;
+      border: 2px solid #ff4d4d;
+      color: #ff5e5e;
+      font-weight: 900;
+      font-size: 16px;
+      padding: 6px 28px;
+      letter-spacing: 8px;
+      transform: rotate(-2deg);
+      text-transform: uppercase;
+      background: rgba(255,60,60,0.03);
+      text-shadow: 0 0 10px #ff3a3a;
+    }
+
+    /* Content sections */
+    .content {
+      padding: 5px 30px 25px;
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-header {
+      font-weight: 900;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: #2ab3ff;
+      border-bottom: 2px solid #1e4f7a;
+      padding-bottom: 6px;
+      margin-bottom: 18px;
+      text-shadow: 0 0 8px #0099ff;
+    }
+
+    /* Data grid */
+    .data-row {
+      display: flex;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .data-label {
+      width: 170px;
+      font-weight: 700;
+      color: #3d7eb3;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+    }
+
+    .data-value {
+      flex: 1;
+      font-weight: 500;
+      color: #66ddff;
+      border-bottom: 1px dotted #1e4f7a;
+      padding-bottom: 2px;
+    }
+
+    /* Photo area — cyberpunk minimal */
+    .photo-section {
+      display: flex;
+      gap: 25px;
+      margin: 15px 0 20px;
+    }
+
+    .photo-box {
+      width: 140px;
+      height: 180px;
+      background: #0b1116;
+      border: 2px solid #1e4f7a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 15px rgba(0,180,255,0.1);
+    }
+
+    .photo-box::before {
+      content: "";
       position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #0f0, transparent);
-      animation: scan 3s linear infinite;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,200,255,0.03) 2px, rgba(0,200,255,0.03) 4px);
+      pointer-events: none;
     }
-    @keyframes scan {
-      0% { opacity: 0; transform: translateY(0); }
-      50% { opacity: 1; }
-      100% { opacity: 0; transform: translateY(100px); }
+
+    .photo-box .caption {
+      margin-top: 8px;
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #2a6b96;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .photo-box .redacted {
+      color: #ff4d4d;
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid #ff4d4d;
+      padding: 4px 10px;
+      background: #0e0f11;
+      text-shadow: 0 0 6px #ff0000;
+    }
+
+    .photo-meta {
+      font-size: 11px;
+      color: #2a7eb3;
+    }
+
+    .photo-meta div {
+      margin-bottom: 8px;
+    }
+
+    .photo-meta strong {
+      color: #2ab3ff;
+    }
+
+    /* Notes block */
+    .notes-block {
+      background: #0d131c;
+      padding: 18px 20px;
+      border-left: 6px solid #00a6ff;
+      margin: 20px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #7ad0ff;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+    }
+
+    .footer-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #1e3a5f;
+      font-size: 11px;
+      color: #2a7eb3;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Watermark — interpol blue */
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-30deg);
+      font-size: 80px;
+      font-weight: 900;
+      color: rgba(0, 180, 255, 0.025);
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 1;
+      text-transform: uppercase;
+      letter-spacing: 20px;
+      text-shadow: 0 0 20px rgba(0,160,255,0.05);
+    }
+
+    /* Ensure content stays above watermark */
+    .classified-doc > *:not(.watermark) {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Scan line effect overlay */
+    .classified-doc::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(0deg, rgba(0,40,80,0.02) 0px, rgba(0,200,255,0.01) 1px, transparent 2px);
+      pointer-events: none;
+      z-index: 3;
     }
   </style>
 </head>
 <body>
-  <div class="file-container">
-    <div class="scan-line"></div>
-    
-    <div class="header">
-      <h1>MISSING PERSON REPORT</h1>
-      <div class="stamp">CASE #MP-2024-047</div>
+<div class="classified-doc">
+  
+  <!-- CLASSIFIED WATERMARK (INTERPOL) -->
+  <div class="watermark">// INTERPOL // RED //</div>
+  
+  <!-- TOP CLASSIFICATION BANNER -->
+  <div class="class-banner">/// CLASSIFIED /// INTERPOL /// RED NOTICE ///</div>
+  
+  <!-- HEADER (INTERPOL) -->
+  <div class="interpol-header">
+    <div class="interpol-seal">
+      INTERNATIONAL CRIMINAL POLICE ORGANIZATION
+      <span>LYON, FRANCE · CYBERCRIME DIRECTORATE · UNIT 8</span>
     </div>
-
-    <div class="content">
-      <div class="section">
-        <h2>SUBJECT INFORMATION</h2>
-        <div class="photo-placeholder"></div>
-        <div class="field"><label>Name:</label> <span>JANE DOE</span></div>
-        <div class="field"><label>Age:</label> <span>28</span></div>
-        <div class="field"><label>Last Seen:</label> <span>October 15, 2024 - Downtown Sector 7</span></div>
-        <div class="field"><label>Height:</label> <span>5'6"</span></div>
-        <div class="field"><label>Distinguishing Marks:</label> <span>Tattoo on left wrist, scar above right eyebrow</span></div>
-      </div>
-
-      <div class="section">
-        <h2>LAST KNOWN DETAILS</h2>
-        <div class="field"><label>Vehicle:</label> <span>Black 2018 Honda Civic, plate X7K-392</span></div>
-        <div class="field"><label>Phone:</label> <span>Last pinged 2:47 AM, burner phone detected</span></div>
-        <div class="field"><label>Associates:</label> <span>Known connections to Sector 9 smuggling ring</span></div>
-      </div>
-
-      <div class="section">
-        <h2>CASE NOTES</h2>
-        <div class="case-notes">
-          Subject was under surveillance for suspected data breach activities. 
-          Last communication indicated intention to "disappear." CCTV shows subject 
-          entering abandoned warehouse at 23:14. No exit recorded. Possible abduction 
-          or voluntary disappearance. HIGH PRIORITY - mobilize all units.
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">
-      <div>REPORT GENERATED: October 16, 2024 04:23 AM</div>
-      <div>OFFICER ID: DET-4729 | STATUS: ACTIVE INVESTIGATION</div>
+    <div class="case-number">
+      <div class="label">RED NOTICE</div>
+      <div class="number">RN-2024-8842</div>
     </div>
   </div>
+  
+  <!-- TITLE -->
+  <div class="doc-title">MISSING PERSON // WANTED</div>
+  
+  <!-- PRIORITY STAMP -->
+  <div class="priority-stamp">
+    <div class="stamp">⚠ PRIORITY: IMMEDIATE ⚠</div>
+  </div>
+  
+  <!-- MAIN CONTENT -->
+  <div class="content">
+    
+    <!-- SUBJECT INFORMATION -->
+    <div class="section">
+      <div class="section-header">I. SUBJECT IDENTIFICATION</div>
+      
+      <div class="photo-section">
+        <div class="photo-box">
+          <div class="redacted">[BIOMETRIC BLOCKED]</div>
+          <div class="caption">REF # INTPL-8842-A</div>
+        </div>
+        <div class="photo-meta">
+          <div><strong>SOURCE:</strong> INTERPOL I-24/7 · NCB COMPOSITE</div>
+          <div><strong>CLASSIFICATION:</strong> RESTRICTED / LAW ENFORCEMENT ONLY</div>
+          <div><strong>NOTE:</strong> Facial template mismatch · counter‑surveillance trained</div>
+        </div>
+      </div>
+      
+      <div class="data-row">
+        <div class="data-label">FULL NAME / ALIAS</div>
+        <div class="data-value">DOE, JANE [AKA: "WRAITH", "ECHO", "NYX-7"]</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">DATE OF BIRTH</div>
+        <div class="data-value">1996-03-12 (AGE 28) · BIRTH REGISTRY FLAGGED</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">HEIGHT / WEIGHT</div>
+        <div class="data-value">168 CM / 59 KG (5'6" / 130 LBS)</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">EYES / HAIR</div>
+        <div class="data-value">GREEN / BROWN (FREQUENT COSMETIC ALTERATION)</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">DISTINGUISHING</div>
+        <div class="data-value">OUROBOROS TATTOO (L WRIST) · 4CM FOREHEAD SCAR · UNREGISTERED OCCIPITAL DATA-PORT</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">NATIONALITY</div>
+        <div class="data-value">UNITED STATES · MULTIPLE SUSPECTED IDENTITIES (FRAUD ALERT)</div>
+      </div>
+    </div>
+    
+    <!-- LAST KNOWN WHEREABOUTS -->
+    <div class="section">
+      <div class="section-header">II. LAST CONFIRMED SIGHTING</div>
+      
+      <div class="data-row">
+        <div class="data-label">DATE / TIME (UTC)</div>
+        <div class="data-value">15 OCT 2024 · 23:14 UTC</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">LOCATION</div>
+        <div class="data-value">WAREHOUSE 7B · SECTOR 7 INDUSTRIAL · [REDACTED] DOWNTOWN</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">VEHICLE</div>
+        <div class="data-value">BLACK 2018 HONDA CIVIC · PLATE X7K-392 (STOLEN / CLONED)</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">COMMUNICATION</div>
+        <div class="data-value">ENCRYPTED BURNER · LAST PING 02:47 (2.3KM OFFSET) · IMSI UNKNOWN</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">CCTV / SENSOR LOG</div>
+        <div class="data-value">ENTRY CONFIRMED 23:14:07 · NO EXIT · SENSOR ANOMALY AT 01:30</div>
+      </div>
+    </div>
+    
+    <!-- KNOWN ASSOCIATES -->
+    <div class="section">
+      <div class="section-header">III. ASSOCIATES & CRIMINAL NETWORKS</div>
+      
+      <div class="data-row">
+        <div class="data-label">PRIMARY CONTACT</div>
+        <div class="data-value">"CIPHER" · TRANSNATIONAL SMUGGLING SYNDICATE · GHOST IDENTITY</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">FORMER ASSOCIATE</div>
+        <div class="data-value">M. KOVACS (DECEASED 2023) · LEGACY ENCRYPTION KEYS STILL ACTIVE</div>
+      </div>
+      <div class="data-row">
+        <div class="data-label">SUSPECTED OFFENSES</div>
+        <div class="data-value">CYBER INTRUSION · ESPIONAGE · DATA THEFT · DARKNET "VOID CHAIN"</div>
+      </div>
+    </div>
+    
+    <!-- INVESTIGATIVE NOTES -->
+    <div class="section">
+      <div class="section-header">IV. INVESTIGATIVE SUMMARY</div>
+      
+      <div class="notes-block">
+        Subject is wanted for questioning regarding unauthorized access to INTERPOL secure subnet OMEGA-7 and associated data exfiltration. Last encrypted comms intercepted: "dead drop at the lighthouse" and "the lighthouse only blinks once."<br><br>
+        Thermal sweeps indicate subject was alone in warehouse. At 01:30 UTC, sector surveillance suffered coordinated 9-second blackout. No exit recorded. Drone and K-9 negative.<br><br>
+        <strong style="color: #5cc8ff;">Assessment:</strong> Voluntary disappearance with professional facilitation. Subject believed to possess sensitive compartmented intelligence. Consider armed and evasive. All NCBs: INTERPOL Red Notice diffusion — locate and detain.
+      </div>
+    </div>
+    
+    <!-- REPORTING OFFICER & ADMIN (INTERPOL) -->
+    <div class="footer-meta">
+      <div>REPORTING OFFICER: C/INSP. V. DURAND · INTERPOL ID 8842-IA</div>
+      <div>NOTICE ISSUED: 2024-10-16 07:15 UTC</div>
+    </div>
+    
+    <div class="footer-meta" style="margin-top: 5px; padding-top: 10px;">
+      <div>DISTRIBUTION: ALL NCBs · CYBER FUSION CENTRE · JOINT TASK FORCE</div>
+      <div>STATUS: <span style="color: #3cc6ff; text-shadow: 0 0 8px #0099ff;">RED NOTICE · ACTIVE</span></div>
+    </div>
+    
+  </div><!-- end content -->
+  
+  <!-- BOTTOM CLASSIFICATION BANNER -->
+  <div class="class-banner bottom">/// CLASSIFIED /// INTERPOL /// RED NOTICE ///</div>
+  
+</div><!-- end classified-doc -->
 </body>
 </html>

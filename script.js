@@ -844,7 +844,7 @@ function createFolderExplorerTab(container) {
     folderGrid.innerHTML = '';
     
     const files = [
-      { name: 'ConquestMother.txt', date: '2024-05-10 08:30', type: 'Text Document', icon: 'txt' },
+      { name: 'Report.txt', date: '2024-05-10 08:30', type: 'Text Document', icon: 'txt' },
       { name: 'Aqulia.jpg', date: '2024-05-12 14:22', type: 'JPEG Image', icon: 'img' },
       { name: 'Scream.wav', date: '2024-05-08 19:45', type: 'Wave Sound', icon: 'audio' },
       { name: 'Eye.mp4', date: '2024-05-15 23:11', type: 'MP4 Video', icon: 'video' }
