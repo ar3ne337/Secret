@@ -1,1 +1,344 @@
-text
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A3OS · Login</title>
+  <link rel="icon" href="Favicon/A3.svg" type="image/svg+xml">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', 'Courier New', monospace;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* background image matching OS.html */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      height: 300px;
+      background-image: url('Sources/DesktopIcons/HomeBackground.png');
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      filter: invert(1);
+      opacity: 0.15;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .login-container {
+      position: relative;
+      z-index: 10;
+      width: 380px;
+      max-width: 90vw;
+      background: rgba(20, 20, 20, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .logo-main {
+      font-size: 2.8rem;
+      font-weight: 400;
+      letter-spacing: 8px;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 4px;
+    }
+
+    .logo-sub {
+      font-size: 0.7rem;
+      letter-spacing: 6px;
+      color: rgba(255, 255, 255, 0.4);
+      text-transform: uppercase;
+    }
+
+    .avatar {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1.8rem;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar svg {
+      width: 36px;
+      height: 36px;
+      opacity: 0.6;
+      filter: invert(1);
+    }
+
+    .input-field {
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-field label {
+      display: block;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .input-field input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-field input:focus {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .input-field input::placeholder {
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 2px;
+    }
+
+    .login-btn {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+      padding: 12px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 400;
+      margin-top: 8px;
+    }
+
+    .login-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .login-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .boot-section {
+      margin-top: 24px;
+      display: none;
+    }
+
+    .boot-text {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: rgba(255, 255, 255, 0.4);
+      transition: width 0.1s linear;
+    }
+
+    .message {
+      margin-top: 16px;
+      min-height: 20px;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.7rem;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    .hint {
+      margin-top: 20px;
+      color: rgba(255, 255, 255, 0.15);
+      font-size: 0.6rem;
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <div class="logo-main">A3OS</div>
+      <div class="logo-sub">NYMOS</div>
+    </div>
+
+    <div class="avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    </div>
+
+    <div class="input-field">
+      <label>Password</label>
+      <input type="password" id="passwordInput" placeholder="········" autocomplete="off" spellcheck="false">
+    </div>
+
+    <button class="login-btn" id="loginBtn">Sign in</button>
+
+    <div class="boot-section" id="bootSection">
+      <div class="boot-text" id="bootText">Starting A3OS</div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="message" id="message"></div>
+    <div class="hint">Press Enter to continue</div>
+  </div>
+
+  <script>
+    (function() {
+      const passwordInput = document.getElementById('passwordInput');
+      const loginBtn = document.getElementById('loginBtn');
+      const bootSection = document.getElementById('bootSection');
+      const bootText = document.getElementById('bootText');
+      const progressFill = document.getElementById('progressFill');
+      const messageEl = document.getElementById('message');
+
+      let isBooting = false;
+      let bootTimer = null;
+      let progressTimer = null;
+
+      function resetBoot() {
+        if (bootTimer) clearTimeout(bootTimer);
+        if (progressTimer) clearInterval(progressTimer);
+        bootTimer = null;
+        progressTimer = null;
+        isBooting = false;
+        
+        bootSection.style.display = 'none';
+        progressFill.style.width = '0%';
+        bootText.textContent = 'Starting A3OS';
+        loginBtn.disabled = false;
+        passwordInput.disabled = false;
+        messageEl.textContent = '';
+      }
+
+      function startBoot() {
+        if (isBooting) return;
+        
+        isBooting = true;
+        loginBtn.disabled = true;
+        passwordInput.disabled = true;
+        messageEl.textContent = '';
+        
+        bootSection.style.display = 'block';
+        progressFill.style.width = '0%';
+        
+        const bootDuration = Math.floor(Math.random() * 2000) + 8000; // 8-10 seconds
+        const startTime = Date.now();
+        
+        const bootMessages = [
+          'Starting A3OS',
+          'Loading kernel',
+          'Initializing system',
+          'Starting services',
+          'Preparing desktop'
+        ];
+        let msgIndex = 0;
+        
+        progressTimer = setInterval(() => {
+          const elapsed = Date.now() - startTime;
+          const percent = Math.min((elapsed / bootDuration) * 100, 100);
+          progressFill.style.width = percent + '%';
+          
+          const newIndex = Math.min(Math.floor((percent / 100) * bootMessages.length), bootMessages.length - 1);
+          if (newIndex !== msgIndex) {
+            msgIndex = newIndex;
+            bootText.textContent = bootMessages[msgIndex];
+          }
+        }, 50);
+        
+        bootTimer = setTimeout(() => {
+          clearInterval(progressTimer);
+          progressTimer = null;
+          progressFill.style.width = '100%';
+          bootText.textContent = 'Ready';
+          
+          setTimeout(() => {
+            window.location.href = 'OS.html';
+          }, 200);
+        }, bootDuration);
+      }
+
+      function handleLogin() {
+        if (isBooting) return;
+        startBoot();
+      }
+
+      loginBtn.addEventListener('click', handleLogin);
+      
+      passwordInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (!isBooting) {
+            handleLogin();
+          }
+        }
+      });
+
+      passwordInput.focus();
+
+      window.addEventListener('beforeunload', () => {
+        if (bootTimer) clearTimeout(bootTimer);
+        if (progressTimer) clearInterval(progressTimer);
+      });
+    })();
+  </script>
+</body>
+</html>

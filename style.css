@@ -965,6 +965,13 @@ body {
   margin: 0 auto;
 }
 
+.file-icon {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(0) invert(1);
+}
+
 .disk-icon {
   background-image: url('Applications/ThisPC/Disk.png');
 }
