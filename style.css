@@ -2,6 +2,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 :root {
@@ -761,7 +767,7 @@ body {
 .address-icon {
   width: 16px;
   height: 16px;
-  background-image: url('Applications/Folder/Folder.png');
+  background-image: url('Applications/ThisPC/ThisPC.png');
   background-size: contain;
   filter: brightness(0) invert(1);
 }
@@ -894,6 +900,22 @@ body {
   background-image: url('Sources/DesktopIcons/Videos.png');
 }
 
+.sidebar-icon.disk {
+  background-image: url('Applications/ThisPC/Disk.png');
+}
+
+.sidebar-icon.network {
+  background-image: url('Applications/ThisPC/Network.png');
+}
+
+.sidebar-icon.usb {
+  background-image: url('Applications/ThisPC/USB.png');
+}
+
+.sidebar-icon.database {
+  background-image: url('Applications/ThisPC/Database.png');
+}
+
 .explorer-content {
   flex: 1;
   background: #1a1a1a;
@@ -918,7 +940,7 @@ body {
   gap: 2px;
 }
 
-.folder-item, .file-item {
+.folder-item, .file-item, .disk-item, .network-item {
   display: grid;
   grid-template-columns: 40px 1fr 120px 140px;
   padding: 10px 0;
@@ -928,12 +950,12 @@ body {
   border: 1px solid transparent;
 }
 
-.folder-item:hover, .file-item:hover {
+.folder-item:hover, .file-item:hover, .disk-item:hover, .network-item:hover {
   background: #2d2d2d;
   border-color: #4d4d4d;
 }
 
-.folder-icon, .file-icon {
+.folder-icon, .file-icon, .disk-icon, .network-icon {
   width: 20px;
   height: 20px;
   background-size: contain;
@@ -943,25 +965,83 @@ body {
   margin: 0 auto;
 }
 
-.folder-name, .file-name {
+.disk-icon {
+  background-image: url('Applications/ThisPC/Disk.png');
+}
+
+.network-icon {
+  background-image: url('Applications/ThisPC/Network.png');
+}
+
+.usb-icon {
+  background-image: url('Applications/ThisPC/USB.png');
+  filter: brightness(0) invert(1);
+}
+
+.database-icon {
+  background-image: url('Applications/ThisPC/Database.png');
+  filter: brightness(0) invert(1);
+}
+
+.folder-name, .file-name, .disk-name, .network-name {
   color: #fff;
   font-size: 13px;
   display: flex;
   align-items: center;
 }
 
-.folder-date, .file-date {
+.folder-date, .file-date, .disk-space, .network-space {
   color: #999;
   font-size: 12px;
   display: flex;
   align-items: center;
+  padding-left: 8px;
 }
 
-.folder-type, .file-type {
+.folder-type, .file-type, .disk-type, .network-type {
   color: #999;
   font-size: 12px;
   display: flex;
   align-items: center;
+  padding-left: 8px;
+}
+
+/* Storage bar styles */
+.storage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.storage-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #aaa;
+}
+
+.storage-bar {
+  width: 100%;
+  height: 4px;
+  background: #3d3d3d;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.storage-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0066cc, #0099ff);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.storage-bar-fill.warning {
+  background: linear-gradient(90deg, #ff9800, #ffc107);
+}
+
+.storage-bar-fill.critical {
+  background: linear-gradient(90deg, #f44336, #ff5722);
 }
 
 /* Special styling for restricted folder */
@@ -1022,4 +1102,40 @@ body {
 .view-btn.active {
   background: #0066cc;
   color: #fff;
+}
+
+/* Section headers in content area */
+.content-section {
+  margin-bottom: 24px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid #3d3d3d;
+  margin-bottom: 12px;
+  color: #ccc;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-header-icon {
+  width: 18px;
+  height: 18px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(0) invert(1);
+}
+
+.section-header-icon.devices {
+  background-image: url('Applications/ThisPC/ThisPC.png');
+}
+
+.section-header-icon.network-header {
+  background-image: url('Applications/ThisPC/Network.png');
 }

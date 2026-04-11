@@ -1,174 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MISSING PERSON REPORT</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { 
-      background: #000; 
-      color: #0f0; 
-      font-family: 'Courier New', monospace; 
-      height: 100vh; 
-      overflow: hidden; 
-      padding: 20px;
-    }
-    .file-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: rgba(0,20,0,0.95);
-      border: 2px solid #0f0;
-      box-shadow: 0 0 30px rgba(0,255,0,0.3);
-      height: 120vh;
-      overflow-y: scroll;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .file-container::-webkit-scrollbar {
-      display: none;
-    }
-    .header {
-      background: rgba(0,50,0,1);
-      padding: 15px 20px;
-      border-bottom: 2px solid #0f0;
-      text-align: center;
-    }
-    .header h1 {
-      font-size: 18px;
-      margin-bottom: 5px;
-    }
-    .header .stamp {
-      font-size: 12px;
-      color: #f80;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .content {
-      padding: 25px;
-      line-height: 1.6;
-      font-size: 13px;
-    }
-    .section {
-      margin-bottom: 25px;
-      border-bottom: 1px solid rgba(0,255,0,0.3);
-      padding-bottom: 15px;
-    }
-    .section h2 {
-      color: #0f0;
-      font-size: 14px;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .photo-placeholder {
-      width: 150px;
-      height: 200px;
-      background: rgba(0,0,0,0.8);
-      border: 2px solid #f00;
-      margin: 10px 0 15px 0;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #f00;
-      font-size: 12px;
-    }
-    .photo-placeholder::before {
-      content: '[PHOTO REDACTED]';
-      text-align: center;
-      font-weight: bold;
-    }
-    .field {
-      display: flex;
-      margin: 12px 0;
-      min-height: 20px;
-    }
-    .field label {
-      width: 140px;
-      font-weight: bold;
-      color: #888;
-      padding-right: 10px;
-    }
-    .field span {
-      color: #0f0;
-      flex: 1;
-      word-break: break-word;
-    }
-    .case-notes {
-      background: rgba(0,0,0,0.5);
-      padding: 15px;
-      border-left: 4px solid #f00;
-      margin-top: 15px;
-      font-style: italic;
-    }
-    .footer {
-      text-align: center;
-      padding: 20px;
-      border-top: 2px solid #0f0;
-      background: rgba(0,50,0,1);
-      font-size: 12px;
-      color: #666;
-    }
-    .scan-line {
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, #0f0, transparent);
-      animation: scan 3s linear infinite;
-    }
-    @keyframes scan {
-      0% { opacity: 0; transform: translateY(0); }
-      50% { opacity: 1; }
-      100% { opacity: 0; transform: translateY(100px); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conquest Mother · Ar3ne</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Garamond', 'Times New Roman', 'Palatino', serif;
+            padding: 2rem 1.5rem;
+            margin: 0;
+        }
+
+        .poem-wrapper {
+            max-width: 780px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff2a2a;
+            font-size: 3.4rem;
+            font-weight: 400;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 0.2rem;
+            font-family: 'Cinzel', 'Garamond', 'Times New Roman', serif;
+            word-spacing: 8px;
+            text-shadow: 
+                0 0 8px #ff0000,
+                0 0 18px #aa2222,
+                0 0 30px #7a0f0f;
+        }
+
+        .poet-credit {
+            color: #e05a5a;
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            margin-top: -0.1rem;
+            margin-bottom: 1.8rem;
+            font-style: italic;
+            text-transform: uppercase;
+            opacity: 0.95;
+            text-shadow: 
+                0 0 6px #b31b1b,
+                0 0 12px #6b0f0f;
+        }
+
+        .verse {
+            color: #ffffff;
+            font-size: 1.5rem;
+            line-height: 1.35;                /* tightened line spacing */
+            font-weight: 350;
+            text-align: center;
+            white-space: pre-line;
+            font-family: 'Garamond', 'Baskerville', 'Times New Roman', serif;
+            text-shadow: 
+                0 0 6px rgba(255, 255, 255, 0.9),
+                0 0 16px rgba(255, 200, 200, 0.5),
+                0 0 28px rgba(220, 80, 80, 0.3);
+            margin-top: 0.5rem;
+        }
+
+        /* reduce space between stanzas — smaller gap after <br><br> */
+        .verse br + br {
+            display: block;
+            content: "";
+            margin-top: 0.1rem;               /* almost no extra space between stanzas */
+        }
+
+        @media (max-width: 550px) {
+            body { padding: 1rem 0.8rem; }
+            h1 { font-size: 2.4rem; letter-spacing: 3px; }
+            .verse { font-size: 1.25rem; line-height: 1.3; }
+        }
+
+        /* Hide scrollbars across browsers */
+        * {
+            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;  /* IE/Edge */
+        }
+
+        *::-webkit-scrollbar {
+            display: none;  /* WebKit browsers */
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&display=swap');
+    </style>
+
 </head>
 <body>
-  <div class="file-container">
-    <div class="scan-line"></div>
-    
-    <div class="header">
-      <h1>MISSING PERSON REPORT</h1>
-      <div class="stamp">CASE #MP-2024-047</div>
+
+<div class="poem-wrapper">
+    <h1>CONQUEST MOTHER</h1>
+    <div class="poet-credit">by Ar3ne</div>
+    <div class="verse">
+        Atop her throne of briars and bone,<br>
+        The queen reigns, her conquest hushed.<br>
+        My hand, torn by her sweet lament,<br>
+        Bears a nail driven through stone and silken rust.<br>
+        <br>
+        A giant slumbers in the withered plains,<br>
+        Her grave a sprawl of splintered cross and shale.<br>
+        From her spine, a lineage of grief unfurls,<br>
+        Her cloak, a shroud, exacts the toll of farewell.<br>
+        <br>
+        Mothers to our toppled groves, they stand—<br>
+        Regret, a quickening pang, claws at the end.<br>
+        In anguish’s bloom, we cling to fallen boughs,<br>
+        Our roots entwined with hers, unyielding, condemned.
     </div>
+</div>
 
-    <div class="content">
-      <div class="section">
-        <h2>SUBJECT INFORMATION</h2>
-        <div class="photo-placeholder"></div>
-        <div class="field"><label>Name:</label> <span>JANE DOE</span></div>
-        <div class="field"><label>Age:</label> <span>28</span></div>
-        <div class="field"><label>Last Seen:</label> <span>October 15, 2024 - Downtown Sector 7</span></div>
-        <div class="field"><label>Height:</label> <span>5'6"</span></div>
-        <div class="field"><label>Distinguishing Marks:</label> <span>Tattoo on left wrist, scar above right eyebrow</span></div>
-      </div>
-
-      <div class="section">
-        <h2>LAST KNOWN DETAILS</h2>
-        <div class="field"><label>Vehicle:</label> <span>Black 2018 Honda Civic, plate X7K-392</span></div>
-        <div class="field"><label>Phone:</label> <span>Last pinged 2:47 AM, burner phone detected</span></div>
-        <div class="field"><label>Associates:</label> <span>Known connections to Sector 9 smuggling ring</span></div>
-      </div>
-
-      <div class="section">
-        <h2>CASE NOTES</h2>
-        <div class="case-notes">
-          Subject was under surveillance for suspected data breach activities. 
-          Last communication indicated intention to "disappear." CCTV shows subject 
-          entering abandoned warehouse at 23:14. No exit recorded. Possible abduction 
-          or voluntary disappearance. HIGH PRIORITY - mobilize all units.
-        </div>
-      </div>
-    </div>
-
-    <div class="footer">
-      <div>REPORT GENERATED: October 16, 2024 04:23 AM</div>
-      <div>OFFICER ID: DET-4729 | STATUS: ACTIVE INVESTIGATION</div>
-    </div>
-  </div>
 </body>
 </html>

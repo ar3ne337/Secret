@@ -7,6 +7,7 @@ let musicTab = null;
 let notepadTab = null;
 let pdfTab = null;
 let fileExplorerTab = null;
+let folderExplorerTab = null;
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0;
 let tabStartX = 0, tabStartY = 0;
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // === FILE EXPLORER CLICK HANDLER ===
+  // === THIS PC (FILE EXPLORER WITH DISKS) CLICK HANDLER ===
   const thisPCIcon = document.getElementById('app1');
   if (thisPCIcon) {
     thisPCIcon.style.cursor = 'pointer';
@@ -95,25 +96,25 @@ document.addEventListener('DOMContentLoaded', function() {
         fileExplorerTab.remove();
         fileExplorerTab = null;
       } else {
-        fileExplorerTab = createFileExplorerTab(tabContainer);
+        fileExplorerTab = createDiskExplorerTab(tabContainer);
         positionFileExplorerTab();
       }
     });
   }
 
-  // Also handle folder icon (app4) to open file explorer
+  // === FOLDER ICON (FILE EXPLORER WITH 5 FOLDERS) CLICK HANDLER ===
   const folderIcon = document.getElementById('app4');
   if (folderIcon) {
     folderIcon.style.cursor = 'pointer';
     folderIcon.addEventListener('click', function(e) {
       e.stopPropagation();
       
-      if (fileExplorerTab && fileExplorerTab.parentNode) {
-        fileExplorerTab.remove();
-        fileExplorerTab = null;
+      if (folderExplorerTab && folderExplorerTab.parentNode) {
+        folderExplorerTab.remove();
+        folderExplorerTab = null;
       } else {
-        fileExplorerTab = createFileExplorerTab(tabContainer);
-        positionFileExplorerTab();
+        folderExplorerTab = createFolderExplorerTab(tabContainer);
+        positionFolderExplorerTab();
       }
     });
   }
@@ -373,7 +374,8 @@ function createPdfTab(container) {
   return tab;
 }
 
-function createFileExplorerTab(container) {
+// === DISK EXPLORER TAB (This PC) ===
+function createDiskExplorerTab(container) {
   const tab = document.createElement('div');
   tab.id = 'file-explorer-tab';
   tab.className = 'tab';
@@ -385,7 +387,7 @@ function createFileExplorerTab(container) {
 
   const title = document.createElement('div');
   title.className = 'tab-title';
-  title.textContent = 'File Explorer';
+  title.textContent = 'This PC';
 
   // Controls
   const controls = document.createElement('div');
@@ -428,11 +430,11 @@ function createFileExplorerTab(container) {
     </div>
     <div class="address-bar">
       <div class="address-icon"></div>
-      <span class="address-text" id="address-text">This PC > Documents</span>
+      <span class="address-text" id="address-text">This PC</span>
     </div>
     <div class="search-box">
       <span class="search-icon"></span>
-      <input type="text" placeholder="Search Documents">
+      <input type="text" placeholder="Search This PC">
     </div>
   `;
   
@@ -489,6 +491,287 @@ function createFileExplorerTab(container) {
   contentArea.className = 'explorer-content';
   contentArea.id = 'explorer-content-area';
   
+  // Create Devices and drives section
+  const devicesSection = document.createElement('div');
+  devicesSection.className = 'content-section';
+  devicesSection.innerHTML = `
+    <div class="section-header">
+      <div class="section-header-icon devices"></div>
+      <span>Devices and drives</span>
+    </div>
+  `;
+  
+  // Create disks grid
+  const disksGrid = document.createElement('div');
+  disksGrid.className = 'folder-grid';
+  disksGrid.id = 'disks-grid';
+  
+  // Disk data
+  const disks = [
+    { name: 'Local Disk (C:)', total: '1 PB', used: '333 TB', free: '667 TB', usedPercent: 33, type: 'Local Disk' },
+    { name: 'Local Disk (E:)', total: '2 TB', used: '1.2 TB', free: '800 GB', usedPercent: 60, type: 'Local Disk' },
+    { name: 'Local Disk (F:)', total: '500 GB', used: '375 GB', free: '125 GB', usedPercent: 75, type: 'Local Disk' },
+    { name: 'USB Drive (G:)', total: '500 GB', used: '335 GB', free: '165 GB', usedPercent: 67, type: 'USB Drive' },
+    { name: 'SSD (H:)', total: '1 TB', used: '250 GB', free: '750 GB', usedPercent: 25, type: 'SSD' },
+    { name: 'NVMe (I:)', total: '2 TB', used: '500 GB', free: '1.5 TB', usedPercent: 25, type: 'NVMe SSD' }
+  ];
+  
+  disks.forEach(disk => {
+    const diskItem = document.createElement('div');
+    diskItem.className = 'disk-item';
+    
+    const barClass = disk.usedPercent > 80 ? 'critical' : (disk.usedPercent > 60 ? 'warning' : '');
+    
+    diskItem.innerHTML = `
+      <div class="disk-icon ${disk.type === 'USB Drive' ? 'usb-icon' : ''}"></div>
+      <div class="disk-name">
+        <div class="storage-info">
+          <span>${disk.name}</span>
+          <div class="storage-details">
+            <span>${disk.used} used</span>
+            <span>${disk.free} free</span>
+          </div>
+          <div class="storage-bar">
+            <div class="storage-bar-fill ${barClass}" style="width: ${disk.usedPercent}%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="disk-space">${disk.total}</div>
+      <div class="disk-type">${disk.type}</div>
+    `;
+    
+    disksGrid.appendChild(diskItem);
+  });
+  
+  devicesSection.appendChild(disksGrid);
+  
+  // Create Network locations section
+  const networkSection = document.createElement('div');
+  networkSection.className = 'content-section';
+  networkSection.style.marginTop = '24px';
+  networkSection.innerHTML = `
+    <div class="section-header">
+      <div class="section-header-icon network-header"></div>
+      <span>Network locations</span>
+    </div>
+  `;
+  
+  // Create network grid
+  const networkGrid = document.createElement('div');
+  networkGrid.className = 'folder-grid';
+  networkGrid.id = 'network-grid';
+  
+  // Network data
+  const networks = [
+    { name: 'nymos.web', total: '100 PB', used: '10 PB', free: '90 PB', usedPercent: 10, type: 'Network Drive' }
+  ];
+  
+  networks.forEach(network => {
+    const networkItem = document.createElement('div');
+    networkItem.className = 'network-item';
+    
+    const barClass = network.usedPercent > 80 ? 'critical' : (network.usedPercent > 60 ? 'warning' : '');
+    
+    networkItem.innerHTML = `
+      <div class="network-icon"></div>
+      <div class="network-name">
+        <div class="storage-info">
+          <span>${network.name}</span>
+          <div class="storage-details">
+            <span>${network.used} used</span>
+            <span>${network.free} free</span>
+          </div>
+          <div class="storage-bar">
+            <div class="storage-bar-fill ${barClass}" style="width: ${network.usedPercent}%"></div>
+          </div>
+        </div>
+      </div>
+      <div class="network-space">${network.total}</div>
+      <div class="network-type">${network.type}</div>
+    `;
+    
+    networkGrid.appendChild(networkItem);
+  });
+  
+  networkSection.appendChild(networkGrid);
+  
+  contentArea.appendChild(devicesSection);
+  contentArea.appendChild(networkSection);
+  
+  main.appendChild(sidebar);
+  main.appendChild(contentArea);
+  
+  // Status bar
+  const statusbar = document.createElement('div');
+  statusbar.className = 'explorer-statusbar';
+  statusbar.innerHTML = `
+    <div class="status-left">
+      <span>${disks.length + networks.length} items</span>
+    </div>
+    <div class="status-right">
+      <div class="view-options">
+        <button class="view-btn" title="Details"><img src="Sources/DesktopIcons/View.png" alt="Details" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
+        <button class="view-btn" title="Icons"><img src="Sources/DesktopIcons/Icons.png" alt="Icons" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
+        <button class="view-btn" title="List"><img src="Sources/DesktopIcons/List.png" alt="List" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
+      </div>
+    </div>
+  `;
+  
+  explorer.appendChild(toolbar);
+  explorer.appendChild(main);
+  explorer.appendChild(statusbar);
+  
+  content.appendChild(explorer);
+  tab.appendChild(header);
+  tab.appendChild(content);
+  container.appendChild(tab);
+
+  // === DRAG LOGIC ===
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
+
+  // === EVENT LISTENERS ===
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize(tab);
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTab(tab);
+  });
+
+  // Bring to front on mousedown
+  tab.addEventListener('mousedown', function() {
+    tab.style.zIndex = zIndexCounter++;
+  });
+
+  // Prevent text selection during drag
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+
+  return tab;
+}
+
+// === FOLDER EXPLORER TAB (Folder app) ===
+function createFolderExplorerTab(container) {
+  const tab = document.createElement('div');
+  tab.id = 'folder-explorer-tab';
+  tab.className = 'tab';
+  tab.style.zIndex = zIndexCounter++;
+
+  // Header (draggable area)
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = 'Documents';
+
+  // Controls
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  // Minimize button
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize (click to toggle)';
+
+  // Close button
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Create File Explorer content
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '0';
+  
+  // Create File Explorer UI
+  const explorer = document.createElement('div');
+  explorer.className = 'file-explorer';
+  
+  // Toolbar
+  const toolbar = document.createElement('div');
+  toolbar.className = 'explorer-toolbar';
+  toolbar.innerHTML = `
+    <div class="nav-buttons">
+      <button class="nav-btn" title="Back" id="folder-back-btn">←</button>
+      <button class="nav-btn" title="Forward">→</button>
+      <button class="nav-btn" title="Up" id="folder-up-btn">↑</button>
+    </div>
+    <div class="address-bar">
+      <div class="address-icon"></div>
+      <span class="address-text" id="folder-address-text">This PC > Documents</span>
+    </div>
+    <div class="search-box">
+      <span class="search-icon"></span>
+      <input type="text" placeholder="Search Documents">
+    </div>
+  `;
+  
+  // Main area with sidebar and content
+  const main = document.createElement('div');
+  main.className = 'explorer-main';
+  
+  // Sidebar
+  const sidebar = document.createElement('div');
+  sidebar.className = 'explorer-sidebar';
+  sidebar.innerHTML = `
+    <div class="sidebar-section">
+      <div class="sidebar-header">Quick access</div>
+      <div class="sidebar-item" data-nav="thispc">
+        <div class="sidebar-icon pc"></div>
+        <span>This PC</span>
+      </div>
+      <div class="sidebar-item active" data-nav="documents">
+        <div class="sidebar-icon folder"></div>
+        <span>Documents</span>
+      </div>
+      <div class="sidebar-item" data-nav="downloads">
+        <div class="sidebar-icon downloads"></div>
+        <span>Downloads</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-header">This PC</div>
+      <div class="sidebar-item" data-nav="desktop">
+        <div class="sidebar-icon folder"></div>
+        <span>Desktop</span>
+      </div>
+      <div class="sidebar-item" data-nav="documents">
+        <div class="sidebar-icon documents"></div>
+        <span>Documents</span>
+      </div>
+      <div class="sidebar-item" data-nav="pictures">
+        <div class="sidebar-icon pictures"></div>
+        <span>Pictures</span>
+      </div>
+      <div class="sidebar-item" data-nav="music">
+        <div class="sidebar-icon music"></div>
+        <span>Music</span>
+      </div>
+      <div class="sidebar-item" data-nav="videos">
+        <div class="sidebar-icon videos"></div>
+        <span>Videos</span>
+      </div>
+    </div>
+  `;
+  
+  // Content area
+  const contentArea = document.createElement('div');
+  contentArea.className = 'explorer-content';
+  contentArea.id = 'folder-explorer-content-area';
+  
   // Header
   const contentHeader = document.createElement('div');
   contentHeader.className = 'content-header';
@@ -504,7 +787,7 @@ function createFileExplorerTab(container) {
   folderGrid.className = 'folder-grid';
   folderGrid.id = 'folder-grid';
   
-  // Add the 5 folders (initial view)
+  // Function to render root folders
   function renderRootFolders() {
     folderGrid.innerHTML = '';
     const folders = [
@@ -531,12 +814,29 @@ function createFileExplorerTab(container) {
         folderItem.addEventListener('dblclick', function(e) {
           e.stopPropagation();
           renderAr3neFiles();
-          document.getElementById('address-text').textContent = 'This PC > Documents > Ar3ne';
+          const addressText = document.getElementById('folder-address-text');
+          if (addressText) {
+            addressText.textContent = 'This PC > Documents > Ar3ne';
+          }
+        });
+      }
+      
+      // Add click handler for Restricted folder
+      if (folder.id === 'restricted') {
+        folderItem.addEventListener('dblclick', function(e) {
+          e.stopPropagation();
+          alert('Access Denied: You do not have permission to access this folder.');
         });
       }
       
       folderGrid.appendChild(folderItem);
     });
+    
+    // Update status bar
+    const statusLeft = document.querySelector('#folder-explorer-tab .status-left');
+    if (statusLeft) {
+      statusLeft.innerHTML = `<span>5 items</span><span>5 folders</span>`;
+    }
   }
   
   // Function to render Ar3ne files
@@ -544,18 +844,30 @@ function createFileExplorerTab(container) {
     folderGrid.innerHTML = '';
     
     const files = [
-      { name: 'ConquestMother.txt', date: '2024-05-10 08:30', type: 'Text Document', icon: 'Applications/Ar3ne/Document.png', id: 'doc1' },
-      { name: 'Aqulia.jpg', date: '2024-05-12 14:22', type: 'JPEG Image', icon: 'Applications/Ar3ne/Picture.png', id: 'img1' },
-      { name: 'Scream.wav', date: '2024-05-08 19:45', type: 'Wave Sound', icon: 'Applications/Ar3ne/Audio.png', id: 'aud1' },
-      { name: 'Eye.mp3', date: '2024-05-15 23:11', type: 'MP3 Audio', icon: 'Applications/Ar3ne/Video.png', id: 'vid1' }
+      { name: 'ConquestMother.txt', date: '2024-05-10 08:30', type: 'Text Document', icon: 'txt' },
+      { name: 'Aqulia.jpg', date: '2024-05-12 14:22', type: 'JPEG Image', icon: 'img' },
+      { name: 'Scream.wav', date: '2024-05-08 19:45', type: 'Wave Sound', icon: 'audio' },
+      { name: 'Eye.mp4', date: '2024-05-15 23:11', type: 'MP4 Video', icon: 'video' }
     ];
     
     files.forEach(file => {
       const fileItem = document.createElement('div');
       fileItem.className = 'file-item';
-      fileItem.setAttribute('data-file-id', file.id);
+      fileItem.setAttribute('data-file-id', file.name);
+      
+      let iconStyle = '';
+      if (file.icon === 'txt') {
+        iconStyle = 'background-image: url("Applications/Notepad/Notepad.png");';
+      } else if (file.icon === 'img') {
+        iconStyle = 'background-image: url("Applications/Gallary/Gallary.png");';
+      } else if (file.icon === 'audio') {
+        iconStyle = 'background-image: url("Applications/Music/Music.png");';
+      } else if (file.icon === 'video') {
+        iconStyle = 'background-image: url("Sources/DesktopIcons/Videos.png");';
+      }
+      
       fileItem.innerHTML = `
-        <div class="file-icon" style="background-image: url('${file.icon}')"></div>
+        <div class="file-icon" style="${iconStyle}"></div>
         <div class="file-name">${file.name}</div>
         <div class="file-date">${file.date}</div>
         <div class="file-type">${file.type}</div>
@@ -563,8 +875,8 @@ function createFileExplorerTab(container) {
       folderGrid.appendChild(fileItem);
     });
     
-    // Update status bar item count
-    const statusLeft = document.querySelector('.status-left');
+    // Update status bar
+    const statusLeft = document.querySelector('#folder-explorer-tab .status-left');
     if (statusLeft) {
       statusLeft.innerHTML = `<span>4 items</span><span>4 files</span>`;
     }
@@ -605,27 +917,25 @@ function createFileExplorerTab(container) {
   container.appendChild(tab);
   
   // Add back button functionality
-  const backBtn = toolbar.querySelector('#back-btn');
+  const backBtn = toolbar.querySelector('#folder-back-btn');
   if (backBtn) {
     backBtn.addEventListener('click', function() {
       renderRootFolders();
-      document.getElementById('address-text').textContent = 'This PC > Documents';
-      const statusLeft = document.querySelector('.status-left');
-      if (statusLeft) {
-        statusLeft.innerHTML = `<span>5 items</span><span>5 folders</span>`;
+      const addressText = document.getElementById('folder-address-text');
+      if (addressText) {
+        addressText.textContent = 'This PC > Documents';
       }
     });
   }
   
   // Add up button functionality
-  const upBtn = toolbar.querySelector('#up-btn');
+  const upBtn = toolbar.querySelector('#folder-up-btn');
   if (upBtn) {
     upBtn.addEventListener('click', function() {
       renderRootFolders();
-      document.getElementById('address-text').textContent = 'This PC > Documents';
-      const statusLeft = document.querySelector('.status-left');
-      if (statusLeft) {
-        statusLeft.innerHTML = `<span>5 items</span><span>5 folders</span>`;
+      const addressText = document.getElementById('folder-address-text');
+      if (addressText) {
+        addressText.textContent = 'This PC > Documents';
       }
     });
   }
@@ -661,37 +971,54 @@ function createFileExplorerTab(container) {
 
 // === UTILITY FUNCTIONS ===
 function positionTab() {
-  musicTab.style.left = '50%';
-  musicTab.style.top = '20vh';
-  musicTab.style.width = '450px';
-  musicTab.style.height = '550px';
-  musicTab.style.transform = 'translateX(-50%)';
+  if (musicTab) {
+    musicTab.style.left = '50%';
+    musicTab.style.top = '20vh';
+    musicTab.style.width = '450px';
+    musicTab.style.height = '550px';
+    musicTab.style.transform = 'translateX(-50%)';
+  }
 }
 
 function positionNotepadTab() {
-  notepadTab.style.left = '50%';
-  notepadTab.style.top = '20vh';
-  notepadTab.style.width = '600px';
-  notepadTab.style.height = '500px';
-  notepadTab.style.transform = 'translateX(-50%)';
+  if (notepadTab) {
+    notepadTab.style.left = '50%';
+    notepadTab.style.top = '20vh';
+    notepadTab.style.width = '600px';
+    notepadTab.style.height = '500px';
+    notepadTab.style.transform = 'translateX(-50%)';
+  }
 }
 
 function positionPdfTab() {
-  pdfTab.style.left = '50%';
-  pdfTab.style.top = '20vh';
-  pdfTab.style.width = '700px';
-  pdfTab.style.height = '600px';
-  pdfTab.style.transform = 'translateX(-50%)';
+  if (pdfTab) {
+    pdfTab.style.left = '50%';
+    pdfTab.style.top = '20vh';
+    pdfTab.style.width = '700px';
+    pdfTab.style.height = '600px';
+    pdfTab.style.transform = 'translateX(-50%)';
+  }
 }
 
 function positionFileExplorerTab() {
-  fileExplorerTab.style.left = '50%';
-  fileExplorerTab.style.top = '15vh';
-  fileExplorerTab.style.width = '800px';
-  fileExplorerTab.style.height = '600px';
-  fileExplorerTab.style.transform = 'translateX(-50%)';
+  if (fileExplorerTab) {
+    fileExplorerTab.style.left = '50%';
+    fileExplorerTab.style.top = '15vh';
+    fileExplorerTab.style.width = '900px';
+    fileExplorerTab.style.height = '650px';
+    fileExplorerTab.style.transform = 'translateX(-50%)';
+  }
 }
 
+function positionFolderExplorerTab() {
+  if (folderExplorerTab) {
+    folderExplorerTab.style.left = '50%';
+    folderExplorerTab.style.top = '15vh';
+    folderExplorerTab.style.width = '800px';
+    folderExplorerTab.style.height = '600px';
+    folderExplorerTab.style.transform = 'translateX(-50%)';
+  }
+}
 
 // === DRAG FUNCTIONS ===
 function startDrag(e, tab) {
@@ -737,6 +1064,7 @@ function closeTab(tab) {
     else if (tab === notepadTab) notepadTab = null;
     else if (tab === pdfTab) pdfTab = null;
     else if (tab === fileExplorerTab) fileExplorerTab = null;
+    else if (tab === folderExplorerTab) folderExplorerTab = null;
   }
 }
 
