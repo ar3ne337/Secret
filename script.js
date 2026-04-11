@@ -6,6 +6,8 @@
 let musicTab = null;
 let notepadTab = null;
 let pdfTab = null;
+let galleryTab = null;
+let imageViewerTab = null;
 let fileExplorerTab = null;
 let folderExplorerTab = null;
 let isDragging = false;
@@ -81,6 +83,23 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         pdfTab = createPdfTab(tabContainer);
         positionPdfTab();
+      }
+    });
+  }
+
+  // === GALLERY CLICK HANDLER ===
+  const galleryIcon = document.getElementById('app5');
+  if (galleryIcon) {
+    galleryIcon.style.cursor = 'pointer';
+    galleryIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      if (galleryTab && galleryTab.parentNode) {
+        galleryTab.remove();
+        galleryTab = null;
+      } else {
+        galleryTab = createGalleryTab(tabContainer);
+        positionGalleryTab();
       }
     });
   }
@@ -372,6 +391,207 @@ function createPdfTab(container) {
   });
 
   return tab;
+}
+
+// === GALLERY TAB ===
+function createGalleryTab(container) {
+  const tab = document.createElement('div');
+  tab.id = 'gallery-tab';
+  tab.className = 'tab';
+  tab.style.zIndex = zIndexCounter++;
+
+  // Header (draggable area)
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = 'Gallery';
+
+  // Controls
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  // Minimize button
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize (click to toggle)';
+
+  // Close button
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Load Gallery via iframe
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '0';
+  
+  const iframe = document.createElement('iframe');
+  iframe.src = 'Applications/Gallary/Gallary.html';
+  iframe.style.width = '100%';
+  iframe.style.height = 'calc(100% - 32px)';
+  iframe.style.border = 'none';
+  iframe.style.background = 'transparent';
+  
+  content.appendChild(iframe);
+
+  tab.appendChild(header);
+  tab.appendChild(content);
+  container.appendChild(tab);
+
+  // Listen for messages from iframe to open image viewer
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'openImage') {
+      openImageViewer(container, e.data.imageSrc, e.data.imageName);
+    }
+  });
+
+  // === DRAG LOGIC ===
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
+
+  // === EVENT LISTENERS ===
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize(tab);
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTab(tab);
+  });
+
+  // Bring to front on mousedown
+  tab.addEventListener('mousedown', function() {
+    tab.style.zIndex = zIndexCounter++;
+  });
+
+  // Prevent text selection during drag
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+
+  return tab;
+}
+
+// === IMAGE VIEWER FUNCTION ===
+function openImageViewer(container, imageSrc, imageName) {
+  // Close existing image viewer if open
+  if (imageViewerTab && imageViewerTab.parentNode) {
+    imageViewerTab.remove();
+    imageViewerTab = null;
+  }
+
+  imageViewerTab = document.createElement('div');
+  imageViewerTab.id = 'image-viewer-tab';
+  imageViewerTab.className = 'tab';
+  imageViewerTab.style.zIndex = zIndexCounter++;
+  imageViewerTab.style.width = '800px';
+  imageViewerTab.style.height = '600px';
+  imageViewerTab.style.left = '50%';
+  imageViewerTab.style.top = '10vh';
+  imageViewerTab.style.transform = 'translateX(-50%)';
+
+  // Header (draggable area)
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = imageName || 'Image Viewer';
+
+  // Controls
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  // Minimize button
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize (click to toggle)';
+
+  // Close button
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Content with image
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '0';
+  content.style.display = 'flex';
+  content.style.alignItems = 'center';
+  content.style.justifyContent = 'center';
+  content.style.background = '#1a1a1a';
+  content.style.overflow = 'auto';
+  
+  const img = document.createElement('img');
+  img.src = imageSrc;
+  img.style.maxWidth = '95%';
+  img.style.maxHeight = '95%';
+  img.style.objectFit = 'contain';
+  img.style.display = 'block';
+  img.style.margin = 'auto';
+  
+  // Handle image load error
+  img.onerror = function() {
+    img.alt = 'Failed to load image';
+    content.innerHTML = '<div style="color: #fff; text-align: center; padding: 20px;">Failed to load image</div>';
+  };
+  
+  content.appendChild(img);
+
+  imageViewerTab.appendChild(header);
+  imageViewerTab.appendChild(content);
+  container.appendChild(imageViewerTab);
+
+  // === DRAG LOGIC ===
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, imageViewerTab);
+  });
+
+  // === EVENT LISTENERS ===
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize(imageViewerTab);
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeImageViewerTab();
+  });
+
+  // Bring to front on mousedown
+  imageViewerTab.addEventListener('mousedown', function() {
+    imageViewerTab.style.zIndex = zIndexCounter++;
+  });
+
+  // Prevent text selection during drag
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+}
+
+function closeImageViewerTab() {
+  if (imageViewerTab) {
+    imageViewerTab.remove();
+    imageViewerTab = null;
+  }
 }
 
 // === DISK EXPLORER TAB (This PC) ===
@@ -1000,6 +1220,16 @@ function positionPdfTab() {
   }
 }
 
+function positionGalleryTab() {
+  if (galleryTab) {
+    galleryTab.style.left = '50%';
+    galleryTab.style.top = '15vh';
+    galleryTab.style.width = '850px';
+    galleryTab.style.height = '650px';
+    galleryTab.style.transform = 'translateX(-50%)';
+  }
+}
+
 function positionFileExplorerTab() {
   if (fileExplorerTab) {
     fileExplorerTab.style.left = '50%';
@@ -1063,6 +1293,7 @@ function closeTab(tab) {
     if (tab === musicTab) musicTab = null;
     else if (tab === notepadTab) notepadTab = null;
     else if (tab === pdfTab) pdfTab = null;
+    else if (tab === galleryTab) galleryTab = null;
     else if (tab === fileExplorerTab) fileExplorerTab = null;
     else if (tab === folderExplorerTab) folderExplorerTab = null;
   }

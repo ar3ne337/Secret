@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', -apple-system, sans-serif;
+      background: #1a1a1a;
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    .gallery-container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #1a1a1a;
+    }
+
+    /* Toolbar */
+    .gallery-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 16px;
+      background: #2d2d2d;
+      border-bottom: 1px solid #3d3d3d;
+    }
+
+    .gallery-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: #ccc;
+    }
+
+    .gallery-count {
+      font-size: 12px;
+      color: #888;
+      margin-left: auto;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 4px;
+    }
+
+    .view-btn {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: 1px solid #4d4d4d;
+      border-radius: 4px;
+      color: #ccc;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .view-btn:hover {
+      background: #4d4d4d;
+      color: #fff;
+    }
+
+    .view-btn.active {
+      background: #0066cc;
+      color: #fff;
+      border-color: #0066cc;
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      align-content: start;
+    }
+
+    /* Gallery List View */
+    .gallery-grid.list-view {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .gallery-grid.list-view .gallery-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 12px;
+      background: transparent;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .gallery-grid.list-view .gallery-item:hover {
+      background: #2d2d2d;
+    }
+
+    .gallery-grid.list-view .gallery-thumbnail {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+    }
+
+    .gallery-grid.list-view .gallery-info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .gallery-grid.list-view .gallery-name {
+      flex: 2;
+    }
+
+    .gallery-grid.list-view .gallery-dimensions {
+      flex: 1;
+      color: #888;
+      font-size: 12px;
+    }
+
+    .gallery-grid.list-view .gallery-size {
+      flex: 0.5;
+      color: #888;
+      font-size: 12px;
+    }
+
+    /* Grid View Items */
+    .gallery-item {
+      background: #2d2d2d;
+      border: 1px solid #3d3d3d;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .gallery-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      border-color: #0066cc;
+    }
+
+    .gallery-thumbnail {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      background: #1a1a1a;
+      display: block;
+    }
+
+    .gallery-info {
+      padding: 8px 10px;
+    }
+
+    .gallery-name {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .gallery-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #888;
+    }
+
+    /* Empty state */
+    .gallery-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #888;
+    }
+
+    .gallery-empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    /* Loading state */
+    .gallery-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #888;
+    }
+
+    /* Image error */
+    .gallery-thumbnail.error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #2d2d2d;
+      color: #888;
+      font-size: 12px;
+    }
+
+    .gallery-thumbnail.error::before {
+      content: '🖼️';
+      font-size: 24px;
+      margin-right: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="gallery-container">
+    <!-- Toolbar -->
+    <div class="gallery-toolbar">
+      <span class="gallery-title">📁 Gallery</span>
+      <span class="gallery-count" id="image-count">8 items</span>
+      <div class="view-toggle">
+        <button class="view-btn active" data-view="grid" title="Grid View">⊞</button>
+        <button class="view-btn" data-view="list" title="List View">☰</button>
+      </div>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </div>
+
+  <script>
+    (function() {
+      // Image data - 8 images
+      const images = [
+        { 
+          name: 'Image 1', 
+          src: 'Images/1.jpg',
+          dimensions: '1920 x 1080',
+          size: '2.4 MB'
+        },
+        { 
+          name: 'Image 2', 
+          src: 'Images/2.jpg',
+          dimensions: '1920 x 1080',
+          size: '1.8 MB'
+        },
+        { 
+          name: 'Image 3', 
+          src: 'Images/3.jpg',
+          dimensions: '1920 x 1080',
+          size: '3.1 MB'
+        },
+        { 
+          name: 'Image 4', 
+          src: 'Images/4.jpg',
+          dimensions: '1920 x 1080',
+          size: '2.2 MB'
+        },
+        { 
+          name: 'Image 5', 
+          src: 'Images/5.jpg',
+          dimensions: '1920 x 1080',
+          size: '1.5 MB'
+        },
+        { 
+          name: 'Image 6', 
+          src: 'Images/6.jpg',
+          dimensions: '1920 x 1080',
+          size: '2.8 MB'
+        },
+        { 
+          name: 'Image 7', 
+          src: 'Images/7.jpg',
+          dimensions: '1920 x 1080',
+          size: '3.5 MB'
+        },
+        { 
+          name: 'Image 8', 
+          src: 'Images/8.jpg',
+          dimensions: '1920 x 1080',
+          size: '2.1 MB'
+        }
+      ];
+
+      const galleryGrid = document.getElementById('gallery-grid');
+      const imageCountSpan = document.getElementById('image-count');
+      const viewBtns = document.querySelectorAll('.view-btn');
+
+      let currentView = 'grid';
+
+      // Update image count
+      imageCountSpan.textContent = `${images.length} item${images.length !== 1 ? 's' : ''}`;
+
+      // Render gallery
+      function renderGallery(view) {
+        if (images.length === 0) {
+          galleryGrid.innerHTML = `
+            <div class="gallery-empty">
+              <div class="gallery-empty-icon">🖼️</div>
+              <p>No images found</p>
+            </div>
+          `;
+          return;
+        }
+
+        galleryGrid.className = `gallery-grid ${view === 'list' ? 'list-view' : ''}`;
+
+        let html = '';
+        images.forEach((image, index) => {
+          if (view === 'grid') {
+            html += `
+              <div class="gallery-item" data-index="${index}" data-src="${image.src}" data-name="${image.name}">
+                <img class="gallery-thumbnail" src="${image.src}" alt="${image.name}" loading="lazy" onerror="this.classList.add('error'); this.alt='Failed to load'">
+                <div class="gallery-info">
+                  <div class="gallery-name">${image.name}</div>
+                  <div class="gallery-meta">
+                    <span>${image.dimensions}</span>
+                    <span>${image.size}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          } else {
+            html += `
+              <div class="gallery-item" data-index="${index}" data-src="${image.src}" data-name="${image.name}">
+                <img class="gallery-thumbnail" src="${image.src}" alt="${image.name}" loading="lazy" onerror="this.classList.add('error'); this.alt='Failed to load'">
+                <div class="gallery-info">
+                  <span class="gallery-name">${image.name}</span>
+                  <span class="gallery-dimensions">${image.dimensions}</span>
+                  <span class="gallery-size">${image.size}</span>
+                </div>
+              </div>
+            `;
+          }
+        });
+
+        galleryGrid.innerHTML = html;
+
+        // Add click handlers to all gallery items
+        document.querySelectorAll('.gallery-item').forEach(item => {
+          item.addEventListener('click', function(e) {
+            // Don't trigger if clicking on a button or link
+            if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+            
+            const imageSrc = this.getAttribute('data-src');
+            const imageName = this.getAttribute('data-name');
+            
+            // Send message to parent window to open image viewer
+            window.parent.postMessage({
+              type: 'openImage',
+              imageSrc: imageSrc,
+              imageName: imageName
+            }, '*');
+          });
+        });
+      }
+
+      // Handle image errors
+      window.handleImageError = function(img) {
+        img.classList.add('error');
+        img.alt = 'Failed to load';
+      };
+
+      // View toggle
+      viewBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const view = this.getAttribute('data-view');
+          
+          viewBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          currentView = view;
+          renderGallery(view);
+        });
+      });
+
+      // Initial render
+      renderGallery('grid');
+
+      // Also handle double-click for compatibility
+      galleryGrid.addEventListener('dblclick', function(e) {
+        const item = e.target.closest('.gallery-item');
+        if (item) {
+          const imageSrc = item.getAttribute('data-src');
+          const imageName = item.getAttribute('data-name');
+          
+          window.parent.postMessage({
+            type: 'openImage',
+            imageSrc: imageSrc,
+            imageName: imageName
+          }, '*');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
