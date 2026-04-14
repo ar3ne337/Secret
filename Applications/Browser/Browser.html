@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>A3 Browser Pro</title>
+  <style>
+    /* ----- PROFESSIONAL DARK THEME ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0A0A0C;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 12px;
+      color: #E8E8EE;
+    }
+
+    /* main application window */
+    .browser-pro {
+      width: 100%;
+      max-width: 1400px;
+      height: 95vh;
+      max-height: 950px;
+      background: #0E0E12;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(70, 70, 90, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ----- TITLE BAR (window controls) ----- */
+    .title-bar {
+      padding: 8px 16px;
+      background: #0E0E12;
+      border-bottom: 1px solid #1E1E28;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      -webkit-app-region: drag;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 8px;
+      -webkit-app-region: no-drag;
+    }
+
+    .window-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      border: none;
+    }
+    .window-btn.close { background: #FF5F56; }
+    .window-btn.minimize { background: #FFBD2E; }
+    .window-btn.maximize { background: #27C93F; }
+    .window-btn:hover { opacity: 0.8; }
+
+    .title-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #808090;
+      font-size: 0.85rem;
+      font-weight: 400;
+    }
+
+    .profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      -webkit-app-region: no-drag;
+    }
+    .profile-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #3B82F6, #2563EB);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* ----- TAB BAR (professional multi-tab) ----- */
+    .tab-bar {
+      display: flex;
+      align-items: center;
+      padding: 0 12px 0 8px;
+      background: #0E0E12;
+      border-bottom: 1px solid #1E1E28;
+      gap: 4px;
+    }
+
+    .tabs-container {
+      display: flex;
+      flex: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+      gap: 2px;
+    }
+    .tabs-container::-webkit-scrollbar { display: none; }
+
+    .tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: #16161E;
+      border-radius: 10px 10px 0 0;
+      border: 1px solid #252530;
+      border-bottom: none;
+      color: #A0A0B0;
+      font-size: 0.85rem;
+      max-width: 200px;
+      min-width: 120px;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .tab.active {
+      background: #1C1C28;
+      color: #FFFFFF;
+      border-color: #3B82F6;
+      box-shadow: 0 -2px 0 #3B82F6;
+    }
+    .tab:hover:not(.active) {
+      background: #1E1E2A;
+      color: #D0D0E0;
+    }
+    .tab-favicon {
+      width: 16px;
+      height: 16px;
+      background: #3B82F6;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+    }
+    .tab-title {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .tab-close {
+      opacity: 0;
+      background: none;
+      border: none;
+      color: #808090;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0 4px;
+      transition: opacity 0.15s, color 0.15s;
+    }
+    .tab:hover .tab-close { opacity: 1; }
+    .tab-close:hover { color: #EF4444; }
+
+    .new-tab-btn {
+      background: #1A1A24;
+      border: 1px solid #2A2A38;
+      color: #A0A0B0;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      margin-left: 4px;
+      transition: all 0.15s;
+    }
+    .new-tab-btn:hover {
+      background: #252532;
+      color: #FFFFFF;
+      border-color: #3B82F6;
+    }
+
+    /* ----- SIDEBAR (bookmarks & tools) ----- */
+    .main-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: #0C0C10;
+      border-right: 1px solid #1E1E28;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 0;
+    }
+
+    .sidebar-section {
+      padding: 8px 12px;
+    }
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      color: #606070;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    .bookmark-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      margin: 2px 4px;
+      border-radius: 8px;
+      color: #B0B0C0;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .bookmark-item:hover {
+      background: #1A1A26;
+      color: #FFFFFF;
+    }
+    .bookmark-icon {
+      width: 20px;
+      height: 20px;
+      background: #2A2A38;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+    .bookmark-name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tool-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      margin: 2px 4px;
+      border-radius: 8px;
+      color: #9090A0;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .tool-item:hover {
+      background: #1A1A26;
+      color: #FFFFFF;
+    }
+    .tool-item.active {
+      background: #1E1E30;
+      color: #3B82F6;
+      border-left: 3px solid #3B82F6;
+    }
+
+    /* ----- MAIN CONTENT (viewport) ----- */
+    .content-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* navigation bar */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: #0E0E12;
+      gap: 12px;
+      border-bottom: 1px solid #1A1A24;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 4px;
+    }
+    .nav-btn {
+      background: #16161E;
+      border: 1px solid #282838;
+      color: #C0C0D0;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .nav-btn:hover {
+      background: #20202E;
+      color: #FFFFFF;
+      border-color: #3B82F6;
+    }
+
+    .url-bar-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: #14141C;
+      border-radius: 12px;
+      padding: 2px 2px 2px 16px;
+      border: 1.5px solid #282838;
+      transition: all 0.2s;
+    }
+    .url-bar-wrapper:focus-within {
+      border-color: #3B82F6;
+      background: #181822;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .security-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      background: #1E1E2A;
+      border-radius: 8px;
+      margin-right: 8px;
+      font-size: 0.75rem;
+      color: #10B981;
+    }
+
+    #urlInput {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #F0F0F8;
+      font-size: 0.95rem;
+      padding: 12px 0;
+      font-family: inherit;
+    }
+    #urlInput::placeholder {
+      color: #606070;
+    }
+
+    .url-actions {
+      display: flex;
+      gap: 4px;
+      margin-left: 4px;
+    }
+    .action-btn {
+      background: #1E1E2A;
+      border: 1px solid #303040;
+      color: #C0C0D0;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .action-btn:hover {
+      background: #2A2A3A;
+      color: #FFFFFF;
+      border-color: #3B82F6;
+    }
+
+    /* viewport */
+    .viewport-container {
+      flex: 1;
+      background: #000;
+      position: relative;
+    }
+
+    #browserFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    /* status bar */
+    .status-bar-pro {
+      padding: 6px 16px;
+      background: #0A0A0E;
+      border-top: 1px solid #1A1A24;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #707080;
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .progress-bar {
+      width: 100px;
+      height: 3px;
+      background: #2A2A38;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3B82F6, #60A5FA);
+      transition: width 0.3s;
+    }
+
+    /* bookmark dialog (minimal) */
+    .bookmark-dialog {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1A1A28;
+      border: 1px solid #303048;
+      border-radius: 16px;
+      padding: 24px;
+      width: 400px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+      display: none;
+      z-index: 1000;
+    }
+    .bookmark-dialog.active { display: block; }
+    .dialog-title {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+      color: #FFFFFF;
+    }
+    .dialog-input {
+      width: 100%;
+      padding: 12px;
+      background: #0E0E18;
+      border: 1px solid #303048;
+      border-radius: 10px;
+      color: #FFFFFF;
+      margin-bottom: 12px;
+    }
+    .dialog-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .dialog-btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .dialog-btn.primary {
+      background: #3B82F6;
+      color: white;
+    }
+    .dialog-btn.secondary {
+      background: #2A2A3A;
+      color: #C0C0D0;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      z-index: 999;
+    }
+    .overlay.active { display: block; }
+  </style>
+</head>
+<body>
+<div class="browser-pro">
+  <!-- Title Bar -->
+  <div class="title-bar">
+    <div class="window-controls">
+      <button class="window-btn close"></button>
+      <button class="window-btn minimize"></button>
+      <button class="window-btn maximize"></button>
+    </div>
+    <div class="title-info">
+<img src="Applications/Browser/A3BrowserLogo.png" alt="A3 Logo" style="width:20px;height:20px;border-radius:4px;">
+      <span>A3 Browser Pro</span>
+    </div>
+    <div class="profile-badge">
+      <span style="color:#707080;">Workspace</span>
+      <div class="profile-icon">P</div>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <div class="tabs-container" id="tabsContainer"></div>
+    <button class="new-tab-btn" id="newTabBtn">+</button>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <span>Bookmarks</span>
+        <button id="addBookmarkBtn" style="background:none;border:none;color:#707080;cursor:pointer;font-size:16px;">+</button>
+      </div>
+      <div class="sidebar-section" id="bookmarksList"></div>
+      
+      <div class="sidebar-header" style="margin-top:16px;">
+        <span>Tools</span>
+      </div>
+      <div class="tool-item active" data-tool="browser">
+        <span>🌐</span>
+        <span>Browser</span>
+      </div>
+      <div class="tool-item" data-tool="history">
+        <span>🕒</span>
+        <span>History</span>
+      </div>
+      <div class="tool-item" data-tool="downloads">
+        <span>⬇️</span>
+        <span>Downloads</span>
+      </div>
+      <div class="tool-item" data-tool="settings">
+        <span>⚙️</span>
+        <span>Settings</span>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Navigation Bar -->
+      <div class="nav-bar">
+        <div class="nav-actions">
+          <button class="nav-btn" id="backBtn" title="Back">←</button>
+          <button class="nav-btn" id="forwardBtn" title="Forward">→</button>
+          <button class="nav-btn" id="refreshBtn" title="Refresh">↻</button>
+          <button class="nav-btn" id="homeBtn" title="Home">⌂</button>
+        </div>
+        
+        <div class="url-bar-wrapper">
+          <div class="security-badge" id="securityBadge">
+            <span>🔒</span>
+            <span id="securityText">Secure</span>
+          </div>
+          <input type="text" id="urlInput" placeholder="Search Google or type URL" spellcheck="false" autocomplete="off" />
+          <div class="url-actions">
+            <button class="action-btn" id="bookmarkPageBtn" title="Bookmark">☆</button>
+            <button class="action-btn" id="goBtn" title="Go">→</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Viewport -->
+      <div class="viewport-container">
+        <iframe id="browserFrame" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals" allow="fullscreen"></iframe>
+      </div>
+
+      <!-- Status Bar -->
+      <div class="status-bar-pro">
+        <div class="status-left">
+          <span class="status-item" id="connectionStatus">🟢 Connected</span>
+          <span class="status-item" id="pageStatus">Ready</span>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+        <div>
+          <span id="urlDisplay">a3://welcome</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bookmark Dialog -->
+<div class="overlay" id="overlay"></div>
+<div class="bookmark-dialog" id="bookmarkDialog">
+  <div class="dialog-title">Add Bookmark</div>
+  <input type="text" class="dialog-input" id="bookmarkName" placeholder="Name" value="">
+  <input type="text" class="dialog-input" id="bookmarkUrl" placeholder="URL" value="">
+  <div class="dialog-actions">
+    <button class="dialog-btn secondary" id="cancelBookmark">Cancel</button>
+    <button class="dialog-btn primary" id="saveBookmark">Save</button>
+  </div>
+</div>
+
+<script>
+  (function() {
+    "use strict";
+
+    // ----- STATE MANAGEMENT -----
+    let tabs = [];
+    let activeTabId = null;
+    let bookmarks = [];
+    let isLoading = false;
+
+    // DOM Elements
+    const iframe = document.getElementById('browserFrame');
+    const urlInput = document.getElementById('urlInput');
+    const goBtn = document.getElementById('goBtn');
+    const backBtn = document.getElementById('backBtn');
+    const forwardBtn = document.getElementById('forwardBtn');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const homeBtn = document.getElementById('homeBtn');
+    const newTabBtn = document.getElementById('newTabBtn');
+    const tabsContainer = document.getElementById('tabsContainer');
+    const bookmarksList = document.getElementById('bookmarksList');
+    const addBookmarkBtn = document.getElementById('addBookmarkBtn');
+    const bookmarkPageBtn = document.getElementById('bookmarkPageBtn');
+    const securityBadge = document.getElementById('securityBadge');
+    const securityText = document.getElementById('securityText');
+    const connectionStatus = document.getElementById('connectionStatus');
+    const pageStatus = document.getElementById('pageStatus');
+    const urlDisplay = document.getElementById('urlDisplay');
+    const progressFill = document.getElementById('progressFill');
+    const overlay = document.getElementById('overlay');
+    const bookmarkDialog = document.getElementById('bookmarkDialog');
+    const bookmarkName = document.getElementById('bookmarkName');
+    const bookmarkUrl = document.getElementById('bookmarkUrl');
+    const cancelBookmark = document.getElementById('cancelBookmark');
+    const saveBookmark = document.getElementById('saveBookmark');
+
+    // ----- UTILITIES -----
+    function generateId() { return Date.now() + '-' + Math.random().toString(36); }
+
+    function processUrl(input) {
+      let trimmed = input.trim();
+      if (!trimmed) return '';
+      if (/^https?:\/\//i.test(trimmed) || /^file:\/\//i.test(trimmed)) return trimmed;
+      if (/^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/.*)?$/.test(trimmed) || /^localhost(:\d+)?/i.test(trimmed)) {
+        return 'https://' + trimmed;
+      }
+      return `https://www.google.com/search?q=${encodeURIComponent(trimmed)}`;
+    }
+
+    function updateUIForUrl(url) {
+      if (!url || url === 'about:newtab') {
+        securityBadge.innerHTML = '<span>🛡️</span><span>Local</span>';
+        connectionStatus.textContent = '🟢 Local';
+        urlDisplay.textContent = 'a3://newtab';
+        return;
+      }
+      try {
+        const u = new URL(url);
+        urlDisplay.textContent = u.hostname;
+        if (u.protocol === 'https:') {
+          securityBadge.innerHTML = '<span>🔒</span><span>Secure</span>';
+          connectionStatus.textContent = '🟢 Secure HTTPS';
+        } else {
+          securityBadge.innerHTML = '<span>🔓</span><span>HTTP</span>';
+          connectionStatus.textContent = '🟡 Not Secure';
+        }
+      } catch(e) {
+        urlDisplay.textContent = url;
+      }
+    }
+
+    function startLoading() {
+      isLoading = true;
+      pageStatus.textContent = 'Loading...';
+      progressFill.style.width = '60%';
+    }
+
+    function stopLoading() {
+      isLoading = false;
+      pageStatus.textContent = 'Ready';
+      progressFill.style.width = '100%';
+      setTimeout(() => progressFill.style.width = '0%', 200);
+    }
+
+    // ----- TAB MANAGEMENT -----
+    function renderTabs() {
+      tabsContainer.innerHTML = '';
+      tabs.forEach(tab => {
+        const tabEl = document.createElement('div');
+        tabEl.className = `tab ${tab.id === activeTabId ? 'active' : ''}`;
+        tabEl.innerHTML = `
+          <div class="tab-favicon">${tab.favicon || '🌐'}</div>
+          <span class="tab-title">${tab.title || 'New Tab'}</span>
+          <button class="tab-close" data-tab-id="${tab.id}">×</button>
+        `;
+        tabEl.addEventListener('click', (e) => {
+          if (!e.target.classList.contains('tab-close')) {
+            switchTab(tab.id);
+          }
+        });
+        tabEl.querySelector('.tab-close').addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeTab(tab.id);
+        });
+        tabsContainer.appendChild(tabEl);
+      });
+    }
+
+    function createTab(url = '', title = 'New Tab') {
+      const id = generateId();
+      tabs.push({ id, url, title, favicon: '🌐' });
+      return id;
+    }
+
+    function switchTab(id) {
+      activeTabId = id;
+      const tab = tabs.find(t => t.id === id);
+      if (tab) {
+        if (tab.url && tab.url !== 'about:newtab') {
+          iframe.src = tab.url;
+          urlInput.value = tab.url;
+        } else {
+          loadNewTabPage();
+        }
+        renderTabs();
+      }
+    }
+
+    function closeTab(id) {
+      const index = tabs.findIndex(t => t.id === id);
+      if (index === -1) return;
+      
+      tabs.splice(index, 1);
+      if (tabs.length === 0) {
+        const newId = createTab();
+        activeTabId = newId;
+        loadNewTabPage();
+      } else if (activeTabId === id) {
+        activeTabId = tabs[Math.min(index, tabs.length - 1)].id;
+        switchTab(activeTabId);
+      }
+      renderTabs();
+    }
+
+    function updateActiveTab(url, title) {
+      const tab = tabs.find(t => t.id === activeTabId);
+      if (tab) {
+        tab.url = url;
+        tab.title = title || url;
+        renderTabs();
+      }
+    }
+
+    // ----- NEW TAB PAGE -----
+    function loadNewTabPage() {
+      const newTabHtml = `
+        <html style="background:#0E0E12; height:100%; font-family:system-ui;">
+          <head><meta charset="UTF-8"></head>
+          <body style="margin:0; background:linear-gradient(135deg, #0E0E12, #1A1A28); color:#E8E8EE; display:flex; align-items:center; justify-content:center; height:100vh;">
+            <div style="text-align:center;">
+              <img src="Applications/Browser/A3BrowserLogo.png" alt="A3 Logo" style="width:64px; height:64px; border-radius:8px;">
+              <h1 style="font-weight:400; margin-bottom:8px;">A3 Browser Pro</h1>
+              <p style="color:#808090; margin-bottom:40px;">Professional · Fast · Private</p>
+              <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:16px; max-width:400px; margin:0 auto;">
+                <div style="background:#1E1E2E; padding:20px; border-radius:16px; cursor:pointer;" onclick="window.parent.postMessage('navigate','*')">
+                  <div style="font-size:24px;">🔍</div>
+                  <div>Search</div>
+                </div>
+                <div style="background:#1E1E2E; padding:20px; border-radius:16px;">
+                  <div style="font-size:24px;">⭐</div>
+                  <div>Bookmarks</div>
+                </div>
+              </div>
+            </div>
+          </body>
+        </html>
+      `;
+      iframe.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(newTabHtml);
+      urlInput.value = '';
+      updateActiveTab('about:newtab', 'New Tab');
+      updateUIForUrl('about:newtab');
+    }
+
+    // ----- BOOKMARKS -----
+    function renderBookmarks() {
+      bookmarksList.innerHTML = '';
+      bookmarks.forEach((bm, index) => {
+        const item = document.createElement('div');
+        item.className = 'bookmark-item';
+        item.innerHTML = `
+          <div class="bookmark-icon">⭐</div>
+          <span class="bookmark-name">${bm.name}</span>
+        `;
+        item.addEventListener('click', () => navigateTo(bm.url));
+        bookmarksList.appendChild(item);
+      });
+    }
+
+    function addBookmark(name, url) {
+      bookmarks.push({ name, url });
+      renderBookmarks();
+    }
+
+    // ----- NAVIGATION -----
+    function navigateTo(input) {
+      const url = processUrl(input);
+      if (!url) return;
+      
+      startLoading();
+      iframe.src = url;
+      urlInput.value = url;
+      updateActiveTab(url, '');
+      updateUIForUrl(url);
+    }
+
+    // ----- EVENT LISTENERS -----
+    goBtn.addEventListener('click', () => {
+      const val = urlInput.value.trim();
+      if (val) navigateTo(val);
+    });
+
+    urlInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const val = urlInput.value.trim();
+        if (val) navigateTo(val);
+      }
+    });
+
+    backBtn.addEventListener('click', () => {
+      try { iframe.contentWindow.history.back(); } catch(e) {}
+    });
+
+    forwardBtn.addEventListener('click', () => {
+      try { iframe.contentWindow.history.forward(); } catch(e) {}
+    });
+
+    refreshBtn.addEventListener('click', () => {
+      iframe.src = iframe.src;
+      startLoading();
+    });
+
+    homeBtn.addEventListener('click', loadNewTabPage);
+
+    newTabBtn.addEventListener('click', () => {
+      const newId = createTab();
+      activeTabId = newId;
+      loadNewTabPage();
+      renderTabs();
+    });
+
+    iframe.addEventListener('load', () => {
+      stopLoading();
+      let loadedUrl = '';
+      try {
+        loadedUrl = iframe.contentWindow.location.href;
+      } catch(e) {
+        loadedUrl = urlInput.value;
+      }
+      
+      if (loadedUrl && !loadedUrl.startsWith('about:') && !loadedUrl.startsWith('data:')) {
+        urlInput.value = loadedUrl;
+        updateActiveTab(loadedUrl, loadedUrl);
+        updateUIForUrl(loadedUrl);
+      }
+    });
+
+    iframe.addEventListener('error', stopLoading);
+
+    // Bookmark dialog
+    bookmarkPageBtn.addEventListener('click', () => {
+      const currentUrl = urlInput.value;
+      if (currentUrl && !currentUrl.startsWith('about:') && !currentUrl.startsWith('data:')) {
+        bookmarkUrl.value = currentUrl;
+        bookmarkName.value = urlDisplay.textContent || 'Bookmark';
+        overlay.classList.add('active');
+        bookmarkDialog.classList.add('active');
+      }
+    });
+
+    addBookmarkBtn.addEventListener('click', () => {
+      bookmarkUrl.value = '';
+      bookmarkName.value = '';
+      overlay.classList.add('active');
+      bookmarkDialog.classList.add('active');
+    });
+
+    cancelBookmark.addEventListener('click', () => {
+      overlay.classList.remove('active');
+      bookmarkDialog.classList.remove('active');
+    });
+
+    saveBookmark.addEventListener('click', () => {
+      const name = bookmarkName.value.trim();
+      const url = bookmarkUrl.value.trim();
+      if (name && url) {
+        addBookmark(name, url);
+      }
+      overlay.classList.remove('active');
+      bookmarkDialog.classList.remove('active');
+    });
+
+    overlay.addEventListener('click', () => {
+      overlay.classList.remove('active');
+      bookmarkDialog.classList.remove('active');
+    });
+
+    // Initialize
+    const initialTabId = createTab();
+    activeTabId = initialTabId;
+    loadNewTabPage();
+    renderTabs();
+    renderBookmarks();
+
+    // Sample bookmarks
+    addBookmark('Google', 'https://www.google.com');
+    addBookmark('GitHub', 'https://github.com');
+    addBookmark('Wikipedia', 'https://wikipedia.org');
+  })();
+</script>
+</body>
+</html>
