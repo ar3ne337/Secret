@@ -222,8 +222,8 @@
       font-size: 12px;
     }
 
-    .gallery-thumbnail.error::before {
-      content: '🖼️';
+.gallery-thumbnail.error::before {
+      content: '';
       font-size: 24px;
       margin-right: 4px;
     }
@@ -315,7 +315,7 @@
         if (images.length === 0) {
           galleryGrid.innerHTML = `
             <div class="gallery-empty">
-              <div class="gallery-empty-icon">🖼️</div>
+<div class="gallery-empty-icon"><img src="Images.png" alt="Images" style="width:64px;height:64px;opacity:0.5;image-rendering:pixelated;filter:invert(1);"></div>
               <p>No images found</p>
             </div>
           `;
