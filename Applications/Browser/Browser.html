@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>A3 Browser Pro</title>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* ----- PROFESSIONAL DARK THEME ----- */
     * {
@@ -71,10 +73,17 @@
     .title-info {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       color: #808090;
       font-size: 0.85rem;
       font-weight: 400;
+    }
+
+    .title-logo {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      object-fit: contain;
     }
 
     .profile-badge {
@@ -146,12 +155,16 @@
     .tab-favicon {
       width: 16px;
       height: 16px;
-      background: #3B82F6;
-      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
+      font-size: 12px;
+      color: #808090;
+    }
+    .tab-favicon img {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
     }
     .tab-title {
       flex: 1;
@@ -242,12 +255,14 @@
     .bookmark-icon {
       width: 20px;
       height: 20px;
-      background: #2A2A38;
-      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      color: #9090A0;
+      font-size: 14px;
+    }
+    .bookmark-item:hover .bookmark-icon {
+      color: #FFFFFF;
     }
     .bookmark-name {
       flex: 1;
@@ -274,6 +289,25 @@
       background: #1E1E30;
       color: #3B82F6;
       border-left: 3px solid #3B82F6;
+    }
+    
+    .tool-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #9090A0;
+    }
+    .tool-item:hover .tool-icon,
+    .tool-item.active .tool-icon {
+      color: #3B82F6;
+    }
+    .tool-icon img {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
     }
 
     /* ----- MAIN CONTENT (viewport) ----- */
@@ -308,7 +342,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
       transition: all 0.15s;
     }
@@ -345,6 +379,9 @@
       font-size: 0.75rem;
       color: #10B981;
     }
+    .security-badge i {
+      font-size: 12px;
+    }
 
     #urlInput {
       flex: 1;
@@ -372,9 +409,12 @@
       width: 40px;
       height: 40px;
       border-radius: 10px;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
       transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .action-btn:hover {
       background: #2A2A3A;
@@ -417,7 +457,13 @@
     .status-item {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+    }
+    .status-item i {
+      font-size: 12px;
+    }
+    .status-item .fa-circle {
+      font-size: 8px;
     }
 
     .progress-bar {
@@ -505,7 +551,7 @@
       <button class="window-btn maximize"></button>
     </div>
     <div class="title-info">
-<img src="A3BrowserLogo.png" alt="A3 Logo" style="width:20px;height:20px;border-radius:4px;">
+      <img src="https://a3os.pages.dev/Applications/Browser/A3BrowserLogo.png" alt="A3 Logo" class="title-logo">
       <span>A3 Browser Pro</span>
     </div>
     <div class="profile-badge">
@@ -526,7 +572,7 @@
     <div class="sidebar">
       <div class="sidebar-header">
         <span>Bookmarks</span>
-        <button id="addBookmarkBtn" style="background:none;border:none;color:#707080;cursor:pointer;font-size:16px;">+</button>
+        <button id="addBookmarkBtn" style="background:none;border:none;color:#707080;cursor:pointer;font-size:16px;"><i class="fas fa-plus"></i></button>
       </div>
       <div class="sidebar-section" id="bookmarksList"></div>
       
@@ -534,19 +580,19 @@
         <span>Tools</span>
       </div>
       <div class="tool-item active" data-tool="browser">
-        <span>🌐</span>
+        <span class="tool-icon"><img src="https://a3os.pages.dev/Applications/Browser/A3.png" alt="Browser"></span>
         <span>Browser</span>
       </div>
       <div class="tool-item" data-tool="history">
-        <span>🕒</span>
+        <span class="tool-icon"><i class="far fa-clock"></i></span>
         <span>History</span>
       </div>
       <div class="tool-item" data-tool="downloads">
-        <span>⬇️</span>
+        <span class="tool-icon"><i class="fas fa-download"></i></span>
         <span>Downloads</span>
       </div>
       <div class="tool-item" data-tool="settings">
-        <span>⚙️</span>
+        <span class="tool-icon"><i class="fas fa-cog"></i></span>
         <span>Settings</span>
       </div>
     </div>
@@ -556,21 +602,21 @@
       <!-- Navigation Bar -->
       <div class="nav-bar">
         <div class="nav-actions">
-          <button class="nav-btn" id="backBtn" title="Back">←</button>
-          <button class="nav-btn" id="forwardBtn" title="Forward">→</button>
-          <button class="nav-btn" id="refreshBtn" title="Refresh">↻</button>
-          <button class="nav-btn" id="homeBtn" title="Home">⌂</button>
+          <button class="nav-btn" id="backBtn" title="Back"><i class="fas fa-arrow-left"></i></button>
+          <button class="nav-btn" id="forwardBtn" title="Forward"><i class="fas fa-arrow-right"></i></button>
+          <button class="nav-btn" id="refreshBtn" title="Refresh"><i class="fas fa-redo-alt"></i></button>
+          <button class="nav-btn" id="homeBtn" title="Home"><i class="fas fa-home"></i></button>
         </div>
         
         <div class="url-bar-wrapper">
           <div class="security-badge" id="securityBadge">
-            <span>🔒</span>
+            <i class="fas fa-lock"></i>
             <span id="securityText">Secure</span>
           </div>
-          <input type="text" id="urlInput" placeholder="Search Google or type URL" spellcheck="false" autocomplete="off" />
+          <input type="text" id="urlInput" placeholder="Search with DuckDuckGo or type URL" spellcheck="false" autocomplete="off" />
           <div class="url-actions">
-            <button class="action-btn" id="bookmarkPageBtn" title="Bookmark">☆</button>
-            <button class="action-btn" id="goBtn" title="Go">→</button>
+            <button class="action-btn" id="bookmarkPageBtn" title="Bookmark"><i class="far fa-bookmark"></i></button>
+            <button class="action-btn" id="goBtn" title="Go"><i class="fas fa-arrow-right"></i></button>
           </div>
         </div>
       </div>
@@ -583,7 +629,10 @@
       <!-- Status Bar -->
       <div class="status-bar-pro">
         <div class="status-left">
-          <span class="status-item" id="connectionStatus">🟢 Connected</span>
+          <span class="status-item" id="connectionStatus">
+            <i class="fas fa-circle" style="color: #10B981; font-size: 8px;"></i>
+            <span>Connected</span>
+          </span>
           <span class="status-item" id="pageStatus">Ready</span>
           <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
@@ -600,7 +649,7 @@
 <!-- Bookmark Dialog -->
 <div class="overlay" id="overlay"></div>
 <div class="bookmark-dialog" id="bookmarkDialog">
-  <div class="dialog-title">Add Bookmark</div>
+  <div class="dialog-title"><i class="fas fa-bookmark" style="margin-right: 8px;"></i>Add Bookmark</div>
   <input type="text" class="dialog-input" id="bookmarkName" placeholder="Name" value="">
   <input type="text" class="dialog-input" id="bookmarkUrl" placeholder="URL" value="">
   <div class="dialog-actions">
@@ -618,6 +667,8 @@
     let activeTabId = null;
     let bookmarks = [];
     let isLoading = false;
+    let navigationHistory = [];
+    let historyIndex = -1;
 
     // DOM Elements
     const iframe = document.getElementById('browserFrame');
@@ -648,32 +699,36 @@
     // ----- UTILITIES -----
     function generateId() { return Date.now() + '-' + Math.random().toString(36); }
 
+    function isUrl(input) {
+      const trimmed = input.trim();
+      return /^https?:\/\//i.test(trimmed) || 
+             /^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/.*)?$/.test(trimmed) || 
+             /^localhost(:\d+)?/i.test(trimmed);
+    }
+
     function processUrl(input) {
       let trimmed = input.trim();
       if (!trimmed) return '';
-      if (/^https?:\/\//i.test(trimmed) || /^file:\/\//i.test(trimmed)) return trimmed;
-      if (/^([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/.*)?$/.test(trimmed) || /^localhost(:\d+)?/i.test(trimmed)) {
-        return 'https://' + trimmed;
-      }
-      return `https://www.google.com/search?q=${encodeURIComponent(trimmed)}`;
+      if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed;
+      return 'https://' + trimmed;
     }
 
     function updateUIForUrl(url) {
-      if (!url || url === 'about:newtab') {
-        securityBadge.innerHTML = '<span>🛡️</span><span>Local</span>';
-        connectionStatus.textContent = '🟢 Local';
-        urlDisplay.textContent = 'a3://newtab';
+      if (!url || url === 'about:newtab' || url.startsWith('search:')) {
+        securityBadge.innerHTML = '<i class="fas fa-shield-alt"></i><span>A3</span>';
+        connectionStatus.innerHTML = '<i class="fas fa-circle" style="color: #10B981; font-size: 8px;"></i><span>Connected</span>';
+        urlDisplay.textContent = url.startsWith('search:') ? 'Search Results' : 'a3://welcome';
         return;
       }
       try {
         const u = new URL(url);
         urlDisplay.textContent = u.hostname;
         if (u.protocol === 'https:') {
-          securityBadge.innerHTML = '<span>🔒</span><span>Secure</span>';
-          connectionStatus.textContent = '🟢 Secure HTTPS';
+          securityBadge.innerHTML = '<i class="fas fa-lock"></i><span>Secure</span>';
+          connectionStatus.innerHTML = '<i class="fas fa-circle" style="color: #10B981; font-size: 8px;"></i><span>Secure HTTPS</span>';
         } else {
-          securityBadge.innerHTML = '<span>🔓</span><span>HTTP</span>';
-          connectionStatus.textContent = '🟡 Not Secure';
+          securityBadge.innerHTML = '<i class="fas fa-lock-open"></i><span>HTTP</span>';
+          connectionStatus.innerHTML = '<i class="fas fa-circle" style="color: #FBBF24; font-size: 8px;"></i><span>Not Secure</span>';
         }
       } catch(e) {
         urlDisplay.textContent = url;
@@ -693,15 +748,102 @@
       setTimeout(() => progressFill.style.width = '0%', 200);
     }
 
+    // ----- SEARCH FUNCTIONALITY -----
+    async function performSearch(query) {
+      startLoading();
+      urlInput.value = query;
+      
+      try {
+        const response = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`);
+        const data = await response.json();
+        
+        const resultsHtml = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0E0E12;color:#E8E8EE;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:30px;min-height:100vh}
+.search-container{max-width:900px;margin:0 auto}
+.search-header{margin-bottom:30px}
+.search-box{display:flex;gap:10px;margin-bottom:20px}
+.search-box input{flex:1;padding:14px 18px;background:#14141C;border:2px solid #282838;border-radius:12px;color:#FFF;font-size:16px}
+.search-box input:focus{outline:none;border-color:#3B82F6;background:#181822}
+.search-box button{padding:14px 24px;background:#3B82F6;border:none;border-radius:12px;color:#FFF;font-weight:600;cursor:pointer}
+.search-box button:hover{background:#2563EB}
+.result-stats{color:#808090;margin-bottom:20px;font-size:14px}
+.instant-answer{background:#1E1E30;border-left:4px solid #3B82F6;padding:20px;border-radius:12px;margin-bottom:30px}
+.instant-answer h3{color:#3B82F6;margin-bottom:12px;font-size:18px}
+.instant-answer p{line-height:1.6;color:#D0D0E0;margin-bottom:12px}
+.source-link{color:#60A5FA;text-decoration:none;font-size:14px;cursor:pointer}
+.source-link:hover{text-decoration:underline}
+.results-section{margin-top:30px}
+.results-section h3{color:#A0A0B0;margin-bottom:20px;font-size:16px;text-transform:uppercase;letter-spacing:1px}
+.result-item{background:#16161E;padding:18px;border-radius:10px;margin-bottom:12px;cursor:pointer;transition:all 0.2s;border:1px solid #252530}
+.result-item:hover{background:#1E1E2A;border-color:#3B82F6;transform:translateX(5px)}
+.result-title{color:#60A5FA;font-size:16px;font-weight:600;margin-bottom:8px}
+.result-description{color:#B0B0C0;font-size:14px;line-height:1.5}
+.external-link{margin-top:20px;padding:15px;background:#1A1A26;border-radius:8px;text-align:center}
+.external-link a{color:#3B82F6;text-decoration:none;cursor:pointer}
+</style></head><body>
+<div class="search-container">
+<div class="search-header">
+<div class="search-box"><input type="text" id="searchInput" value="${query.replace(/"/g, '&quot;')}" placeholder="Search DuckDuckGo or enter URL">
+<button onclick="window.parent.searchAgain()"><i class="fas fa-search"></i> Search</button></div>
+<div class="result-stats"><i class="fas fa-globe"></i> Results from DuckDuckGo</div>
+</div>
+${data.AbstractText ? `<div class="instant-answer"><h3><i class="fas fa-bolt"></i> Instant Answer</h3><p>${data.AbstractText}</p>
+${data.AbstractURL ? `<a class="source-link" onclick="window.parent.loadUrl('${data.AbstractURL}')"><i class="fas fa-external-link-alt"></i> Source: ${new URL(data.AbstractURL).hostname}</a>` : ''}</div>` : ''}
+${data.RelatedTopics && data.RelatedTopics.length > 0 ? `<div class="results-section"><h3><i class="fas fa-list"></i> Related Results</h3>
+${data.RelatedTopics.filter(t => t.Text && t.FirstURL).slice(0, 15).map(topic => 
+    `<div class="result-item" onclick="window.parent.loadUrl('${topic.FirstURL}')"><div class="result-title"><i class="fas fa-link"></i> ${topic.Text.split(' - ')[0]}</div>
+    <div class="result-description">${topic.Text.includes(' - ') ? topic.Text.split(' - ').slice(1).join(' - ') : topic.Text}</div></div>`
+).join('')}</div>` : ''}
+<div class="external-link"><a onclick="window.parent.openInBrowser('${query}')"><i class="fas fa-external-link-alt"></i> Open in DuckDuckGo.com</a></div>
+</div>
+<script>document.getElementById('searchInput').addEventListener('keypress',function(e){if(e.key==='Enter')window.parent.searchAgain();});<\/script>
+</body></html>`;
+        
+        iframe.srcdoc = resultsHtml;
+        updateActiveTab('search:' + query, `Search: ${query}`);
+        updateUIForUrl('search:' + query);
+      } catch (error) {
+        // Fallback to DuckDuckGo HTML
+        iframe.src = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+        updateActiveTab('search:' + query, `Search: ${query}`);
+        updateUIForUrl('search:' + query);
+      }
+      stopLoading();
+    }
+
+    window.searchAgain = function() {
+      try {
+        const searchInput = iframe.contentDocument.getElementById('searchInput');
+        if (searchInput) {
+          const query = searchInput.value.trim();
+          if (query) navigateTo(query);
+        }
+      } catch(e) {}
+    };
+
+    window.loadUrl = function(url) {
+      navigateTo(url);
+    };
+
+    window.openInBrowser = function(query) {
+      window.open(`https://duckduckgo.com/?q=${encodeURIComponent(query)}`, '_blank');
+    };
+
     // ----- TAB MANAGEMENT -----
     function renderTabs() {
       tabsContainer.innerHTML = '';
       tabs.forEach(tab => {
         const tabEl = document.createElement('div');
         tabEl.className = `tab ${tab.id === activeTabId ? 'active' : ''}`;
+        const displayTitle = tab.title || 'New Tab';
+        const shortTitle = displayTitle.length > 25 ? displayTitle.substring(0, 22) + '...' : displayTitle;
         tabEl.innerHTML = `
-          <div class="tab-favicon">${tab.favicon || '🌐'}</div>
-          <span class="tab-title">${tab.title || 'New Tab'}</span>
+          <div class="tab-favicon">${tab.favicon || '<i class="fas fa-globe"></i>'}</div>
+          <span class="tab-title">${shortTitle}</span>
           <button class="tab-close" data-tab-id="${tab.id}">×</button>
         `;
         tabEl.addEventListener('click', (e) => {
@@ -719,7 +861,7 @@
 
     function createTab(url = '', title = 'New Tab') {
       const id = generateId();
-      tabs.push({ id, url, title, favicon: '🌐' });
+      tabs.push({ id, url, title, favicon: '<i class="fas fa-globe"></i>' });
       return id;
     }
 
@@ -728,8 +870,13 @@
       const tab = tabs.find(t => t.id === id);
       if (tab) {
         if (tab.url && tab.url !== 'about:newtab') {
-          iframe.src = tab.url;
-          urlInput.value = tab.url;
+          if (tab.url.startsWith('search:')) {
+            performSearch(tab.url.replace('search:', ''));
+          } else {
+            iframe.src = tab.url;
+            urlInput.value = tab.url;
+            updateUIForUrl(tab.url);
+          }
         } else {
           loadNewTabPage();
         }
@@ -766,27 +913,50 @@
     function loadNewTabPage() {
       const newTabHtml = `
         <html style="background:#0E0E12; height:100%; font-family:system-ui;">
-          <head><meta charset="UTF-8"></head>
+          <head>
+            <meta charset="UTF-8">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+          </head>
           <body style="margin:0; background:linear-gradient(135deg, #0E0E12, #1A1A28); color:#E8E8EE; display:flex; align-items:center; justify-content:center; height:100vh;">
             <div style="text-align:center;">
-              <img src="A3BrowserLogo.png" alt="A3 Logo" style="width:64px; height:64px; border-radius:8px;">
-              <h1 style="font-weight:400; margin-bottom:8px;">A3 Browser Pro</h1>
-              <p style="color:#808090; margin-bottom:40px;">Professional · Fast · Private</p>
-              <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:16px; max-width:400px; margin:0 auto;">
-                <div style="background:#1E1E2E; padding:20px; border-radius:16px; cursor:pointer;" onclick="window.parent.postMessage('navigate','*')">
-                  <div style="font-size:24px;">🔍</div>
-                  <div>Search</div>
+              <img src="https://a3os.pages.dev/Applications/Browser/A3BrowserLogo.png" alt="A3 Logo" style="width:600px; height:auto; border-radius:12px; margin-bottom:40px;">
+              <div style="margin-bottom:30px;">
+                <input type="text" id="searchInput" placeholder="Search with DuckDuckGo or enter URL" style="width:500px;padding:16px 20px;background:#14141C;border:2px solid #282838;border-radius:12px;color:#FFF;font-size:16px;outline:none;" onkeypress="if(event.key==='Enter')search()">
+                <button onclick="search()" style="padding:16px 30px;margin-left:10px;background:#3B82F6;border:none;border-radius:12px;color:#FFF;font-weight:600;cursor:pointer;font-size:16px;"><i class="fas fa-search"></i> Search</button>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; max-width:600px; margin:0 auto;">
+                <div style="background:#1E1E2E; padding:20px; border-radius:16px; cursor:pointer; transition:all 0.2s;" onclick="navigate('https://github.com')" onmouseover="this.style.background='#252538'" onmouseout="this.style.background='#1E1E2E'">
+                  <div style="font-size:24px; margin-bottom:8px; color:#9090A0;"><i class="fab fa-github"></i></div>
+                  <div style="font-weight:500;">GitHub</div>
                 </div>
-                <div style="background:#1E1E2E; padding:20px; border-radius:16px;">
-                  <div style="font-size:24px;">⭐</div>
-                  <div>Bookmarks</div>
+                <div style="background:#1E1E2E; padding:20px; border-radius:16px; cursor:pointer; transition:all 0.2s;" onclick="navigate('https://wikipedia.org')" onmouseover="this.style.background='#252538'" onmouseout="this.style.background='#1E1E2E'">
+                  <div style="font-size:24px; margin-bottom:8px; color:#9090A0;"><i class="fab fa-wikipedia-w"></i></div>
+                  <div style="font-weight:500;">Wikipedia</div>
+                </div>
+                <div style="background:#1E1E2E; padding:20px; border-radius:16px; cursor:pointer; transition:all 0.2s;" onclick="navigate('https://youtube.com')" onmouseover="this.style.background='#252538'" onmouseout="this.style.background='#1E1E2E'">
+                  <div style="font-size:24px; margin-bottom:8px; color:#9090A0;"><i class="fab fa-youtube"></i></div>
+                  <div style="font-weight:500;">YouTube</div>
+                </div>
+                <div style="background:#1E1E2E; padding:20px; border-radius:16px; cursor:pointer; transition:all 0.2s;" onclick="navigate('https://reddit.com')" onmouseover="this.style.background='#252538'" onmouseout="this.style.background='#1E1E2E'">
+                  <div style="font-size:24px; margin-bottom:8px; color:#9090A0;"><i class="fab fa-reddit"></i></div>
+                  <div style="font-weight:500;">Reddit</div>
                 </div>
               </div>
+              <p style="color:#606070; margin-top:32px; font-size:0.85rem;">A3 Browser Pro · Fast · Private · Professional</p>
             </div>
+            <script>
+              function search() {
+                const query = document.getElementById('searchInput').value.trim();
+                if (query) window.parent.navigateTo(query);
+              }
+              function navigate(url) {
+                window.parent.navigateTo(url);
+              }
+            <\/script>
           </body>
         </html>
       `;
-      iframe.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(newTabHtml);
+      iframe.srcdoc = newTabHtml;
       urlInput.value = '';
       updateActiveTab('about:newtab', 'New Tab');
       updateUIForUrl('about:newtab');
@@ -799,7 +969,7 @@
         const item = document.createElement('div');
         item.className = 'bookmark-item';
         item.innerHTML = `
-          <div class="bookmark-icon">⭐</div>
+          <div class="bookmark-icon"><i class="fas fa-bookmark"></i></div>
           <span class="bookmark-name">${bm.name}</span>
         `;
         item.addEventListener('click', () => navigateTo(bm.url));
@@ -810,44 +980,87 @@
     function addBookmark(name, url) {
       bookmarks.push({ name, url });
       renderBookmarks();
+      localStorage.setItem('a3Bookmarks', JSON.stringify(bookmarks));
     }
 
     // ----- NAVIGATION -----
-    function navigateTo(input) {
-      const url = processUrl(input);
-      if (!url) return;
+    window.navigateTo = function(input) {
+      if (!input) return;
       
-      startLoading();
-      iframe.src = url;
-      urlInput.value = url;
-      updateActiveTab(url, '');
-      updateUIForUrl(url);
-    }
+      if (isUrl(input)) {
+        const url = processUrl(input);
+        startLoading();
+        
+        // Add to history
+        if (historyIndex < navigationHistory.length - 1) {
+          navigationHistory = navigationHistory.slice(0, historyIndex + 1);
+        }
+        navigationHistory.push(url);
+        historyIndex = navigationHistory.length - 1;
+        
+        iframe.src = url;
+        urlInput.value = url;
+        updateActiveTab(url, url);
+        updateUIForUrl(url);
+      } else {
+        performSearch(input);
+        // Add search to history
+        if (historyIndex < navigationHistory.length - 1) {
+          navigationHistory = navigationHistory.slice(0, historyIndex + 1);
+        }
+        navigationHistory.push('search:' + input);
+        historyIndex = navigationHistory.length - 1;
+      }
+    };
 
     // ----- EVENT LISTENERS -----
     goBtn.addEventListener('click', () => {
       const val = urlInput.value.trim();
-      if (val) navigateTo(val);
+      if (val) window.navigateTo(val);
     });
 
     urlInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         const val = urlInput.value.trim();
-        if (val) navigateTo(val);
+        if (val) window.navigateTo(val);
       }
     });
 
     backBtn.addEventListener('click', () => {
-      try { iframe.contentWindow.history.back(); } catch(e) {}
+      if (historyIndex > 0) {
+        historyIndex--;
+        const prev = navigationHistory[historyIndex];
+        if (prev.startsWith('search:')) {
+          performSearch(prev.replace('search:', ''));
+        } else {
+          window.navigateTo(prev);
+        }
+      }
     });
 
     forwardBtn.addEventListener('click', () => {
-      try { iframe.contentWindow.history.forward(); } catch(e) {}
+      if (historyIndex < navigationHistory.length - 1) {
+        historyIndex++;
+        const next = navigationHistory[historyIndex];
+        if (next.startsWith('search:')) {
+          performSearch(next.replace('search:', ''));
+        } else {
+          window.navigateTo(next);
+        }
+      }
     });
 
     refreshBtn.addEventListener('click', () => {
-      iframe.src = iframe.src;
-      startLoading();
+      const tab = tabs.find(t => t.id === activeTabId);
+      if (tab) {
+        if (tab.url.startsWith('search:')) {
+          performSearch(tab.url.replace('search:', ''));
+        } else if (tab.url !== 'about:newtab') {
+          window.navigateTo(tab.url);
+        } else {
+          loadNewTabPage();
+        }
+      }
     });
 
     homeBtn.addEventListener('click', loadNewTabPage);
@@ -880,9 +1093,14 @@
     // Bookmark dialog
     bookmarkPageBtn.addEventListener('click', () => {
       const currentUrl = urlInput.value;
-      if (currentUrl && !currentUrl.startsWith('about:') && !currentUrl.startsWith('data:')) {
+      if (currentUrl && !currentUrl.startsWith('about:') && !currentUrl.startsWith('data:') && !currentUrl.startsWith('search:')) {
         bookmarkUrl.value = currentUrl;
         bookmarkName.value = urlDisplay.textContent || 'Bookmark';
+        overlay.classList.add('active');
+        bookmarkDialog.classList.add('active');
+      } else if (currentUrl && currentUrl.startsWith('search:')) {
+        bookmarkUrl.value = currentUrl;
+        bookmarkName.value = 'Search: ' + currentUrl.replace('search:', '');
         overlay.classList.add('active');
         bookmarkDialog.classList.add('active');
       }
@@ -915,17 +1133,25 @@
       bookmarkDialog.classList.remove('active');
     });
 
+    // Load saved bookmarks
+    try {
+      const saved = localStorage.getItem('a3Bookmarks');
+      if (saved) bookmarks = JSON.parse(saved);
+    } catch(e) {}
+
     // Initialize
     const initialTabId = createTab();
     activeTabId = initialTabId;
     loadNewTabPage();
     renderTabs();
+    
+    // Add default bookmarks if none exist
+    if (bookmarks.length === 0) {
+      addBookmark('DuckDuckGo', 'https://duckduckgo.com');
+      addBookmark('GitHub', 'https://github.com');
+      addBookmark('Wikipedia', 'https://wikipedia.org');
+    }
     renderBookmarks();
-
-    // Sample bookmarks
-    addBookmark('Google', 'https://www.google.com');
-    addBookmark('GitHub', 'https://github.com');
-    addBookmark('Wikipedia', 'https://wikipedia.org');
   })();
 </script>
 </body>
