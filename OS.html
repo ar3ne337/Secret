@@ -5,7 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Black Screen</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="Favicon/A3.svg" type="image/svg+xml">
+<link rel="icon" href="Favicon/A3.svg" type="image/svg+xml">
+  <script>
+    (function() {
+      if (!sessionStorage.getItem('authenticated')) {
+        document.body.innerHTML = '<div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;display:flex;align-items:center;justify-content:center;font-family:\'Courier New\',monospace;color:#fff;font-size:2rem;z-index:9999;">Access Denied. Return to login.</div>';
+        window.location.href = 'index.html';
+        return;
+      }
+    })();
+  </script>
 </head>
 <body>
   <div id="bg-image"></div>
@@ -158,6 +167,11 @@
   </div>
 
   <script src="script.js"></script>
+  <script>
+    window.addEventListener('beforeunload', function() {
+      sessionStorage.removeItem('authenticated');
+    });
+  </script>
 
 </body>
 

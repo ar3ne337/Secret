@@ -322,6 +322,7 @@ function handleLogin() {
         // Your Journey begins here lost soul
         const enteredPassword = passwordInput.value;
         if (enteredPassword === 'Nymos337') {
+          sessionStorage.setItem('authenticated', 'true');
           startBoot();
         } else {
           messageEl.textContent = 'Incorrect password';
