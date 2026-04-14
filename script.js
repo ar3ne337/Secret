@@ -1270,20 +1270,20 @@ function createDiscordTab(container) {
   discordLogo.style.width = '80px';
   discordLogo.style.height = '80px';
   discordLogo.style.margin = '0 auto 15px';
-  discordLogo.style.backgroundImage = 'url("Applications/Discord/Discord.png")';
+  discordLogo.style.backgroundImage = 'url("Applications/Discord/DiscordServer.png")';
   discordLogo.style.backgroundSize = 'contain';
   discordLogo.style.backgroundRepeat = 'no-repeat';
   discordLogo.style.backgroundPosition = 'center';
   discordLogo.style.filter = 'brightness(0) invert(1)';
   
   const discordTitle = document.createElement('h2');
-  discordTitle.textContent = 'Nymos Discord Server';
+  discordTitle.textContent = 'A3OS.Comms';
   discordTitle.style.color = '#fff';
   discordTitle.style.marginBottom = '8px';
   discordTitle.style.fontFamily = "'Segoe UI', sans-serif";
   
   const discordDesc = document.createElement('p');
-  discordDesc.textContent = 'Join our community server to chat and hang out!';
+  discordDesc.textContent = 'A server to connect wondering souls';
   discordDesc.style.color = '#b9bbbe';
   discordDesc.style.fontSize = '14px';
   discordDesc.style.marginBottom = '20px';
@@ -1292,7 +1292,7 @@ function createDiscordTab(container) {
   const joinButton = document.createElement('a');
   joinButton.href = 'https://discord.gg/8tYtnJkcGV';
   joinButton.target = '_blank';
-  joinButton.textContent = 'Join Discord Server';
+  joinButton.textContent = 'Enter A3OS Internal Networks';
   joinButton.style.display = 'inline-block';
   joinButton.style.padding = '12px 24px';
   joinButton.style.background = '#5865f2';
