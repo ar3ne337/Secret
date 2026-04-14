@@ -10,6 +10,7 @@ let galleryTab = null;
 let imageViewerTab = null;
 let fileExplorerTab = null;
 let folderExplorerTab = null;
+let discordTab = null;
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0;
 let tabStartX = 0, tabStartY = 0;
@@ -124,6 +125,23 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         folderExplorerTab = createFolderExplorerTab(tabContainer);
         positionFolderExplorerTab();
+      }
+    });
+  }
+
+  // === DISCORD CLICK HANDLER ===
+  const discordIcon = document.getElementById('app3');
+  if (discordIcon) {
+    discordIcon.style.cursor = 'pointer';
+    discordIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      if (discordTab && discordTab.parentNode) {
+        discordTab.remove();
+        discordTab = null;
+      } else {
+        discordTab = createDiscordTab(tabContainer);
+        positionDiscordTab();
       }
     });
   }
@@ -1017,7 +1035,7 @@ function createFolderExplorerTab(container) {
       
       // Add click handler for Ar3ne folder
       if (folder.id === 'ar3ne') {
-        folderItem.addEventListener('dblclick', function(e) {
+        folderItem.addEventListener('click', function(e) {
           e.stopPropagation();
           renderAr3neFiles();
           const addressText = document.getElementById('folder-address-text');
@@ -1192,6 +1210,171 @@ function renderAr3neFiles() {
   return tab;
 }
 
+// === DISCORD TAB (using Discord Widget) ===
+function createDiscordTab(container) {
+  const tab = document.createElement('div');
+  tab.id = 'discord-tab';
+  tab.className = 'tab';
+  tab.style.zIndex = zIndexCounter++;
+
+  // Header (draggable area)
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = 'Discord';
+
+  // Controls
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  // Minimize button
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize (click to toggle)';
+
+  // Close button
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Load Discord via iframe
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '0';
+  content.style.background = '#36393f';
+  
+  // Create Discord UI with widget and invite button
+  const discordContent = document.createElement('div');
+  discordContent.style.width = '100%';
+  discordContent.style.height = '100%';
+  discordContent.style.display = 'flex';
+  discordContent.style.flexDirection = 'column';
+  
+  // Header with Discord logo
+  const discordHeader = document.createElement('div');
+  discordHeader.style.padding = '20px';
+  discordHeader.style.textAlign = 'center';
+  discordHeader.style.background = '#2f3136';
+  discordHeader.style.borderBottom = '1px solid #202225';
+  
+  const discordLogo = document.createElement('div');
+  discordLogo.style.width = '80px';
+  discordLogo.style.height = '80px';
+  discordLogo.style.margin = '0 auto 15px';
+  discordLogo.style.backgroundImage = 'url("Applications/Discord/Discord.png")';
+  discordLogo.style.backgroundSize = 'contain';
+  discordLogo.style.backgroundRepeat = 'no-repeat';
+  discordLogo.style.backgroundPosition = 'center';
+  discordLogo.style.filter = 'brightness(0) invert(1)';
+  
+  const discordTitle = document.createElement('h2');
+  discordTitle.textContent = 'Nymos Discord Server';
+  discordTitle.style.color = '#fff';
+  discordTitle.style.marginBottom = '8px';
+  discordTitle.style.fontFamily = "'Segoe UI', sans-serif";
+  
+  const discordDesc = document.createElement('p');
+  discordDesc.textContent = 'Join our community server to chat and hang out!';
+  discordDesc.style.color = '#b9bbbe';
+  discordDesc.style.fontSize = '14px';
+  discordDesc.style.marginBottom = '20px';
+  
+  // Join button
+  const joinButton = document.createElement('a');
+  joinButton.href = 'https://discord.gg/8tYtnJkcGV';
+  joinButton.target = '_blank';
+  joinButton.textContent = 'Join Discord Server';
+  joinButton.style.display = 'inline-block';
+  joinButton.style.padding = '12px 24px';
+  joinButton.style.background = '#5865f2';
+  joinButton.style.color = '#fff';
+  joinButton.style.textDecoration = 'none';
+  joinButton.style.borderRadius = '4px';
+  joinButton.style.fontWeight = 'bold';
+  joinButton.style.fontSize = '16px';
+  joinButton.style.transition = 'background 0.2s ease';
+  joinButton.onmouseover = function() { this.style.background = '#4752c4'; };
+  joinButton.onmouseout = function() { this.style.background = '#5865f2'; };
+  
+  discordHeader.appendChild(discordLogo);
+  discordHeader.appendChild(discordTitle);
+  discordHeader.appendChild(discordDesc);
+  discordHeader.appendChild(joinButton);
+  
+  // Widget section
+  const widgetSection = document.createElement('div');
+  widgetSection.style.flex = '1';
+  widgetSection.style.padding = '15px';
+  widgetSection.style.background = '#36393f';
+  
+  // Discord Widget (this is allowed to be embedded)
+  const iframe = document.createElement('iframe');
+  iframe.src = 'https://discord.com/widget?id=1351574793770430545&theme=dark';
+  iframe.style.width = '100%';
+  iframe.style.height = '100%';
+  iframe.style.border = 'none';
+  iframe.style.borderRadius = '8px';
+  iframe.allow = 'autoplay';
+  
+  widgetSection.appendChild(iframe);
+  
+  discordContent.appendChild(discordHeader);
+  discordContent.appendChild(widgetSection);
+  
+  content.appendChild(discordContent);
+
+  tab.appendChild(header);
+  tab.appendChild(content);
+  container.appendChild(tab);
+
+  // === DRAG LOGIC ===
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
+
+  // === EVENT LISTENERS ===
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize(tab);
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTab(tab);
+  });
+
+  // Bring to front on mousedown
+  tab.addEventListener('mousedown', function() {
+    tab.style.zIndex = zIndexCounter++;
+  });
+
+  // Prevent text selection during drag
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+
+  return tab;
+}
+
+function positionDiscordTab() {
+  if (discordTab) {
+    discordTab.style.left = '50%';
+    discordTab.style.top = '15vh';
+    discordTab.style.width = '600px';
+    discordTab.style.height = '650px';
+    discordTab.style.transform = 'translateX(-50%)';
+  }
+}
+
 // === UTILITY FUNCTIONS ===
 function positionTab() {
   if (musicTab) {
@@ -1299,6 +1482,7 @@ function closeTab(tab) {
     else if (tab === galleryTab) galleryTab = null;
     else if (tab === fileExplorerTab) fileExplorerTab = null;
     else if (tab === folderExplorerTab) folderExplorerTab = null;
+    else if (tab === discordTab) discordTab = null;
   }
 }
 
