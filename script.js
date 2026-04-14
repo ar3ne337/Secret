@@ -421,7 +421,7 @@ function createGalleryTab(container) {
   content.style.padding = '0';
   
   const iframe = document.createElement('iframe');
-  iframe.src = 'Applications/Gallary/Gallary.html';
+  iframe.src = 'Applications/Gallery/Gallery.html';
   iframe.style.width = '100%';
   iframe.style.height = 'calc(100% - 32px)';
   iframe.style.border = 'none';
@@ -1069,7 +1069,7 @@ function renderAr3neFiles() {
     if (file.icon === 'txt') {
       fileIcon.style.backgroundImage = 'url("Applications/Notepad/Notepad.png")';
     } else if (file.icon === 'img') {
-      fileIcon.style.backgroundImage = 'url("Applications/Gallary/Gallary.png")';
+      fileIcon.style.backgroundImage = 'url("Applications/Gallery/Gallery.png")';
     } else if (file.icon === 'audio') {
       fileIcon.style.backgroundImage = 'url("Applications/Music/Music.png")';
     } else if (file.icon === 'video') {

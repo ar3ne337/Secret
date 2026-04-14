@@ -225,7 +225,7 @@ html, body {
 }
 
 .app.app-gallery::before {
-  background-image: url('Applications/Gallary/Gallary.png');
+  background-image: url('Applications/Gallery/Gallery.png');
 }
 
 .app.app-notepad::before {
@@ -673,7 +673,7 @@ body {
 }
 
 .gallery-icon {
-  background-image: url('Applications/Gallary/Gallary.png');
+  background-image: url('Applications/Gallery/Gallery.png');
 }
 
 .notepad-icon {
@@ -884,7 +884,7 @@ body {
 }
 
 .sidebar-icon.pictures {
-  background-image: url('Applications/Gallary/Gallary.png');
+  background-image: url('Applications/Gallery/Gallery.png');
 }
 
 .sidebar-icon.music {
