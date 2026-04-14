@@ -120,10 +120,14 @@
       display: flex;
       flex: 1;
       overflow-x: auto;
-      scrollbar-width: none;
+      overflow-y: hidden;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
       gap: 2px;
     }
-    .tabs-container::-webkit-scrollbar { display: none; }
+    .tabs-container::-webkit-scrollbar { 
+      display: none; /* Chrome, Safari, Opera */
+    }
 
     .tab {
       display: flex;
@@ -219,6 +223,12 @@
       display: flex;
       flex-direction: column;
       padding: 16px 0;
+      overflow-y: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+    }
+    .sidebar::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
     }
 
     .sidebar-section {
@@ -316,6 +326,9 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      border: none;
+      margin: 0;
+      padding: 0;
     }
 
     /* navigation bar */
@@ -424,23 +437,37 @@
 
     /* viewport */
     .viewport-container {
-      flex: 1;
+      flex: 1 1 auto;
       background: #000;
       position: relative;
+      border: none;
+      margin: 0;
+      padding: 0;
     }
 
     #browserFrame {
       width: 100%;
       height: 100%;
       border: none;
-      background: #fff;
+      background: transparent;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Make scrollbar invisible for the iframe content */
+    #browserFrame {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+    }
+    #browserFrame::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
     }
 
     /* status bar */
     .status-bar-pro {
       padding: 6px 16px;
-      background: #0A0A0E;
-      border-top: 1px solid #1A1A24;
+      background: #0E0E12;
+      border-top: none;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -613,7 +640,7 @@
             <i class="fas fa-lock"></i>
             <span id="securityText">Secure</span>
           </div>
-          <input type="text" id="urlInput" placeholder="Search" spellcheck="false" autocomplete="off" />
+          <input type="text" id="urlInput" placeholder="Search with DuckDuckGo or type URL" spellcheck="false" autocomplete="off" />
           <div class="url-actions">
             <button class="action-btn" id="bookmarkPageBtn" title="Bookmark"><i class="far fa-bookmark"></i></button>
             <button class="action-btn" id="goBtn" title="Go"><i class="fas fa-arrow-right"></i></button>
@@ -762,7 +789,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0E0E12;color:#E8E8EE;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:30px;min-height:100vh}
+html, body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none;
+}
+body{background:#0E0E12;color:#E8E8EE;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;padding:30px;min-height:100vh;overflow-y:auto}
 .search-container{max-width:900px;margin:0 auto}
 .search-header{margin-bottom:30px}
 .search-box{display:flex;gap:10px;margin-bottom:20px}
@@ -787,7 +821,7 @@ body{background:#0E0E12;color:#E8E8EE;font-family:-apple-system,BlinkMacSystemFo
 </style></head><body>
 <div class="search-container">
 <div class="search-header">
-<div class="search-box"><input type="text" id="searchInput" value="${query.replace(/"/g, '&quot;')}" placeholder="Search or enter URL">
+<div class="search-box"><input type="text" id="searchInput" value="${query.replace(/"/g, '&quot;')}" placeholder="Search DuckDuckGo or enter URL">
 <button onclick="window.parent.searchAgain()"><i class="fas fa-search"></i> Search</button></div>
 <div class="result-stats"><i class="fas fa-globe"></i> Results from DuckDuckGo</div>
 </div>
@@ -798,7 +832,7 @@ ${data.RelatedTopics.filter(t => t.Text && t.FirstURL).slice(0, 15).map(topic =>
     `<div class="result-item" onclick="window.parent.loadUrl('${topic.FirstURL}')"><div class="result-title"><i class="fas fa-link"></i> ${topic.Text.split(' - ')[0]}</div>
     <div class="result-description">${topic.Text.includes(' - ') ? topic.Text.split(' - ').slice(1).join(' - ') : topic.Text}</div></div>`
 ).join('')}</div>` : ''}
-<div class="external-link"><a onclick="window.parent.openInBrowser('${query}')"><i class="fas fa-external-link-alt"></i>Click to open</a></div>
+<div class="external-link"><a onclick="window.parent.openInBrowser('${query}')"><i class="fas fa-external-link-alt"></i> Open in DuckDuckGo.com</a></div>
 </div>
 <script>document.getElementById('searchInput').addEventListener('keypress',function(e){if(e.key==='Enter')window.parent.searchAgain();});<\/script>
 </body></html>`;
@@ -912,19 +946,23 @@ ${data.RelatedTopics.filter(t => t.Text && t.FirstURL).slice(0, 15).map(topic =>
     // ----- NEW TAB PAGE -----
     function loadNewTabPage() {
       const newTabHtml = `
-        <html style="background:#0E0E12; height:100%; font-family:system-ui;">
+        <html style="background:#0E0E12; height:100%; font-family:system-ui; scrollbar-width:none; -ms-overflow-style:none;">
           <head>
             <meta charset="UTF-8">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <style>
+              html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+              html, body { scrollbar-width: none; -ms-overflow-style: none; }
+            </style>
           </head>
-          <body style="margin:0; background:linear-gradient(135deg, #0E0E12, #1A1A28); color:#E8E8EE; display:flex; align-items:center; justify-content:center; height:100vh;">
+          <body style="margin:0; background:linear-gradient(135deg, #0E0E12, #1A1A28); color:#E8E8EE; display:flex; align-items:center; justify-content:center; height:100vh; overflow-y:auto;">
             <div style="text-align:center;">
               <img src="https://a3os.pages.dev/Applications/Browser/A3BrowserLogo.png" alt="A3 Logo" style="width:600px; height:auto; border-radius:12px; margin-bottom:40px;">
               <div style="margin-bottom:30px;">
                 <input type="text" id="searchInput" placeholder="Search with DuckDuckGo or enter URL" style="width:500px;padding:16px 20px;background:#14141C;border:2px solid #282838;border-radius:12px;color:#FFF;font-size:16px;outline:none;" onkeypress="if(event.key==='Enter')search()">
                 <button onclick="search()" style="padding:16px 30px;margin-left:10px;background:#3B82F6;border:none;border-radius:12px;color:#FFF;font-weight:600;cursor:pointer;font-size:16px;"><i class="fas fa-search"></i> Search</button>
               </div>
-              <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; max-width:600px; margin:0 auto;">
+              <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; max-width:550px; margin:0 auto;">
                 <div style="background:#1E1E2E; padding:20px; border-radius:16px; cursor:pointer; transition:all 0.2s;" onclick="navigate('https://github.com')" onmouseover="this.style.background='#252538'" onmouseout="this.style.background='#1E1E2E'">
                   <div style="font-size:24px; margin-bottom:8px; color:#9090A0;"><i class="fab fa-github"></i></div>
                   <div style="font-weight:500;">GitHub</div>
