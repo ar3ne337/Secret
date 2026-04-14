@@ -613,7 +613,7 @@
             <i class="fas fa-lock"></i>
             <span id="securityText">Secure</span>
           </div>
-          <input type="text" id="urlInput" placeholder="Search with DuckDuckGo or type URL" spellcheck="false" autocomplete="off" />
+          <input type="text" id="urlInput" placeholder="Search" spellcheck="false" autocomplete="off" />
           <div class="url-actions">
             <button class="action-btn" id="bookmarkPageBtn" title="Bookmark"><i class="far fa-bookmark"></i></button>
             <button class="action-btn" id="goBtn" title="Go"><i class="fas fa-arrow-right"></i></button>
@@ -787,7 +787,7 @@ body{background:#0E0E12;color:#E8E8EE;font-family:-apple-system,BlinkMacSystemFo
 </style></head><body>
 <div class="search-container">
 <div class="search-header">
-<div class="search-box"><input type="text" id="searchInput" value="${query.replace(/"/g, '&quot;')}" placeholder="Search DuckDuckGo or enter URL">
+<div class="search-box"><input type="text" id="searchInput" value="${query.replace(/"/g, '&quot;')}" placeholder="Search or enter URL">
 <button onclick="window.parent.searchAgain()"><i class="fas fa-search"></i> Search</button></div>
 <div class="result-stats"><i class="fas fa-globe"></i> Results from DuckDuckGo</div>
 </div>
@@ -798,7 +798,7 @@ ${data.RelatedTopics.filter(t => t.Text && t.FirstURL).slice(0, 15).map(topic =>
     `<div class="result-item" onclick="window.parent.loadUrl('${topic.FirstURL}')"><div class="result-title"><i class="fas fa-link"></i> ${topic.Text.split(' - ')[0]}</div>
     <div class="result-description">${topic.Text.includes(' - ') ? topic.Text.split(' - ').slice(1).join(' - ') : topic.Text}</div></div>`
 ).join('')}</div>` : ''}
-<div class="external-link"><a onclick="window.parent.openInBrowser('${query}')"><i class="fas fa-external-link-alt"></i> Open in DuckDuckGo.com</a></div>
+<div class="external-link"><a onclick="window.parent.openInBrowser('${query}')"><i class="fas fa-external-link-alt"></i>Click to open</a></div>
 </div>
 <script>document.getElementById('searchInput').addEventListener('keypress',function(e){if(e.key==='Enter')window.parent.searchAgain();});<\/script>
 </body></html>`;
