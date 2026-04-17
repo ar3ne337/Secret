@@ -1,14 +1,10 @@
 (function() {
     "use strict";
   
-    // ----- STATE MANAGEMENT -----
+// ----- STATE MANAGEMENT -----
     let tabs = [];
     let activeTabId = null;
     let bookmarks = [];
-    let isLoading = false;
-    let navigationHistory = [];
-    let historyIndex = -1;
-    let loadingTimeout = null;
   
     // DOM Elements
     const iframe = document.getElementById('browserFrame');
@@ -102,19 +98,12 @@
       stopLoading();
       const processedUrl = processUrl(url);
       
-      // Add to history
-      if (historyIndex < navigationHistory.length - 1) {
-        navigationHistory = navigationHistory.slice(0, historyIndex + 1);
-      }
-      navigationHistory.push(processedUrl);
-      historyIndex = navigationHistory.length - 1;
-      
       // Update UI
       urlInput.value = processedUrl;
       updateActiveTab(processedUrl, processedUrl);
       updateUIForUrl(processedUrl);
       
-      // Start loading and load URL
+      // Load URL
       startLoading();
       setTimeout(() => {
         iframe.src = processedUrl;
@@ -243,7 +232,6 @@
     function addBookmark(name, url) {
       bookmarks.push({ name, url });
       renderBookmarks();
-      localStorage.setItem('a3Bookmarks', JSON.stringify(bookmarks));
     }
   
     // Expose loadUrl globally for the new tab page
@@ -263,17 +251,11 @@
     });
   
     backBtn.addEventListener('click', () => {
-      if (historyIndex > 0) {
-        historyIndex--;
-        loadUrl(navigationHistory[historyIndex]);
-      }
+      // History UI placeholder
     });
-  
+
     forwardBtn.addEventListener('click', () => {
-      if (historyIndex < navigationHistory.length - 1) {
-        historyIndex++;
-        loadUrl(navigationHistory[historyIndex]);
-      }
+      // History UI placeholder
     });
   
     refreshBtn.addEventListener('click', () => {
@@ -370,11 +352,7 @@
       }
     });
   
-    // Load saved bookmarks
-    try {
-      const saved = localStorage.getItem('a3Bookmarks');
-      if (saved) bookmarks = JSON.parse(saved);
-    } catch(e) {}
+
   
     // Initialize
     const initialTabId = createTab();
@@ -382,13 +360,5 @@
     loadNewTabPage();
     renderTabs();
     
-    // Default bookmarks
-    if (bookmarks.length === 0) {
-      addBookmark('Wikipedia', 'https://wikipedia.org');
-      addBookmark('GitHub', 'https://github.com');
-      addBookmark('Example.com', 'https://example.com');
-    }
     renderBookmarks();
-    
-    console.log('Browser ready');
   })();
