@@ -425,28 +425,27 @@ body {
   height: 100vh;
 }
 
-/* Start Menu Styles */
+/* Start Menu Styles - Perfect Fit, Black Background */
 .start-menu {
   position: fixed;
   bottom: var(--taskbar-height);
   left: 0;
-  width: 400px;
+  width: 380px;
   max-width: 90vw;
-  height: 600px;
-  max-height: 70vh;
-  background: rgba(20, 20, 20, 0.95);
-  backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px 12px 12px 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  height: 560px;
+  max-height: calc(100vh - var(--taskbar-height) - 20px);
+  background: #000000;
+  backdrop-filter: none;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px 8px 8px 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.95);
   z-index: 1000;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .start-menu.hidden {
-  transform: translateY(20px);
+  transform: translateY(15px);
   opacity: 0;
   pointer-events: none;
 }
@@ -455,174 +454,202 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 16px;
   color: #fff;
   font-family: 'Segoe UI', -apple-system, sans-serif;
+  background: #000000;
+  overflow: hidden;
 }
 
 /* User Section */
 .start-user-section {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  margin-bottom: 16px;
+  gap: 10px;
+  padding: 8px 10px;
+  background: #0a0a0a;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #1a1a1a;
+  flex-shrink: 0;
 }
 
 .user-avatar {
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
   background-image: url('Sources/DesktopIcons/UserAvatar.png');
-  background-size: 60%;
+  background-size: 55%;
   background-position: center;
   background-repeat: no-repeat;
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(0.8);
+  flex-shrink: 0;
 }
 
 .user-info {
   flex: 1;
+  min-width: 0;
 }
 
 .user-name {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   margin-bottom: 2px;
+  color: #e0e0e0;
 }
 
 .user-email {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  color: #888;
 }
 
 /* Search Bar */
 .start-search {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+  flex-shrink: 0;
 }
 
 .search-input {
   width: 100%;
-  padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  color: #fff;
-  font-size: 14px;
+  padding: 8px 14px;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 13px;
   outline: none;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .search-input:focus {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: #0f0f0f;
+  border-color: #2a2a2a;
 }
 
 .search-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: #555;
 }
 
-/* Sections */
+/* Sections - Scrollable Area */
+.start-sections-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+
 .start-section {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+}
+
+.start-section:last-child {
+  margin-bottom: 0;
 }
 
 .section-title {
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 12px;
-  padding-left: 4px;
+  letter-spacing: 0.5px;
+  color: #666;
+  margin-bottom: 10px;
+  padding-left: 2px;
+  flex-shrink: 0;
 }
 
 /* App Grid */
 .app-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 8px;
 }
 
 .start-app-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+  gap: 4px;
+  padding: 8px 4px;
+  background: #0a0a0a;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  border: 1px solid #151515;
 }
 
 .start-app-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  background: #151515;
+  border-color: #2a2a2a;
 }
 
 .start-app-icon {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(0.8);
 }
 
 .start-app-item span {
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
+  color: #ccc;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 /* App List */
 .app-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .app-list-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 6px;
+  gap: 10px;
+  padding: 8px 10px;
+  background: #0a0a0a;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  border: 1px solid #151515;
 }
 
 .app-list-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: #151515;
+  border-color: #2a2a2a;
 }
 
 .app-list-icon {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(0.8);
+  flex-shrink: 0;
 }
 
 .app-list-item span {
-  font-size: 13px;
+  font-size: 12px;
+  color: #ccc;
 }
 
 /* Bottom Actions */
 .start-bottom {
   margin-top: auto;
   display: flex;
-  gap: 8px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 6px;
+  padding-top: 12px;
+  border-top: 1px solid #151515;
+  flex-shrink: 0;
 }
 
 .start-bottom-item {
@@ -630,79 +657,65 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 6px;
+  gap: 6px;
+  padding: 8px;
+  background: #0a0a0a;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+  border: 1px solid #151515;
 }
 
 .start-bottom-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: #151515;
+  border-color: #2a2a2a;
 }
 
 .bottom-icon {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  filter: brightness(0) invert(1);
+  filter: brightness(0) invert(0.7);
 }
 
 .start-bottom-item span {
-  font-size: 13px;
+  font-size: 12px;
+  color: #ccc;
 }
 
-/* App Icons */
-.thispc-icon {
-  background-image: url('Applications/ThisPC/ThisPC.png');
+/* Hide scrollbar for cleaner look */
+.start-sections-scroll::-webkit-scrollbar {
+  width: 4px;
 }
 
-.browser-icon {
-  background-image: url('Applications/Browser/Browser.png');
+.start-sections-scroll::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.discord-icon {
-  background-image: url('Applications/Discord/Discord.png');
+.start-sections-scroll::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 2px;
 }
 
-.folder-icon {
-  background-image: url('Applications/Folder/Folder.png');
+.start-sections-scroll::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3a;
 }
 
-.gallery-icon {
-  background-image: url('Applications/Gallery/Gallery.png');
-}
-
-.notepad-icon {
-  background-image: url('Applications/Notepad/Notepad.png');
-}
-
-.pdf-icon {
-  background-image: url('Applications/PDF/PDF.png');
-}
-
-.terminal-icon {
-  background-image: url('Applications/Terminal/Terminal.png');
-}
-
-.instagram-icon {
-  background-image: url('Applications/Instagram/Instagram.png');
-}
-
-.music-icon {
-  background-image: url('Applications/Music/Music.png');
-}
-
-.settings-icon {
-  background-image: url('Sources/DesktopIcons/Settings.png');
-}
-
-.power-icon {
-  background-image: url('Sources/DesktopIcons/Power.png');
-}
+/* App Icons - Keep existing icon definitions */
+.thispc-icon { background-image: url('Applications/ThisPC/ThisPC.png'); }
+.browser-icon { background-image: url('Applications/Browser/Browser.png'); }
+.discord-icon { background-image: url('Applications/Discord/Discord.png'); }
+.folder-icon { background-image: url('Applications/Folder/Folder.png'); }
+.gallery-icon { background-image: url('Applications/Gallery/Gallery.png'); }
+.notepad-icon { background-image: url('Applications/Notepad/Notepad.png'); }
+.pdf-icon { background-image: url('Applications/PDF/PDF.png'); }
+.terminal-icon { background-image: url('Applications/Terminal/Terminal.png'); }
+.instagram-icon { background-image: url('Applications/Instagram/Instagram.png'); }
+.music-icon { background-image: url('Applications/Music/Music.png'); }
+.settings-icon { background-image: url('Sources/DesktopIcons/Settings.png'); }
+.power-icon { background-image: url('Sources/DesktopIcons/Power.png'); }
 
 /* File Explorer Styles */
 .file-explorer {
