@@ -11,7 +11,9 @@ let imageViewerTab = null;
 let fileExplorerTab = null;
 let folderExplorerTab = null;
 let discordTab = null;
-let terminalTab = null; // <-- Added for Terminal
+let terminalTab = null;
+let browserTab = null;      // Added for Browser
+let instagramTab = null;    // Added for Instagram
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0;
 let tabStartX = 0, tabStartY = 0;
@@ -160,6 +162,40 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         terminalTab = createTerminalTab(tabContainer);
         positionTerminalTab();
+      }
+    });
+  }
+
+  // === BROWSER CLICK HANDLER (app2) ===
+  const browserIcon = document.getElementById('app2');
+  if (browserIcon) {
+    browserIcon.style.cursor = 'pointer';
+    browserIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      if (browserTab && browserTab.parentNode) {
+        browserTab.remove();
+        browserTab = null;
+      } else {
+        browserTab = createBrowserTab(tabContainer);
+        positionBrowserTab();
+      }
+    });
+  }
+
+  // === INSTAGRAM CLICK HANDLER (app9) ===
+  const instagramIcon = document.getElementById('app9');
+  if (instagramIcon) {
+    instagramIcon.style.cursor = 'pointer';
+    instagramIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      if (instagramTab && instagramTab.parentNode) {
+        instagramTab.remove();
+        instagramTab = null;
+      } else {
+        instagramTab = createInstagramTab(tabContainer);
+        positionInstagramTab();
       }
     });
   }
@@ -1467,27 +1503,160 @@ function createTerminalTab(container) {
   return tab;
 }
 
-function positionDiscordTab() {
-  if (discordTab) {
-    discordTab.style.left = '50%';
-    discordTab.style.top = '15vh';
-    discordTab.style.width = '600px';
-    discordTab.style.height = '650px';
-    discordTab.style.transform = 'translateX(-50%)';
-  }
+// === BROWSER TAB ===
+function createBrowserTab(container) {
+  const tab = document.createElement('div');
+  tab.id = 'browser-tab';
+  tab.className = 'tab';
+  tab.style.zIndex = zIndexCounter++;
+
+  // Header
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = 'Browser';
+
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize';
+
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Content with iframe
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '0';
+  
+  const iframe = document.createElement('iframe');
+  iframe.src = 'Applications/Browser/Browser.html';
+  iframe.style.width = '100%';
+  iframe.style.height = 'calc(100% - 32px)';
+  iframe.style.border = 'none';
+  iframe.style.background = '#0a0e15';
+  
+  content.appendChild(iframe);
+  tab.appendChild(header);
+  tab.appendChild(content);
+  container.appendChild(tab);
+
+  // Drag logic
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
+
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize(tab);
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTab(tab);
+  });
+
+  tab.addEventListener('mousedown', function() {
+    tab.style.zIndex = zIndexCounter++;
+  });
+
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+
+  return tab;
 }
 
-function positionTerminalTab() {
-  if (terminalTab) {
-    terminalTab.style.left = '50%';
-    terminalTab.style.top = '10vh';
-    terminalTab.style.width = '750px';
-    terminalTab.style.height = '550px';
-    terminalTab.style.transform = 'translateX(-50%)';
-  }
+// === INSTAGRAM TAB ===
+function createInstagramTab(container) {
+  const tab = document.createElement('div');
+  tab.id = 'instagram-tab';
+  tab.className = 'tab';
+  tab.style.zIndex = zIndexCounter++;
+
+  // Header
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = 'Instagram';
+
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize';
+
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Content with iframe
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '0';
+  content.style.background = '#000';
+  
+  const iframe = document.createElement('iframe');
+  iframe.src = 'Applications/Instagram/Instagram.html';
+  iframe.style.width = '100%';
+  iframe.style.height = 'calc(100% - 32px)';
+  iframe.style.border = 'none';
+  iframe.style.background = '#000';
+  
+  content.appendChild(iframe);
+  tab.appendChild(header);
+  tab.appendChild(content);
+  container.appendChild(tab);
+
+  // Drag logic
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
+
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize(tab);
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTab(tab);
+  });
+
+  tab.addEventListener('mousedown', function() {
+    tab.style.zIndex = zIndexCounter++;
+  });
+
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+
+  return tab;
 }
 
-// === UTILITY FUNCTIONS ===
+// === POSITIONING FUNCTIONS ===
 function positionTab() {
   if (musicTab) {
     musicTab.style.left = '50%';
@@ -1548,6 +1717,46 @@ function positionFolderExplorerTab() {
   }
 }
 
+function positionDiscordTab() {
+  if (discordTab) {
+    discordTab.style.left = '50%';
+    discordTab.style.top = '15vh';
+    discordTab.style.width = '600px';
+    discordTab.style.height = '650px';
+    discordTab.style.transform = 'translateX(-50%)';
+  }
+}
+
+function positionTerminalTab() {
+  if (terminalTab) {
+    terminalTab.style.left = '50%';
+    terminalTab.style.top = '10vh';
+    terminalTab.style.width = '750px';
+    terminalTab.style.height = '550px';
+    terminalTab.style.transform = 'translateX(-50%)';
+  }
+}
+
+function positionBrowserTab() {
+  if (browserTab) {
+    browserTab.style.left = '50%';
+    browserTab.style.top = '8vh';
+    browserTab.style.width = '1100px';
+    browserTab.style.height = '750px';
+    browserTab.style.transform = 'translateX(-50%)';
+  }
+}
+
+function positionInstagramTab() {
+  if (instagramTab) {
+    instagramTab.style.left = '50%';
+    instagramTab.style.top = '8vh';
+    instagramTab.style.width = '950px';
+    instagramTab.style.height = '750px';
+    instagramTab.style.transform = 'translateX(-50%)';
+  }
+}
+
 // === DRAG FUNCTIONS ===
 function startDrag(e, tab) {
   if (e.target.classList.contains('tab-btn')) return;  // Don't drag on buttons
@@ -1596,6 +1805,8 @@ function closeTab(tab) {
     else if (tab === folderExplorerTab) folderExplorerTab = null;
     else if (tab === discordTab) discordTab = null;
     else if (tab === terminalTab) terminalTab = null;
+    else if (tab === browserTab) browserTab = null;
+    else if (tab === instagramTab) instagramTab = null;
   }
 }
 
