@@ -27,9 +27,17 @@ function loadSavedWallpaper() {
   const savedWallpaper = localStorage.getItem('wallpaper');
   if (savedWallpaper) {
     document.body.style.backgroundImage = `url('${savedWallpaper}')`;
+    document.body.style.backgroundSize = 'cover';
+    document.body.style.backgroundRepeat = 'no-repeat';
+    document.body.style.backgroundPosition = 'center';
+    document.body.style.backgroundAttachment = 'fixed';
   } else {
     // Default black background
     document.body.style.backgroundImage = '';
+    document.body.style.backgroundSize = '';
+    document.body.style.backgroundRepeat = '';
+    document.body.style.backgroundPosition = '';
+    document.body.style.backgroundAttachment = '';
   }
 }
 loadSavedWallpaper();
@@ -342,6 +350,10 @@ function createWallpaperTab(container) {
     item.addEventListener('click', function() {
       // Set body background
       document.body.style.backgroundImage = `url('${path}')`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.backgroundAttachment = 'fixed';
       // Save to localStorage
       localStorage.setItem('wallpaper', path);
     });
