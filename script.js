@@ -15,11 +15,24 @@ let terminalTab = null;
 let browserTab = null;      // Added for Browser
 let instagramTab = null;    // Added for Instagram
 let bitcoinTab = null;      // Added for BTC (Bitcoin)
+let wallpaperTab = null;    // Added for Wallpaper app
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0;
 let tabStartX = 0, tabStartY = 0;
 let zIndexCounter = 1000;
 let currentDragTab = null;
+
+// Load saved wallpaper on page load
+function loadSavedWallpaper() {
+  const savedWallpaper = localStorage.getItem('wallpaper');
+  if (savedWallpaper) {
+    document.body.style.backgroundImage = `url('${savedWallpaper}')`;
+  } else {
+    // Default black background
+    document.body.style.backgroundImage = '';
+  }
+}
+loadSavedWallpaper();
 
 // Wait for DOM load
 document.addEventListener('DOMContentLoaded', function() {
@@ -218,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // === ARROW OVERLAY TOGGLE (NEW) ===
+  // === ARROW OVERLAY TOGGLE ===
   const arrowIcon = document.getElementById('arrow-icon');
   const arrowOverlay = document.getElementById('arrow-overlay');
   
@@ -245,13 +258,137 @@ document.addEventListener('DOMContentLoaded', function() {
     if (wallpaperItem) {
       wallpaperItem.addEventListener('click', function() {
         arrowOverlay.classList.add('hidden');
-        // Placeholder: Add wallpaper functionality later
-        console.log('Wallpaper app clicked - functionality coming soon');
-        // You can add actual wallpaper change logic here later
+        // Toggle wallpaper tab
+        if (wallpaperTab && wallpaperTab.parentNode) {
+          wallpaperTab.remove();
+          wallpaperTab = null;
+        } else {
+          wallpaperTab = createWallpaperTab(tabContainer);
+          positionWallpaperTab();
+        }
       });
     }
   }
 });
+
+// === NEW: WALLPAPER TAB CREATOR ===
+function createWallpaperTab(container) {
+  const tab = document.createElement('div');
+  tab.id = 'wallpaper-tab';
+  tab.className = 'tab';
+  tab.style.zIndex = zIndexCounter++;
+
+  // Header
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = 'Wallpapers';
+
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize';
+
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Content
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '16px';
+  content.style.background = '#1a1a1a';
+  
+  // Create grid of wallpapers
+  const grid = document.createElement('div');
+  grid.className = 'wallpaper-grid';
+  
+  // Paths for 6 wallpapers
+  const wallpaperPaths = [
+    'https://a3os.pages.dev/Sources/Wallpapers/Wallpaper1.jpg',
+    'https://a3os.pages.dev/Sources/Wallpapers/Wallpaper2.jpg',
+    'https://a3os.pages.dev/Sources/Wallpapers/Wallpaper3.jpg',
+    'https://a3os.pages.dev/Sources/Wallpapers/Wallpaper4.jpg',
+    'https://a3os.pages.dev/Sources/Wallpapers/Wallpaper5.jpg',
+    'https://a3os.pages.dev/Sources/Wallpapers/Wallpaper6.jpg'
+  ];
+  
+  wallpaperPaths.forEach((path, index) => {
+    const item = document.createElement('div');
+    item.className = 'wallpaper-item';
+    
+    const thumb = document.createElement('div');
+    thumb.className = 'wallpaper-thumb';
+    thumb.style.backgroundImage = `url('${path}')`;
+    
+    const label = document.createElement('div');
+    label.className = 'wallpaper-label';
+    label.textContent = `Wallpaper ${index + 1}`;
+    
+    item.appendChild(thumb);
+    item.appendChild(label);
+    
+    item.addEventListener('click', function() {
+      // Set body background
+      document.body.style.backgroundImage = `url('${path}')`;
+      // Save to localStorage
+      localStorage.setItem('wallpaper', path);
+    });
+    
+    grid.appendChild(item);
+  });
+  
+  content.appendChild(grid);
+  tab.appendChild(header);
+  tab.appendChild(content);
+  container.appendChild(tab);
+
+  // Drag logic
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
+
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize(tab);
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTab(tab);
+  });
+
+  tab.addEventListener('mousedown', function() {
+    tab.style.zIndex = zIndexCounter++;
+  });
+
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+
+  return tab;
+}
+
+function positionWallpaperTab() {
+  if (wallpaperTab) {
+    wallpaperTab.style.left = '50%';
+    wallpaperTab.style.top = '15vh';
+    wallpaperTab.style.width = '700px';
+    wallpaperTab.style.height = '500px';
+    wallpaperTab.style.transform = 'translateX(-50%)';
+  }
+}
 
 // === TAB CREATOR FUNCTION ===
 function createMusicTab(container) {
@@ -1947,6 +2084,7 @@ function closeTab(tab) {
     else if (tab === browserTab) browserTab = null;
     else if (tab === instagramTab) instagramTab = null;
     else if (tab === bitcoinTab) bitcoinTab = null;
+    else if (tab === wallpaperTab) wallpaperTab = null;
   }
 }
 
