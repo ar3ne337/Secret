@@ -5,7 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Black Screen</title>
   <link rel="stylesheet" href="style.css">
-<link rel="icon" href="Favicon/A3.svg" type="image/svg+xml">
+  <link rel="icon" href="Favicon/A3.svg" type="image/svg+xml">
+  <style>
+    /* Clean readable app labels */
+    .desktop-apps .app {
+      font-weight: normal !important;
+      color: white !important;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 8px;
+    }
+    
+    /* Remove any bold styling */
+    .app, .app span, .desktop-apps .app {
+      font-weight: normal !important;
+    }
+    
+    /* Style the text inside app divs */
+    .desktop-apps .app {
+      font-size: 11px !important;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif !important;
+      color: rgba(255, 255, 255, 0.95) !important;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+      text-transform: none !important;
+      letter-spacing: 0.2px !important;
+      line-height: 1.4 !important;
+    }
+    
+    /* Position icon above text */
+    .desktop-apps .app::before {
+      top: 35% !important;
+    }
+    
+    /* Make sure text is visible */
+    .desktop-apps .app {
+      text-align: center;
+      word-wrap: break-word;
+    }
+  </style>
   <script>
     (function() {
       if (!sessionStorage.getItem('authenticated')) {
@@ -28,7 +68,6 @@
 
     <!-- App2 -->
     <div class="app app-browser" id="app2">Browser</div>
-
     <!-- App2 end -->
 
     <!-- App3 -->
@@ -48,7 +87,7 @@
     <!-- App6 end -->
 
     <!-- App7 -->
-    <div class="app app-pdf" id="app7">PDF</div>
+    <div class="app app-pdf" id="app7">Poem.txt</div>
     <!-- App7 end -->
 
     <!-- App8 -->
