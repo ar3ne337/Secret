@@ -217,6 +217,40 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // === ARROW OVERLAY TOGGLE (NEW) ===
+  const arrowIcon = document.getElementById('arrow-icon');
+  const arrowOverlay = document.getElementById('arrow-overlay');
+  
+  if (arrowIcon && arrowOverlay) {
+    arrowIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      arrowOverlay.classList.toggle('hidden');
+    });
+    
+    // Close overlay when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!arrowOverlay.contains(e.target) && !arrowIcon.contains(e.target)) {
+        arrowOverlay.classList.add('hidden');
+      }
+    });
+    
+    // Prevent overlay from closing when clicking inside it
+    arrowOverlay.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+    
+    // Handle clicks on overlay app items (Wallpaper app)
+    const wallpaperItem = arrowOverlay.querySelector('[data-app="wallpaper"]');
+    if (wallpaperItem) {
+      wallpaperItem.addEventListener('click', function() {
+        arrowOverlay.classList.add('hidden');
+        // Placeholder: Add wallpaper functionality later
+        console.log('Wallpaper app clicked - functionality coming soon');
+        // You can add actual wallpaper change logic here later
+      });
+    }
+  }
 });
 
 // === TAB CREATOR FUNCTION ===

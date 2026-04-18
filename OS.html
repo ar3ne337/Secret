@@ -190,6 +190,34 @@
     </div>
   </div>
 
+  <!-- Arrow Overlay (new) -->
+  <div id="arrow-overlay" class="arrow-overlay hidden">
+    <div class="arrow-overlay-container">
+      <div class="overlay-grid">
+        <!-- Wallpaper App -->
+        <div class="overlay-app-item" data-app="wallpaper">
+          <div class="overlay-app-icon wallpaper-icon"></div>
+          <span>Wallpaper</span>
+        </div>
+        <!-- Placeholder 1 -->
+        <div class="overlay-app-item placeholder">
+          <div class="overlay-app-icon placeholder-icon"></div>
+          <span>F5 (0)</span>
+        </div>
+        <!-- Placeholder 2 -->
+        <div class="overlay-app-item placeholder">
+          <div class="overlay-app-icon placeholder-icon"></div>
+          <span>F5 (1)</span>
+        </div>
+        <!-- Placeholder 3 -->
+        <div class="overlay-app-item placeholder">
+          <div class="overlay-app-icon placeholder-icon"></div>
+          <span>F5 (2)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Taskbar - Bottom Bar like Windows -->
   <div class="taskbar">
     <!-- Home Button -->
@@ -197,7 +225,7 @@
     
     <!-- Right side icons with images -->
     <div class="taskbar-right">
-      <div class="taskbar-icon arrow"></div>
+      <div class="taskbar-icon arrow" id="arrow-icon"></div>
       <div class="taskbar-icon sound"></div>
       <div class="taskbar-icon wifi"></div>
       <div class="taskbar-icon nymos"></div>
@@ -213,6 +241,4 @@
   </script>
 
 </body>
-
-
 </html>

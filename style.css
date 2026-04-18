@@ -1162,3 +1162,89 @@ body {
 .section-header-icon.network-header {
   background-image: url('Applications/ThisPC/Network.png');
 }
+
+/* ============================================= */
+/* ARROW OVERLAY STYLES (NEW)                    */
+/* ============================================= */
+.arrow-overlay {
+  position: fixed;
+  bottom: calc(var(--taskbar-height) + 5px);
+  right: 180px; /* Position near the arrow icon in taskbar */
+  width: 280px;
+  background: #000000;
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.95);
+  z-index: 1001;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(0);
+}
+
+.arrow-overlay.hidden {
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+}
+
+.arrow-overlay-container {
+  padding: 12px;
+}
+
+.overlay-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.overlay-app-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  background: #0a0a0a;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid #151515;
+}
+
+.overlay-app-item:hover {
+  background: #151515;
+  border-color: #2a2a2a;
+}
+
+.overlay-app-item.placeholder {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.overlay-app-item.placeholder:hover {
+  background: #0a0a0a;
+  border-color: #151515;
+}
+
+.overlay-app-icon {
+  width: 32px;
+  height: 32px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0) invert(0.8);
+}
+
+.wallpaper-icon {
+  background-image: url('Sources/Wallpapers/Wallpaper.png');
+}
+
+.placeholder-icon {
+  background-image: url('Sources/DesktopIcons/Placeholder.png'); /* Fallback if not exist */
+  opacity: 0.5;
+}
+
+.overlay-app-item span {
+  font-size: 10px;
+  color: #ccc;
+  text-align: center;
+  word-break: break-word;
+}
