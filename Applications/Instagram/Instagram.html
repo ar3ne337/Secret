@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Murad Osmann · Instagram profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Murad Osmann · full‑page profile</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * {
@@ -17,27 +17,33 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: #f5f5f5;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       min-height: 100vh;
-      padding: 20px;
+      padding: 0;                /* remove padding → full bleed */
+      margin: 0;
+      overflow-x: hidden;
     }
 
+    /* FULL‑PAGE CARD — takes entire width, no border, no radius */
     .profile-card {
-      max-width: 935px;
       width: 100%;
+      max-width: none;           /* override previous max-width */
       background-color: #000000;
-      border: 1px solid #262626;
-      border-radius: 8px;
-      padding: 30px 20px 24px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      border: none;              /* remove border for seamless edge */
+      border-radius: 0;
+      box-shadow: none;
+      padding: 30px 24px 24px;   /* keep inner spacing */
+      min-height: 100vh;         /* stretch to full viewport height */
+      display: flex;
+      flex-direction: column;
     }
 
-    /* header section */
+    /* header section — fluid */
     .profile-header {
       display: flex;
       flex-wrap: wrap;
       margin-bottom: 30px;
+      width: 100%;
     }
 
     .avatar-wrapper {
@@ -141,17 +147,19 @@
       color: #a8a8a8;
     }
 
-    /* subtle divider */
+    /* subtle divider — keeps visual separation */
     .divider {
       border-top: 1px solid #262626;
       margin: 20px 0 16px;
+      width: 100%;
     }
 
-    /* post grid */
+    /* post grid — 3 columns, full width, no outer gaps */
     .post-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 4px;
+      width: 100%;
     }
 
     .post-item {
@@ -173,114 +181,143 @@
       opacity: 0.8;
     }
 
-    /* bottom footer */
+    /* bottom footer — also full width */
     .grid-footer {
-      margin-top: 16px;
+      margin-top: 20px;
       color: #8e8e8e;
       font-size: 12px;
       border-top: 1px solid #1c1c1c;
       padding-top: 18px;
       text-align: center;
+      width: 100%;
     }
 
-    /* responsive */
+    /* responsive fine‑tuning */
     @media (max-width: 600px) {
+      .profile-card {
+        padding: 20px 16px 20px;
+      }
+
       .profile-header {
         flex-direction: column;
       }
+
       .avatar-wrapper {
         margin-right: 0;
         display: flex;
         justify-content: center;
       }
+
       .avatar {
         width: 120px;
         height: 120px;
       }
+
       .stats {
         justify-content: space-around;
         gap: 20px;
       }
+
       .post-grid {
         gap: 2px;
       }
+    }
+
+    /* optional: keep content comfortable on ultra‑wide, but still full‑bleed */
+    @media (min-width: 1800px) {
+      .profile-card {
+        padding-left: 5vw;
+        padding-right: 5vw;
+      }
+    }
+
+    /* make sure footer stays at bottom if content is short */
+    .profile-card {
+      justify-content: space-between;
+    }
+
+    .spacer {
+      flex: 1;
     }
   </style>
 </head>
 <body>
 <div class="profile-card">
-  <!-- header with avatar and stats -->
-  <div class="profile-header">
-    <div class="avatar-wrapper">
-      <img class="avatar" 
-           src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop&dpr=1" 
-           alt="Murad Osmann"
-           onerror="this.src='https://ui-avatars.com/api/?name=Murad+Osmann&size=150&background=1a1a1a&color=fff&bold=true'">
+  <!-- main content wrapper (no extra container) -->
+  <div>
+    <!-- header with avatar and stats -->
+    <div class="profile-header">
+      <div class="avatar-wrapper">
+        <img class="avatar" 
+             src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=300&h=300&fit=crop&dpr=1" 
+             alt="Murad Osmann"
+             onerror="this.src='https://ui-avatars.com/api/?name=Murad+Osmann&size=150&background=1a1a1a&color=fff&bold=true'">
+      </div>
+
+      <div class="profile-info">
+        <div class="name-row">
+          <span class="username">muradosmann</span>
+          <button class="follow-btn">Follow</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat-item"><span class="stat-number">793</span> <span class="stat-label">posts</span></div>
+          <div class="stat-item"><span class="stat-number">3.2M</span> <span class="stat-label">followers</span></div>
+          <div class="stat-item"><span class="stat-number">1,851</span> <span class="stat-label">following</span></div>
+        </div>
+
+        <div class="display-name">MURAD OSMANN</div>
+        <div class="bio">
+          @muradosmann<br>
+          DAGSTAN<br>
+          2016 was incredible, but 2026 will be even better!
+        </div>
+
+        <div class="location-tag">
+          <i class="fas fa-map-pin" style="font-size: 12px;"></i> WORLD GOVERNMENT SUMMIT 2026
+        </div>
+      </div>
     </div>
 
-    <div class="profile-info">
-      <div class="name-row">
-        <span class="username">muradosmann</span>
-        <button class="follow-btn">Follow</button>
-      </div>
+    <!-- subtle divider -->
+    <div class="divider"></div>
 
-      <div class="stats">
-        <div class="stat-item"><span class="stat-number">793</span> <span class="stat-label">posts</span></div>
-        <div class="stat-item"><span class="stat-number">3.2M</span> <span class="stat-label">followers</span></div>
-        <div class="stat-item"><span class="stat-number">1,851</span> <span class="stat-label">following</span></div>
+    <!-- post grid – now stretches full card width -->
+    <div class="post-grid">
+      <div class="post-item">
+        <img src="https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=600" 
+             alt="post"
+             onerror="this.src='https://picsum.photos/300/300?random=1&grayscale'">
       </div>
-
-      <div class="display-name">MURAD OSMANN</div>
-      <div class="bio">
-        @muradosmann<br>
-        DAGSTAN<br>
-        2016 was incredible, but 2026 will be even better!
+      <div class="post-item">
+        <img src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=600" 
+             alt="post"
+             onerror="this.src='https://picsum.photos/300/300?random=2'">
       </div>
-
-      <div class="location-tag">
-        <i class="fas fa-map-pin" style="font-size: 12px;"></i> WORLD GOVERNMENT SUMMIT 2026
+      <div class="post-item">
+        <img src="https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&w=600" 
+             alt="post"
+             onerror="this.src='https://picsum.photos/300/300?random=3'">
+      </div>
+      <div class="post-item">
+        <img src="https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=600" 
+             alt="post"
+             onerror="this.src='https://picsum.photos/300/300?random=4'">
+      </div>
+      <div class="post-item">
+        <img src="https://images.pexels.com/photos/11832638/pexels-photo-11832638.jpeg?auto=compress&cs=tinysrgb&w=600" 
+             alt="post"
+             onerror="this.src='https://picsum.photos/300/300?random=5'">
+      </div>
+      <div class="post-item">
+        <img src="https://images.pexels.com/photos/3052361/pexels-photo-3052361.jpeg?auto=compress&cs=tinysrgb&w=600" 
+             alt="post"
+             onerror="this.src='https://picsum.photos/300/300?random=6'">
       </div>
     </div>
   </div>
 
-  <!-- subtle divider -->
-  <div class="divider"></div>
-
-  <!-- post grid -->
-  <div class="post-grid">
-    <div class="post-item">
-      <img src="https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=600" 
-           alt="post"
-           onerror="this.src='https://picsum.photos/300/300?random=1&grayscale'">
-    </div>
-    <div class="post-item">
-      <img src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=600" 
-           alt="post"
-           onerror="this.src='https://picsum.photos/300/300?random=2'">
-    </div>
-    <div class="post-item">
-      <img src="https://images.pexels.com/photos/2387873/pexels-photo-2387873.jpeg?auto=compress&cs=tinysrgb&w=600" 
-           alt="post"
-           onerror="this.src='https://picsum.photos/300/300?random=3'">
-    </div>
-    <div class="post-item">
-      <img src="https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=600" 
-           alt="post"
-           onerror="this.src='https://picsum.photos/300/300?random=4'">
-    </div>
-    <div class="post-item">
-      <img src="https://images.pexels.com/photos/11832638/pexels-photo-11832638.jpeg?auto=compress&cs=tinysrgb&w=600" 
-           alt="post"
-           onerror="this.src='https://picsum.photos/300/300?random=5'">
-    </div>
-    <div class="post-item">
-      <img src="https://images.pexels.com/photos/3052361/pexels-photo-3052361.jpeg?auto=compress&cs=tinysrgb&w=600" 
-           alt="post"
-           onerror="this.src='https://picsum.photos/300/300?random=6'">
-    </div>
-  </div>
-
-  <!-- bottom footer -->
+  <!-- bottom footer (pushed down if content is short) -->
   <div class="grid-footer">
     <i class="fab fa-instagram" style="margin-right: 6px;"></i> muradosmann · Dagestan · 2026
   </div>
@@ -288,17 +325,36 @@
 
 <script>
   (function() {
+    // Enhanced fallback: if any image fails (avatar or post), use reliable placeholder
     const images = document.querySelectorAll('.post-item img, .avatar');
     images.forEach(img => {
       img.addEventListener('error', function() {
         if (this.classList.contains('avatar')) {
           this.src = 'https://ui-avatars.com/api/?name=Murad+Osmann&size=150&background=222&color=fff&bold=true';
         } else {
-          const randomId = Math.floor(Math.random() * 1000);
+          // generate unique random for each failed post image
+          const randomId = Math.floor(Math.random() * 1000) + Date.now();
           this.src = `https://picsum.photos/400/400?random=${randomId}&grayscale`;
         }
+        // prevent infinite loop if fallback also fails (rare)
+        this.onerror = null;
       });
     });
+
+    // minor: make the follow button interactive (just a console demo)
+    const followBtn = document.querySelector('.follow-btn');
+    if(followBtn) {
+      followBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if(this.textContent === 'Follow') {
+          this.textContent = 'Following';
+          this.style.backgroundColor = '#262626';
+        } else {
+          this.textContent = 'Follow';
+          this.style.backgroundColor = '#0095f6';
+        }
+      });
+    }
   })();
 </script>
 </body>
