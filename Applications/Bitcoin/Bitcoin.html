@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>₿ Bitcoin · Live Simulation</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Segoe UI', -apple-system, sans-serif;
+      padding: 24px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dashboard { max-width: 1200px; width: 100%; margin: 0 auto; }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .title-section h1 {
+      font-size: 1.8rem;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .title-section i { color: #f7931a; font-size: 2rem; }
+    .price-large { font-size: 2.5rem; font-weight: 600; color: #f7931a; line-height: 1; }
+    .price-change { font-size: 1rem; margin-left: 8px; }
+    .positive { color: #2ecc71; }
+    .negative { color: #e74c3c; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .stat-card {
+      background: #0a0a0a;
+      border: 1px solid #1a1a1a;
+      border-radius: 8px;
+      padding: 20px 18px;
+      transition: border-color 0.2s;
+    }
+    .stat-card:hover { border-color: #2a2a2a; }
+    .card-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #888;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .card-label i { color: #f7931a; width: 18px; }
+    .card-value { font-size: 1.8rem; font-weight: 500; color: #fff; line-height: 1.2; }
+    .card-sub { color: #666; font-size: 0.75rem; margin-top: 6px; }
+    .main-panel {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .chart-card {
+      background: #0a0a0a;
+      border: 1px solid #1a1a1a;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .chart-header h3 { font-weight: 400; font-size: 1rem; color: #ccc; }
+    .time-buttons { display: flex; gap: 6px; }
+    .time-btn {
+      background: transparent;
+      border: 1px solid #2a2a2a;
+      color: #888;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .time-btn.active { background: #f7931a; border-color: #f7931a; color: #000; }
+    .time-btn:hover { background: #1a1a1a; color: #fff; }
+    canvas { width: 100% !important; height: auto !important; max-height: 240px; }
+    .info-card {
+      background: #0a0a0a;
+      border: 1px solid #1a1a1a;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .info-title {
+      font-weight: 400;
+      font-size: 1rem;
+      color: #ccc;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #151515;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #888; font-size: 0.85rem; }
+    .info-value { font-weight: 500; color: #fff; }
+    .progress-container { margin-top: 8px; }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+    .progress-bar {
+      height: 4px;
+      background: #1a1a1a;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill { height: 100%; background: #f7931a; border-radius: 2px; }
+    .blocks-card {
+      background: #0a0a0a;
+      border: 1px solid #1a1a1a;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .blocks-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .blocks-header h3 { font-weight: 400; font-size: 1rem; color: #ccc; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th {
+      text-align: left;
+      padding: 10px 8px;
+      color: #666;
+      font-weight: 400;
+      border-bottom: 1px solid #151515;
+    }
+    td { padding: 10px 8px; border-bottom: 1px solid #0f0f0f; color: #ccc; }
+    .pool-tag {
+      background: #151515;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      color: #444;
+      font-size: 0.7rem;
+    }
+    @media (max-width: 800px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .main-panel { grid-template-columns: 1fr; }
+      body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard">
+  <div class="header">
+    <div class="title-section">
+      <h1><i class="fab fa-bitcoin"></i> Bitcoin Network</h1>
+    </div>
+    <div>
+      <span class="price-large" id="btcPrice">--</span>
+      <span class="price-change" id="btcChange">--</span>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="card-label"><i class="fas fa-microchip"></i> Hashrate</div>
+      <div class="card-value" id="hashrate">--</div>
+      <div class="card-sub" id="hashrateChange">--</div>
+    </div>
+    <div class="stat-card">
+      <div class="card-label"><i class="fas fa-cubes"></i> Difficulty</div>
+      <div class="card-value" id="difficulty">--</div>
+      <div class="card-sub" id="difficultyChange">--</div>
+    </div>
+    <div class="stat-card">
+      <div class="card-label"><i class="fas fa-coins"></i> Block Reward</div>
+      <div class="card-value">3.125 BTC</div>
+      <div class="card-sub">+ fees</div>
+    </div>
+    <div class="stat-card">
+      <div class="card-label"><i class="fas fa-clock"></i> Halving</div>
+      <div class="card-value" id="halvingCountdown">--</div>
+      <div class="card-sub">est. April 2028</div>
+    </div>
+  </div>
+
+  <div class="main-panel">
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3><i class="fas fa-chart-line" style="margin-right:6px;color:#f7931a;"></i>Price (USD)</h3>
+        <div class="time-buttons">
+          <button class="time-btn active" data-days="7">7D</button>
+          <button class="time-btn" data-days="30">1M</button>
+          <button class="time-btn" data-days="90">3M</button>
+        </div>
+      </div>
+      <canvas id="priceChart"></canvas>
+    </div>
+
+    <div class="info-card">
+      <div class="info-title"><i class="fas fa-hammer" style="color:#f7931a;"></i> Network & Mining</div>
+      <div class="info-row">
+        <span class="info-label">Hashrate (24h avg)</span>
+        <span class="info-value" id="detailHashrate">--</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Difficulty</span>
+        <span class="info-value" id="detailDifficulty">--</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Block Height</span>
+        <span class="info-value" id="blockHeight">--</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Mempool TXs</span>
+        <span class="info-value" id="mempoolTx">--</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Next Difficulty Adj.</span>
+        <span class="info-value" id="nextDiffEst">--</span>
+      </div>
+      
+      <div style="margin-top:20px;">
+        <div class="progress-label"><span>Mining Pool Distribution</span></div>
+        <div class="progress-label"><span>Foundry USA</span><span id="foundryPct">32%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="foundryBar" style="width:32%"></div></div>
+        <div class="progress-label" style="margin-top:10px;"><span>AntPool</span><span id="antPct">24%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="antBar" style="width:24%"></div></div>
+        <div class="progress-label" style="margin-top:10px;"><span>F2Pool</span><span id="f2Pct">15%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="f2Bar" style="width:15%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="blocks-card">
+    <div class="blocks-header">
+      <h3><i class="fas fa-cube" style="margin-right:6px;color:#f7931a;"></i>Recent Blocks</h3>
+      <span style="color:#555;font-size:0.75rem;" id="blocksUpdate">live</span>
+    </div>
+    <table>
+      <thead><tr><th>Height</th><th>Time</th><th>TXs</th><th>Size (kB)</th><th>Miner</th></tr></thead>
+      <tbody id="blocksTableBody"><tr><td colspan="5" style="text-align:center;color:#555;">Loading blocks...</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <i class="fas fa-shield-alt"></i> Real price · Simulated mining (updates every 1.5s)
+  </div>
+</div>
+
+<script>
+  (function() {
+    "use strict";
+
+    // DOM elements
+    const btcPriceEl = document.getElementById('btcPrice');
+    const btcChangeEl = document.getElementById('btcChange');
+    const hashrateEl = document.getElementById('hashrate');
+    const hashrateChangeEl = document.getElementById('hashrateChange');
+    const difficultyEl = document.getElementById('difficulty');
+    const difficultyChangeEl = document.getElementById('difficultyChange');
+    const halvingCountdownEl = document.getElementById('halvingCountdown');
+    const detailHashrateEl = document.getElementById('detailHashrate');
+    const detailDifficultyEl = document.getElementById('detailDifficulty');
+    const blockHeightEl = document.getElementById('blockHeight');
+    const mempoolTxEl = document.getElementById('mempoolTx');
+    const nextDiffEstEl = document.getElementById('nextDiffEst');
+    const blocksTableBody = document.getElementById('blocksTableBody');
+    const blocksUpdateSpan = document.getElementById('blocksUpdate');
+    const foundryPct = document.getElementById('foundryPct');
+    const antPct = document.getElementById('antPct');
+    const f2Pct = document.getElementById('f2Pct');
+    const foundryBar = document.getElementById('foundryBar');
+    const antBar = document.getElementById('antBar');
+    const f2Bar = document.getElementById('f2Bar');
+
+    let chart;
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    let priceHistory = { '7': [], '30': [], '90': [] };
+    let currentPeriod = '7';
+
+    // Simulation state (starting values)
+    let simHashrate = 585.3;       // EH/s
+    let simDifficulty = 86.87;     // T
+    let simBlockHeight = 837250;
+    let simMempool = 12500;
+    let simDiffChange = 2.8;       // %
+    let lastBlockTime = Date.now();
+
+    // Halving countdown (real)
+    function updateHalvingCountdown() {
+      const nextHalving = new Date('2028-04-15T00:00:00Z');
+      const now = new Date();
+      const diff = nextHalving - now;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      halvingCountdownEl.textContent = days.toLocaleString() + ' days';
+    }
+    updateHalvingCountdown();
+    setInterval(updateHalvingCountdown, 3600000);
+
+    function formatHashrate(eh) {
+      return eh >= 1000 ? (eh/1000).toFixed(2) + ' ZH/s' : eh.toFixed(1) + ' EH/s';
+    }
+
+    // Fast simulation update (~every 1.5s)
+    function updateSimulationAndUI() {
+      // Small realistic variations
+      simHashrate = simHashrate * (1 + (Math.random() * 0.006 - 0.003));  // ±0.3%
+      simHashrate = Math.max(500, Math.min(700, simHashrate));
+      
+      simDifficulty = simDifficulty * (1 + (Math.random() * 0.002 - 0.001)); // very slow change
+      
+      // Block height: roughly one block every 10 min, but we simulate tiny increments per tick
+      const now = Date.now();
+      const elapsed = now - lastBlockTime;
+      if (elapsed >= 600000) { // 10 min in ms
+        simBlockHeight += 1;
+        lastBlockTime = now;
+      }
+      // Also add a chance for block found earlier
+      if (Math.random() < 0.02) { // 2% chance per tick (~every 1.5s) to simulate variability
+        simBlockHeight += 1;
+        lastBlockTime = now;
+      }
+      
+      simMempool = Math.floor(simMempool * (1 + (Math.random() * 0.1 - 0.05)));
+      simMempool = Math.max(5000, Math.min(30000, simMempool));
+      
+      simDiffChange = simDiffChange + (Math.random() * 0.4 - 0.2);
+      simDiffChange = Math.max(-5, Math.min(8, simDiffChange));
+      
+      // Update UI with simulated data
+      hashrateEl.textContent = formatHashrate(simHashrate);
+      detailHashrateEl.textContent = formatHashrate(simHashrate);
+      
+      difficultyEl.textContent = simDifficulty.toFixed(2) + ' T';
+      detailDifficultyEl.textContent = simDifficulty.toFixed(2) + ' T';
+      
+      blockHeightEl.textContent = simBlockHeight.toLocaleString();
+      mempoolTxEl.textContent = simMempool.toLocaleString();
+      
+      const diffChangeSign = simDiffChange >= 0 ? '+' : '';
+      difficultyChangeEl.textContent = diffChangeSign + simDiffChange.toFixed(2) + '% (24h est)';
+      nextDiffEstEl.textContent = diffChangeSign + simDiffChange.toFixed(2) + '%';
+      
+      const hrChange = (Math.random() * 6 - 2).toFixed(1);
+      hashrateChangeEl.textContent = (hrChange >= 0 ? '+' : '') + hrChange + '% (24h)';
+      
+      // Pool distribution (dynamic)
+      let foundry = 28 + Math.floor(Math.random() * 10);
+      let ant = 20 + Math.floor(Math.random() * 10);
+      let f2 = 12 + Math.floor(Math.random() * 8);
+      const sum = foundry + ant + f2;
+      const others = 100 - sum;
+      foundry += Math.floor(others * 0.4);
+      ant += Math.floor(others * 0.3);
+      f2 += Math.floor(others * 0.2);
+      // ensure total near 100
+      const total = foundry + ant + f2;
+      foundry = Math.round(foundry * 100 / total);
+      ant = Math.round(ant * 100 / total);
+      f2 = 100 - foundry - ant;
+      
+      foundryPct.textContent = foundry + '%';
+      antPct.textContent = ant + '%';
+      f2Pct.textContent = f2 + '%';
+      foundryBar.style.width = foundry + '%';
+      antBar.style.width = ant + '%';
+      f2Bar.style.width = f2 + '%';
+      
+      // Generate recent blocks (based on current simBlockHeight)
+      const blocks = [];
+      const nowSec = Math.floor(Date.now() / 1000);
+      const poolNames = ['Foundry USA', 'AntPool', 'F2Pool', 'ViaBTC', 'Binance Pool', 'Luxor'];
+      for (let i = 0; i < 5; i++) {
+        const height = simBlockHeight - i;
+        const time = nowSec - (i * 600 + Math.floor(Math.random() * 300));
+        const txCount = 2500 + Math.floor(Math.random() * 3000);
+        const size = 1200 + Math.floor(Math.random() * 800);
+        const pool = poolNames[Math.floor(Math.random() * poolNames.length)];
+        blocks.push({ height, time, tx_count: txCount, size: size * 1000, pool_name: pool });
+      }
+      
+      blocksTableBody.innerHTML = '';
+      blocks.forEach(block => {
+        const row = document.createElement('tr');
+        const time = new Date(block.time * 1000);
+        const timeStr = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        row.innerHTML = `
+          <td>${block.height.toLocaleString()}</td>
+          <td>${timeStr}</td>
+          <td>${block.tx_count.toLocaleString()}</td>
+          <td>${(block.size/1000).toFixed(0)}</td>
+          <td><span class="pool-tag">${block.pool_name}</span></td>
+        `;
+        blocksTableBody.appendChild(row);
+      });
+      blocksUpdateSpan.textContent = 'simulated · 1.5s';
+    }
+
+    // Real price data fetch (every 60s)
+    async function fetchPriceData() {
+      try {
+        const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const price = data.bitcoin.usd;
+        const change = data.bitcoin.usd_24h_change;
+        btcPriceEl.textContent = '$' + price.toLocaleString(undefined, { maximumFractionDigits: 0 });
+        btcChangeEl.innerHTML = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
+        btcChangeEl.className = 'price-change ' + (change >= 0 ? 'positive' : 'negative');
+        return price;
+      } catch (e) {
+        console.warn('Price API failed, using last known');
+        return null;
+      }
+    }
+
+    // Real chart data (fetch once per period, then update simulation ticks don't affect chart)
+    async function loadChartData(days) {
+      try {
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${days}&interval=${days <= 7 ? 'hourly' : 'daily'}`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        const prices = data.prices.map(p => p[1]);
+        priceHistory[days] = prices;
+        updateChart(prices, days);
+      } catch (e) {
+        console.warn('Chart API failed, using simulation');
+        const basePrice = 68000;
+        const points = days == 7 ? 168 : (days == 30 ? 30 : 90);
+        const prices = [];
+        let current = basePrice;
+        for (let i = 0; i < points; i++) {
+          current = current * (1 + (Math.random() * 0.04 - 0.02));
+          prices.push(current);
+        }
+        priceHistory[days] = prices;
+        updateChart(prices, days);
+      }
+    }
+
+    function updateChart(prices, days) {
+      const labels = prices.map((_, i) => days == 7 ? `Day ${i+1}` : `${i+1}d`);
+      if (chart) {
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = prices;
+        chart.update();
+      } else {
+        chart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [{
+              label: 'BTC/USD',
+              data: prices,
+              borderColor: '#f7931a',
+              backgroundColor: 'rgba(247,147,26,0.03)',
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              pointHoverBackgroundColor: '#f7931a',
+              tension: 0.2,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: '#666', maxTicksLimit: 6 } },
+              y: { grid: { color: '#151515' }, ticks: { color: '#888', callback: v => '$' + v.toLocaleString() } }
+            }
+          }
+        });
+      }
+    }
+
+    // Time period switcher
+    document.querySelectorAll('.time-btn').forEach(btn => {
+      btn.addEventListener('click', async function() {
+        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const days = this.dataset.days;
+        currentPeriod = days;
+        if (priceHistory[days]?.length) {
+          updateChart(priceHistory[days], days);
+        } else {
+          await loadChartData(days);
+        }
+      });
+    });
+
+    // Initialize
+    async function init() {
+      await fetchPriceData();
+      await loadChartData(currentPeriod);
+      updateSimulationAndUI();
+    }
+
+    init();
+
+    // Fast updates: simulation every 1.5 seconds
+    setInterval(updateSimulationAndUI, 1500);
+    // Real price fetch every 60 seconds
+    setInterval(fetchPriceData, 60000);
+    // Chart data refresh every 5 minutes
+    setInterval(() => loadChartData(currentPeriod), 300000);
+  })();
+</script>
+</body>
+</html>
