@@ -248,6 +248,10 @@ html, body {
   background-image: url('Applications/Music/Music.png');
 }
 
+.app.app-bitcoin::before {
+  background-image: url('Applications/Bitcoin/Bitcoin.png');
+}
+
 .taskbar-icon.arrow::before {
   background-image: url('Sources/DesktopIcons/Arrow.png');
 }
@@ -714,6 +718,7 @@ body {
 .terminal-icon { background-image: url('Applications/Terminal/Terminal.png'); }
 .instagram-icon { background-image: url('Applications/Instagram/Instagram.png'); }
 .music-icon { background-image: url('Applications/Music/Music.png'); }
+.bitcoin-icon { background-image: url('Applications/Bitcoin/Bitcoin.png'); }
 .settings-icon { background-image: url('Sources/DesktopIcons/Settings.png'); }
 .power-icon { background-image: url('Sources/DesktopIcons/Power.png'); }
 

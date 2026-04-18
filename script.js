@@ -14,6 +14,7 @@ let discordTab = null;
 let terminalTab = null;
 let browserTab = null;      // Added for Browser
 let instagramTab = null;    // Added for Instagram
+let bitcoinTab = null;      // Added for BTC (Bitcoin)
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0;
 let tabStartX = 0, tabStartY = 0;
@@ -196,6 +197,23 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         instagramTab = createInstagramTab(tabContainer);
         positionInstagramTab();
+      }
+    });
+  }
+
+  // === BTC (BITCOIN) CLICK HANDLER (app11) ===
+  const bitcoinIcon = document.getElementById('app11');
+  if (bitcoinIcon) {
+    bitcoinIcon.style.cursor = 'pointer';
+    bitcoinIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      if (bitcoinTab && bitcoinTab.parentNode) {
+        bitcoinTab.remove();
+        bitcoinTab = null;
+      } else {
+        bitcoinTab = createBitcoinTab(tabContainer);
+        positionBitcoinTab();
       }
     });
   }
@@ -1656,6 +1674,83 @@ function createInstagramTab(container) {
   return tab;
 }
 
+// === BITCOIN (BTC) TAB ===
+function createBitcoinTab(container) {
+  const tab = document.createElement('div');
+  tab.id = 'bitcoin-tab';
+  tab.className = 'tab';
+  tab.style.zIndex = zIndexCounter++;
+
+  // Header
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = 'Bitcoin';
+
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize';
+
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Content with iframe
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '0';
+  content.style.background = '#0a0e15';
+  
+  const iframe = document.createElement('iframe');
+  iframe.src = 'Applications/Bitcoin/Bitcoin.html';
+  iframe.style.width = '100%';
+  iframe.style.height = 'calc(100% - 32px)';
+  iframe.style.border = 'none';
+  iframe.style.background = '#0a0e15';
+  
+  content.appendChild(iframe);
+  tab.appendChild(header);
+  tab.appendChild(content);
+  container.appendChild(tab);
+
+  // Drag logic
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
+
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize(tab);
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTab(tab);
+  });
+
+  tab.addEventListener('mousedown', function() {
+    tab.style.zIndex = zIndexCounter++;
+  });
+
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+
+  return tab;
+}
+
 // === POSITIONING FUNCTIONS ===
 function positionTab() {
   if (musicTab) {
@@ -1757,6 +1852,16 @@ function positionInstagramTab() {
   }
 }
 
+function positionBitcoinTab() {
+  if (bitcoinTab) {
+    bitcoinTab.style.left = '50%';
+    bitcoinTab.style.top = '10vh';
+    bitcoinTab.style.width = '800px';
+    bitcoinTab.style.height = '600px';
+    bitcoinTab.style.transform = 'translateX(-50%)';
+  }
+}
+
 // === DRAG FUNCTIONS ===
 function startDrag(e, tab) {
   if (e.target.classList.contains('tab-btn')) return;  // Don't drag on buttons
@@ -1807,6 +1912,7 @@ function closeTab(tab) {
     else if (tab === terminalTab) terminalTab = null;
     else if (tab === browserTab) browserTab = null;
     else if (tab === instagramTab) instagramTab = null;
+    else if (tab === bitcoinTab) bitcoinTab = null;
   }
 }
 
@@ -1900,6 +2006,9 @@ document.addEventListener('DOMContentLoaded', function() {
           break;
         case 'music':
           document.getElementById('app10')?.click();
+          break;
+        case 'bitcoin':
+          document.getElementById('app11')?.click();
           break;
       }
     });
