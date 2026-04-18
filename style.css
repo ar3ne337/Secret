@@ -44,7 +44,7 @@ html, body {
   align-items: flex-start;
   gap: clamp(8px, 1.5vw, 15px);
   padding: clamp(10px, 2vw, 20px) clamp(5px, 1vw, 10px);
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0);
   z-index: 20;
 }
 
@@ -1293,4 +1293,9 @@ body {
   font-size: 12px;
   color: #ccc;
   text-align: center;
+}
+
+/* Style for reset/default thumbnail */
+.wallpaper-thumb.default-thumb {
+  border: 2px dashed #555;
 }

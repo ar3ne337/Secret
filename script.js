@@ -32,7 +32,6 @@ function loadSavedWallpaper() {
     document.body.style.backgroundPosition = 'center';
     document.body.style.backgroundAttachment = 'fixed';
   } else {
-    // Default black background
     document.body.style.backgroundImage = '';
     document.body.style.backgroundSize = '';
     document.body.style.backgroundRepeat = '';
@@ -356,10 +355,45 @@ function createWallpaperTab(container) {
       document.body.style.backgroundAttachment = 'fixed';
       // Save to localStorage
       localStorage.setItem('wallpaper', path);
+      // Logo remains visible (no display toggling)
     });
     
     grid.appendChild(item);
   });
+
+  // ===== ADD RESET BUTTON =====
+  const resetItem = document.createElement('div');
+  resetItem.className = 'wallpaper-item';
+
+  const resetThumb = document.createElement('div');
+  resetThumb.className = 'wallpaper-thumb default-thumb';
+  resetThumb.style.background = '#0a0a0a';
+  resetThumb.style.display = 'flex';
+  resetThumb.style.alignItems = 'center';
+  resetThumb.style.justifyContent = 'center';
+  resetThumb.innerHTML = '<span style="color:#fff; font-size:14px;">⟲ Reset</span>';
+
+  const resetLabel = document.createElement('div');
+  resetLabel.className = 'wallpaper-label';
+  resetLabel.textContent = 'Default Background';
+
+  resetItem.appendChild(resetThumb);
+  resetItem.appendChild(resetLabel);
+
+  resetItem.addEventListener('click', function() {
+    // Clear background image
+    document.body.style.backgroundImage = '';
+    document.body.style.backgroundSize = '';
+    document.body.style.backgroundRepeat = '';
+    document.body.style.backgroundPosition = '';
+    document.body.style.backgroundAttachment = '';
+    // Remove from localStorage
+    localStorage.removeItem('wallpaper');
+    // Logo remains visible (no display toggling)
+  });
+
+  grid.appendChild(resetItem);
+  // ===== END RESET BUTTON =====
   
   content.appendChild(grid);
   tab.appendChild(header);
