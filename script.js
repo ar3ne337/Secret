@@ -834,9 +834,9 @@ function createDiskExplorerTab(container) {
     </div>
     <div class="status-right">
       <div class="view-options">
-        <button class="view-btn" title="Details"><img src="https://a3.pages.dev/Sources/DesktopIcons/View.png" alt="Details" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
-        <button class="view-btn" title="Icons"><img src="https://a3.pages.dev/Sources/DesktopIcons/Icons.png" alt="Icons" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
-        <button class="view-btn" title="List"><img src="https://a3.pages.dev/Sources/DesktopIcons/List.png" alt="List" style="width:14px;height:14px;vertical-align:middle;filter:invert(1);"></button>
+https://a3os.pages.dev/Sources/DesktopIcons/View.png
+https://a3os.pages.dev/Sources/DesktopIcons/Icons.png
+https://a3os.pages.dev/Sources/DesktopIcons/List.png
       </div>
     </div>
   `;
