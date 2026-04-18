@@ -11,6 +11,7 @@ let imageViewerTab = null;
 let fileExplorerTab = null;
 let folderExplorerTab = null;
 let discordTab = null;
+let terminalTab = null; // <-- Added for Terminal
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0;
 let tabStartX = 0, tabStartY = 0;
@@ -142,6 +143,23 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         discordTab = createDiscordTab(tabContainer);
         positionDiscordTab();
+      }
+    });
+  }
+
+  // === TERMINAL CLICK HANDLER ===
+  const terminalIcon = document.getElementById('app8');
+  if (terminalIcon) {
+    terminalIcon.style.cursor = 'pointer';
+    terminalIcon.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      if (terminalTab && terminalTab.parentNode) {
+        terminalTab.remove();
+        terminalTab = null;
+      } else {
+        terminalTab = createTerminalTab(tabContainer);
+        positionTerminalTab();
       }
     });
   }
@@ -1365,6 +1383,90 @@ function createDiscordTab(container) {
   return tab;
 }
 
+// === TERMINAL TAB ===
+function createTerminalTab(container) {
+  const tab = document.createElement('div');
+  tab.id = 'terminal-tab';
+  tab.className = 'tab';
+  tab.style.zIndex = zIndexCounter++;
+
+  // Header (draggable area)
+  const header = document.createElement('div');
+  header.className = 'tab-header';
+
+  const title = document.createElement('div');
+  title.className = 'tab-title';
+  title.textContent = 'Terminal';
+
+  // Controls
+  const controls = document.createElement('div');
+  controls.className = 'tab-controls';
+
+  // Minimize button
+  const minBtn = document.createElement('div');
+  minBtn.className = 'tab-btn minimize';
+  minBtn.textContent = '-';
+  minBtn.title = 'Minimize (click to toggle)';
+
+  // Close button
+  const closeBtn = document.createElement('div');
+  closeBtn.className = 'tab-btn close';
+  closeBtn.textContent = '×';
+  closeBtn.title = 'Close tab';
+
+  controls.appendChild(minBtn);
+  controls.appendChild(closeBtn);
+  header.appendChild(title);
+  header.appendChild(controls);
+
+  // Load Terminal via iframe
+  const content = document.createElement('div');
+  content.className = 'tab-content';
+  content.style.padding = '0';
+  content.style.background = '#0a0e15'; // Match terminal background
+  
+  const iframe = document.createElement('iframe');
+  iframe.src = 'Applications/Terminal/Terminal.html';
+  iframe.style.width = '100%';
+  iframe.style.height = 'calc(100% - 32px)';
+  iframe.style.border = 'none';
+  iframe.style.background = '#0a0e15';
+  
+  content.appendChild(iframe);
+
+  tab.appendChild(header);
+  tab.appendChild(content);
+  container.appendChild(tab);
+
+  // === DRAG LOGIC ===
+  header.addEventListener('mousedown', function(e) {
+    startDrag(e, tab);
+  });
+
+  // === EVENT LISTENERS ===
+  minBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    toggleMinimize(tab);
+  });
+
+  closeBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    closeTab(tab);
+  });
+
+  // Bring to front on mousedown
+  tab.addEventListener('mousedown', function() {
+    tab.style.zIndex = zIndexCounter++;
+  });
+
+  // Prevent text selection during drag
+  header.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
+
+  return tab;
+}
+
 function positionDiscordTab() {
   if (discordTab) {
     discordTab.style.left = '50%';
@@ -1372,6 +1474,16 @@ function positionDiscordTab() {
     discordTab.style.width = '600px';
     discordTab.style.height = '650px';
     discordTab.style.transform = 'translateX(-50%)';
+  }
+}
+
+function positionTerminalTab() {
+  if (terminalTab) {
+    terminalTab.style.left = '50%';
+    terminalTab.style.top = '10vh';
+    terminalTab.style.width = '750px';
+    terminalTab.style.height = '550px';
+    terminalTab.style.transform = 'translateX(-50%)';
   }
 }
 
@@ -1483,6 +1595,7 @@ function closeTab(tab) {
     else if (tab === fileExplorerTab) fileExplorerTab = null;
     else if (tab === folderExplorerTab) folderExplorerTab = null;
     else if (tab === discordTab) discordTab = null;
+    else if (tab === terminalTab) terminalTab = null;
   }
 }
 
