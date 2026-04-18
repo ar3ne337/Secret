@@ -2,38 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>A3Terminal · A3OS</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #0a0e15;
+      background: #000000;
       min-height: 100vh;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 8px;
+      padding: 0;
       font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+      overflow: hidden;
     }
     .terminal {
       width: 100%;
-      max-width: 1400px;
-      height: 95vh;
-      background: #0d1219;
-      border-radius: 12px;
-      border: 1px solid #2a3a4a;
-      box-shadow: 0 16px 32px rgba(0,0,0,0.7);
+      height: 100vh;
+      background: #000000;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
     .term-header {
-      background: #151e28;
+      background: #0a0a0a;
       padding: 10px 16px;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #2a3f52;
+      border-bottom: 1px solid #1a1a1a;
       flex-wrap: wrap;
+      flex-shrink: 0;
     }
     .window-controls {
       display: flex;
@@ -54,7 +56,7 @@
     .term-header img { width: 16px; height: 16px; margin-right: 4px; filter: brightness(0) invert(0.7); }
     .output {
       flex: 1;
-      background: #0a1017;
+      background: #000000;
       padding: 16px;
       overflow-y: auto;
       font-size: 13px;
@@ -63,8 +65,8 @@
       word-break: break-word;
     }
     .output::-webkit-scrollbar { width: 8px; }
-    .output::-webkit-scrollbar-track { background: #0d141c; }
-    .output::-webkit-scrollbar-thumb { background: #2a4459; border-radius: 4px; }
+    .output::-webkit-scrollbar-track { background: #0a0a0a; }
+    .output::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
     .line { white-space: pre-wrap; word-break: break-word; margin-bottom: 2px; }
     .cmd-echo { color: #7c9cb0; }
     .success { color: #8fcca8; }
@@ -77,10 +79,11 @@
     .input-area {
       display: flex;
       align-items: center;
-      background: #121b24;
+      background: #0a0a0a;
       padding: 12px 16px;
-      border-top: 1px solid #253e52;
+      border-top: 1px solid #1a1a1a;
       flex-wrap: wrap;
+      flex-shrink: 0;
     }
     .prompt { color: #7cb083; font-weight: bold; margin-right: 10px; font-size: 14px; }
     .path { color: #9bbbcf; margin-right: 10px; font-size: 13px; white-space: nowrap; }
@@ -94,7 +97,7 @@
       font-size: 14px;
       min-width: 120px;
     }
-    #cmdInput::placeholder { color: #4a6a7a; }
+    #cmdInput::placeholder { color: #3a5a6a; }
     .cursor {
       width: 8px;
       height: 18px;
@@ -104,21 +107,20 @@
     }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
     .status-bar {
-      background: #0f1821;
+      background: #0a0a0a;
       padding: 6px 16px;
       display: flex;
       gap: 12px;
-      border-top: 1px solid #1e3343;
+      border-top: 1px solid #1a1a1a;
       color: #6d8a9e;
       font-size: 11px;
       flex-wrap: wrap;
+      flex-shrink: 0;
     }
     .status-bar span { display: flex; align-items: center; gap: 4px; }
     .status-bar img { width: 14px; height: 14px; filter: brightness(0) invert(0.6); }
     .ascii-art { font-size: 10px; line-height: 1.2; white-space: pre; color: #8fcca8; }
     @media (max-width: 600px) {
-      body { padding: 4px; }
-      .terminal { height: 98vh; border-radius: 8px; }
       .ascii-art { font-size: 7px; }
       .path { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
     }
@@ -336,7 +338,7 @@
   ╚═╝  ╚═╝╚═════╝    ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
   </pre>`, 'success');
     printHtml('<span style="color:#8fcca8;">═══════════════════════════════════════════════════════════════</span>');
-    printHtml('<span style="color:#8ab8d9;">   A3 TERMINAL · ENCRYPTION · A3OS</span>');
+    printHtml('<span style="color:#8ab8d9;">   A3 TERMINAL · FULL DEV TOOLS · A3OS</span>');
     printHtml('<span style="color:#8fcca8;">═══════════════════════════════════════════════════════════════</span>');
     print('Type "help" for all commands.', 'info');
     print(`Last login: ${new Date().toLocaleString()}`, 'success');
